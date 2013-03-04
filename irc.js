@@ -51,10 +51,10 @@ bot.addListener("join", function(channel, nick, message){
 	
 	for (var i = 0; i < op.length; i++) {
 		if (op[i] == nick) {
-			bot.say(config.channels[0], "/op "+nick);
+			bot.action(config.channels[0], "/op "+nick);
 			l.appendLog("OP'd "+nick);
 		} else if (voice[i] == nick) {
-			bot.say(config.channels[0], "/voice "+nick);
+			bot.action(config.channels[0], "/voice "+nick);
 			l.appendLog("Voiced "+nick);
 		}
 	}
@@ -87,6 +87,10 @@ bot.addListener("message", function(from, to, text, message) {
 			l.appendLog("http://xkcd.com/");
 			bot.say(config.channels[0], "http://xkcd.com/"+msg.substring(8).trim()+"/");
 		} 
+		// If someone says "kittens" but none
+		// Of the other conditions apply, the
+		// Bot should just send the channel a
+		// Random quote.
 		else {
 			bot.say(config.channels[0], from+": "+RandomQuote());
 		}
