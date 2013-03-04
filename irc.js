@@ -3,6 +3,7 @@
 //
 
 var irc = require("irc");
+var http = require('http');
 var l = require("./log");
 
 // Create Random Quotes
@@ -14,7 +15,7 @@ var config = {
 	realName: "Kitten IRC Bot",
 	autoRejoin: true,
 	autoConnect: true,
-	channels: ["#marylandmesh"],
+	channels: ["#herpderpbot"],
 	server: "irc.efnet.org",
 	botName: "kittens"
 };
@@ -42,14 +43,27 @@ bot.addListener("topic", function(channel, topic, nick, message){
 // Parses the message to see what it is to
 // Do next.
 bot.addListener("message", function(from, to, text, message) {
+	// Log anything and everything just to have it
 	l.appendLog(from+": "+String(message.args[1]));
 	
+	// Check if someone posted a link. If so, then
+	// Get some information about the posted link.
+	if (String(message.args[1]).toLowerCase().indexOf("http") > -1) {
+		var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("http")));
+		var msgAtURL = message.args[1].substring(before.length);
+		var after = msgAtURL.substring(msgAtURL.indexOf(" "));
+		var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
+		if (url == "") url = after;
+		
+	} 
 	
-	if (String(message.args).indexOf(config.botName) > -1) {
+	// If none of the other things have been done,
+	// Then let's just send them a random quote if
+	// They said "kittens." 
+	else if (String(message.args[1]).toLowerCase().indexOf(config.botName) > -1) {
 		bot.say(config.channels[0], from+": "+RandomQuote());
 	}
 });
-
 
 // The function RandomQuote gets a random
 // Quote to be said back to a user in the
