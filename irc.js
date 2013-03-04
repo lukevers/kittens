@@ -3,7 +3,7 @@
 //
 
 var irc = require("irc");
-var http = require('http');
+var request = require("request");
 var l = require("./log");
 
 // Create Random Quotes
@@ -54,6 +54,28 @@ bot.addListener("message", function(from, to, text, message) {
 		var after = msgAtURL.substring(msgAtURL.indexOf(" "));
 		var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
 		if (url == "") url = after;
+		var host = url;
+		var path = "/";
+		if (url.substring(7).indexOf("/") > -1) {
+			host = url.substring(7, (url.substring(7).indexOf("/")+7));
+			path = url.substring(host.length+7);
+		}
+		
+		l.appendLog("url : "+url);
+		l.appendLog("host: "+host);
+		l.appendLog("path: "+path);
+		
+		l.appendLog("GET request for "+url+" from "+from);
+		
+		request({
+			uri: url,
+		}, function(err, res, body) {
+			var title = /<title>(.*)<\/title>/.exec(body);
+			if (title != null) {
+				l.appendLog(url+" - "+title[1]);
+				bot.say(config.channels[0], url+" - "+title[1]);
+			}
+		});
 		
 	} 
 	
