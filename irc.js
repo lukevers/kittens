@@ -54,7 +54,7 @@ bot.addListener("topic", function(channel, topic, nick, message){
 // Should be op'ed. Same for auto-voice.
 bot.addListener("join", function(channel, nick, message){
 	l.appendLog(nick+" joined "+channel);
-	autoOp(nick, channel);
+	autoOP(nick, channel);
 	autoVoice(nick, channel);
 });
 
