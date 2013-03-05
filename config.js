@@ -22,10 +22,11 @@ var voice = ["dylwhich", "inhies"];
 var jvoice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
 
 // Set key-word threats
-var keyThreats = ["slice", "chop", "castrate", "skin", "kill", "destroy", "bake", "fry", "murder", "hurt", "burn"];
+var keyThreats = ["castrate","kill", "destroy", "murder", "fuck", "fry", "bake", "hurt", "burn", "slice", "chop"];
 
 // Set responses to threats
-var threats = ["I will claw your eyes out", "I will pee on everything you love"];
+var threats = ["I will claw your eyes out", "I will pee on everything you love", "I will claw your walls",
+               "I will throw hairballs at you", "I will fart on you while you sleep"];
 
 // Configure the bot
 var config = {
