@@ -50,16 +50,17 @@ bot.addListener("message", function(from, to, text, message) {
 	} 
 	
 	// If someone says "kittens"
-	else if (String(message.args[1]).toLowerCase().indexOf(config.botName) > -1) {
+	else if (String(message.args[1]).toLowerCase().indexOf(c.config.botName) > -1) {
 		var msg = String(message.args[1]).toLowerCase();
-		// If someone says ...
-		if (msg.indexOf("orangesiadahoiwd") > -1) {
-			
-		} 
+		// If someone says meow, then meow
+		// Back at them!
+		if (msg.indexOf("meow") > -1) {
+			bot.say(message.args[0], from+": meow!");
+		}
 		// If someone just says a lone number,
 		// Get the relevant xkcd comic.
-		else if (!isNaN(msg.substring(8).trim())) {
-			postLink("http://xkcd.com/"+msg.substring(8).trim()+"/", from, message.args[0]);
+		else if (!isNaN(msg.substring(c.config.botName.length).trim())) {
+			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length).trim(), from, message.args[0]);
 		} 
 		// If someone says "kittens" but none
 		// Of the other conditions apply, the
