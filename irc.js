@@ -1,5 +1,5 @@
-// 
-// IRC bot
+//
+// Kittens - IRC Bot
 //
 
 var irc = require("irc");
@@ -54,16 +54,8 @@ bot.addListener("topic", function(channel, topic, nick, message){
 // Should be op'ed. Same for auto-voice.
 bot.addListener("join", function(channel, nick, message){
 	l.appendLog(nick+" joined "+channel);
-	for (var i = 0; i < op.length; i++) {
-		if (op[i] == nick) {
-			bot.send(":"+nick+"!"+jop[[nick]],"MODE", config.channels[0], "+o", nick);
-			l.appendLog(":"+nick+"!"+jop[[nick]]+" MODE "+config.channels[0]+" +o "+nick);
-		} else if (voice[i] == nick) {
-			bot.send(":"+nick+"!"+jvoice[[nick]],"MODE", config.channels[0], "+v", nick);
-			l.appendLog(":"+nick+"!"+jvoice[[nick]]+" MODE "+config.channels[0]+" +v "+nick);
-			l.appendLog("Voiced "+nick);
-		}
-	}
+	autoOp(nick, channel);
+	autoVoice(nick, channel);
 });
 
 // Listen for any message said on channels
@@ -169,4 +161,32 @@ function postLink(url, from) {
 			bot.say(config.channels[0], url+" - \u0002"+title[1]+"\u000f");
 		}
 	});
+}
+
+// The function autoOP cycles through
+// The list of people that are always
+// Going to be OP'd, and then if said
+// Person is on the list then they'll
+// Be OP'd.
+function autoOP(nick, channel) {
+	for (var i = 0; i < op.length; i++) {
+		if (op[i] == nick) {
+			bot.send(":"+nick+"!"+jop[[nick]],"MODE", channel, "+o", nick);
+			l.appendLog(":"+nick+"!"+jop[[nick]]+" MODE "+channel+" +o "+nick);
+		}
+	}
+}
+
+// The function autoVoice cycles through
+// The list of people that should always
+// Be voiced, and if the person is on it
+// Then they'll be voiced.
+function autoVoice(nick, channel) {
+	for (var i = 0; i < voice.length; i++) {
+		if (voice[i] == nick) {
+			bot.send(":"+nick+"!"+jvoice[[nick]],"MODE", channel, "+v", nick);
+			l.appendLog(":"+nick+"!"+jvoice[[nick]]+" MODE "+channel+" +v "+nick);
+			l.appendLog("Voiced "+nick);
+		}
+	}
 }
