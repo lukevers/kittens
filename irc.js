@@ -49,17 +49,18 @@ bot.addListener("message", function(from, to, text, message) {
 		postLink(findUrl(message), from, message.args[0]);
 	} 
 	
+	// If someone says meow, then meow
+	// Back at them!
+	else if (String(message.args[1]).toLowerCase().indexOf("meow") > -1) {
+		bot.say(message.args[0], from+": meow!");
+	}
+
 	// If someone says "kittens"
 	else if (String(message.args[1]).toLowerCase().indexOf(c.config.botName) > -1) {
 		var msg = String(message.args[1]).toLowerCase();
-		// If someone says meow, then meow
-		// Back at them!
-		if (msg.indexOf("meow") > -1) {
-			bot.say(message.args[0], from+": meow!");
-		}
 		// If someone just says a lone number,
 		// Get the relevant xkcd comic.
-		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
+		if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
 			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);
 		} 
 		// If someone says "kittens" but none
