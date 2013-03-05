@@ -6,7 +6,7 @@ var irc = require("irc");
 var request = require("request");
 var l = require("./log");
 
-// Create Random Quotes
+// Create random quotes
 var quotes = ["how many kittens?!", "you've got to be kitten me!"];
 
 // Set auto-ops
