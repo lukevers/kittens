@@ -42,22 +42,22 @@ bot.addListener("join", function(channel, nick, message){
 bot.addListener("message", function(from, to, text, message) {
 	// Log anything and everything just to have it
 	l.appendLog(from+": "+String(message.args[1]));
+	var msg = String(message.args[1]).toLowerCase();
 	
 	// Check if someone posted a link. If so, then
 	// Get some information about the posted link.
-	if (String(message.args[1]).toLowerCase().indexOf("http") > -1) {
+	if (msg.indexOf("http") > -1) {
 		postLink(findUrl(message), from, message.args[0]);
 	} 
 	
 	// If someone says meow, then meow
 	// Back at them!
-	else if (String(message.args[1]).toLowerCase().indexOf("meow") > -1) {
+	else if (msg.indexOf("meow") > -1) {
 		bot.say(message.args[0], from+": meow!");
 	}
 
 	// If someone says "kittens"
-	else if (String(message.args[1]).toLowerCase().indexOf(c.config.botName) > -1) {
-		var msg = String(message.args[1]).toLowerCase();
+	else if (msg.indexOf(c.config.botName) > -1) {
 		// If someone threatens the bot
 		// It can't just sit around and
 		// Not do anything! Fight back!
