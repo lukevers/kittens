@@ -10,12 +10,14 @@ var l = require("./log");
 var quotes = ["how many kittens?!", "you've got to be kitten me!"];
 
 // Set auto-ops
-var op = ["lukevers", "DuoNoxSol"];
-var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com"};
+var op = ["lukevers", "DuoNoxSol", "Dan68_", "thefinn93", "derpz", "werecat"];
+var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com",
+           "Dan68_":"~Dan@199.83.100.24", "derpz":"~derp@2600:3c01::f03c:91ff:fedf:a466", "thefinn93":"~thefinn93@thefinn93.com", 
+		   "werecat":"~werecatd@2002:44ae:bc22:0:1e6f:65ff:fea7:d09f"};
 
 // Set auto-voices
-var voice = ["dylwhich"];
-var jvoice = {"dylwhich":""};
+var voice = ["dylwhich", "inhies"];
+var jvoice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
 
 // Configure the bot
 var config = {
@@ -23,7 +25,7 @@ var config = {
 	realName: "Kitten IRC Bot",
 	autoRejoin: true,
 	autoConnect: true,
-	channels: ["#herpderpmerp"],
+	channels: ["#marylandmesh"],
 	server: "irc.efnet.org",
 	botName: "kittens"
 };
@@ -52,7 +54,6 @@ bot.addListener("topic", function(channel, topic, nick, message){
 // Should be op'ed. Same for auto-voice.
 bot.addListener("join", function(channel, nick, message){
 	l.appendLog(nick+" joined "+channel);
-	
 	for (var i = 0; i < op.length; i++) {
 		if (op[i] == nick) {
 			bot.send(":"+nick+"!"+getHost(nick),"MODE", config.channels[0], "+o", nick);
