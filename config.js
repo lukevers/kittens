@@ -1,0 +1,42 @@
+// 
+// Config.js
+//
+// Instead of having a config file,
+// It's easier to just to have this
+// File be manipulated for personal
+// Use.
+//
+
+
+// Create random quotes
+var quotes = ["how many kittens?!", "you've got to be kitten me!"];
+
+// Set auto-ops
+var op = ["lukevers", "DuoNoxSol", "Dan68_", "thefinn93", "derpz", "werecat"];
+var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com",
+           "Dan68_":"~Dan@199.83.100.24", "derpz":"~derp@2600:3c01::f03c:91ff:fedf:a466", "thefinn93":"~thefinn93@thefinn93.com", 
+		   "werecat":"~werecatd@2002:44ae:bc22:0:1e6f:65ff:fea7:d09f"};
+
+// Set auto-voices
+var voice = ["dylwhich", "inhies"];
+var jvoice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
+
+// Configure the bot
+var config = {
+	userName: "kittens",
+	realName: "Kitten IRC Bot",
+	autoRejoin: true,
+	autoConnect: true,
+	channels: ["#marylandmesh"],
+	server: "irc.efnet.org",
+	botName: "kittens"
+};
+
+// Set the variables for the main IRC
+// File to be able to use.
+exports.quotes = quotes;
+exports.op = op;
+exports.jop = jop;
+exports.voice = voice;
+exports.jvoice = jvoice;
+exports.config = config;

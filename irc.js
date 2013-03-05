@@ -5,47 +5,24 @@
 var irc = require("irc");
 var request = require("request");
 var l = require("./log");
-
-// Create random quotes
-var quotes = ["how many kittens?!", "you've got to be kitten me!"];
-
-// Set auto-ops
-var op = ["lukevers", "DuoNoxSol", "Dan68_", "thefinn93", "derpz", "werecat"];
-var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com",
-           "Dan68_":"~Dan@199.83.100.24", "derpz":"~derp@2600:3c01::f03c:91ff:fedf:a466", "thefinn93":"~thefinn93@thefinn93.com", 
-		   "werecat":"~werecatd@2002:44ae:bc22:0:1e6f:65ff:fea7:d09f"};
-
-// Set auto-voices
-var voice = ["dylwhich", "inhies"];
-var jvoice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
-
-// Configure the bot
-var config = {
-	userName: "kittens",
-	realName: "Kitten IRC Bot",
-	autoRejoin: true,
-	autoConnect: true,
-	channels: ["#marylandmesh"],
-	server: "irc.efnet.org",
-	botName: "kittens"
-};
+var c = require("./config");
 
 l.appendLog("Configured "+config.botName);
 
 // Create the bot
 var bot = new irc.Client(config.server, config.botName, {
-	channels: config.channels
+	channels: c.config.channels
 });
 
-l.appendLog("Created "+config.botName);
-l.appendLog("Connecting to "+config.server);
+l.appendLog("Created "+c.config.botName);
+l.appendLog("Connecting to "+c.config.server);
 
 // Listen for topic changes on channels,
 // And when there is a topic change, the
 // Bot will announce the new topic.
 bot.addListener("topic", function(channel, topic, nick, message){
 	l.appendLog("The new topic on "+channel+" is \""+topic+"\"");
-	bot.say(config.channels[0], "The new topic on "+channel+" is \"\u0002"+topic+"\u000f\"");
+	bot.say(channel, "The new topic on "+channel+" is \"\u0002"+topic+"\u000f\"");
 });
 
 // Listen for people to join the channels,
@@ -69,7 +46,7 @@ bot.addListener("message", function(from, to, text, message) {
 	// Check if someone posted a link. If so, then
 	// Get some information about the posted link.
 	if (String(message.args[1]).toLowerCase().indexOf("http") > -1) {
-		postLink(findUrl(message), from);
+		postLink(findUrl(message), from, message.args[0]);
 	} 
 	
 	// If someone says "kittens"
@@ -82,14 +59,14 @@ bot.addListener("message", function(from, to, text, message) {
 		// If someone just says a lone number,
 		// Get the relevant xkcd comic.
 		else if (!isNaN(msg.substring(8).trim())) {
-			postLink("http://xkcd.com/"+msg.substring(8).trim()+"/", from);
+			postLink("http://xkcd.com/"+msg.substring(8).trim()+"/", from, message.args[0]);
 		} 
 		// If someone says "kittens" but none
 		// Of the other conditions apply, the
 		// Bot should just send the channel a
 		// Random quote.
 		else {
-			bot.say(config.channels[0], from+": "+RandomQuote());
+			bot.say(message.args[0], from+": "+RandomQuote());
 		}
 	}
 });
@@ -103,7 +80,7 @@ bot.addListener("message", function(from, to, text, message) {
 // IRC channel if nothing else is said to
 // The bot when parsing.
 function RandomQuote() {
-	return quotes[Math.floor(Math.random()*quotes.length)];
+	return c.quotes[Math.floor(Math.random()*c.quotes.length)];
 }
 
 // The function findURL searches through
@@ -149,7 +126,7 @@ function findUrlHTTPS(message) {
 // Link that someone said and then gets
 // The title of the link and relays the
 // Information back to the channel.
-function postLink(url, from) {
+function postLink(url, from, channel) {
 	l.appendLog("GET request for ["+url+"] from "+from);
 	
 	request({
@@ -158,7 +135,7 @@ function postLink(url, from) {
 		var title = /<title>(.*)<\/title>/.exec(body);
 		if (title != null) {
 			l.appendLog(url+" - "+title[1]);
-			bot.say(config.channels[0], url+" - \u0002"+title[1]+"\u000f");
+			bot.say(channel, url+" - \u0002"+title[1]+"\u000f");
 		}
 	});
 }
@@ -169,10 +146,10 @@ function postLink(url, from) {
 // Person is on the list then they'll
 // Be OP'd.
 function autoOP(nick, channel) {
-	for (var i = 0; i < op.length; i++) {
-		if (op[i] == nick) {
-			bot.send(":"+nick+"!"+jop[[nick]],"MODE", channel, "+o", nick);
-			l.appendLog(":"+nick+"!"+jop[[nick]]+" MODE "+channel+" +o "+nick);
+	for (var i = 0; i < c.op.length; i++) {
+		if (c.op[i] == nick) {
+			bot.send(":"+nick+"!"+c.jop[[nick]],"MODE", channel, "+o", nick);
+			l.appendLog(":"+nick+"!"+c.jop[[nick]]+" MODE "+channel+" +o "+nick);
 		}
 	}
 }
@@ -182,10 +159,10 @@ function autoOP(nick, channel) {
 // Be voiced, and if the person is on it
 // Then they'll be voiced.
 function autoVoice(nick, channel) {
-	for (var i = 0; i < voice.length; i++) {
-		if (voice[i] == nick) {
-			bot.send(":"+nick+"!"+jvoice[[nick]],"MODE", channel, "+v", nick);
-			l.appendLog(":"+nick+"!"+jvoice[[nick]]+" MODE "+channel+" +v "+nick);
+	for (var i = 0; i < c.voice.length; i++) {
+		if (c.voice[i] == nick) {
+			bot.send(":"+nick+"!"+c.jvoice[[nick]],"MODE", channel, "+v", nick);
+			l.appendLog(":"+nick+"!"+c.jvoice[[nick]]+" MODE "+channel+" +v "+nick);
 			l.appendLog("Voiced "+nick);
 		}
 	}
