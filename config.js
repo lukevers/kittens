@@ -26,7 +26,8 @@ var keyThreats = ["castrate","kill", "destroy", "murder", "fuck", "fry", "bake",
 
 // Set responses to threats
 var threats = ["I will claw your eyes out", "I will pee on everything you love", "I will claw your walls",
-               "I will throw hairballs at you", "I will fart on you while you sleep"];
+               "I will throw hairballs at you", "I will fart on you while you sleep",
+               "I will burn the \u0002heart\u000f out of you."];
 
 // Configure the bot
 var config = {
