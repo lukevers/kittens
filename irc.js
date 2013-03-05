@@ -59,8 +59,8 @@ bot.addListener("message", function(from, to, text, message) {
 		}
 		// If someone just says a lone number,
 		// Get the relevant xkcd comic.
-		else if (!isNaN(msg.substring(c.config.botName.length).trim())) {
-			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length).trim(), from, message.args[0]);
+		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
+			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);
 		} 
 		// If someone says "kittens" but none
 		// Of the other conditions apply, the
