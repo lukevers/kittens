@@ -7,10 +7,10 @@ var request = require("request");
 var l = require("./log");
 var c = require("./config");
 
-l.appendLog("Configured "+config.botName);
+l.appendLog("Configured "+c.config.botName);
 
 // Create the bot
-var bot = new irc.Client(config.server, config.botName, {
+var bot = new irc.Client(c.config.server, c.config.botName, {
 	channels: c.config.channels
 });
 
