@@ -56,11 +56,11 @@ bot.addListener("join", function(channel, nick, message){
 	l.appendLog(nick+" joined "+channel);
 	for (var i = 0; i < op.length; i++) {
 		if (op[i] == nick) {
-			bot.send(":"+nick+"!"+getHost(nick),"MODE", config.channels[0], "+o", nick);
-			l.appendLog(":"+nick+"!"+getHost(nick)+" MODE "+config.channels[0]+" +o "+nick);
+			bot.send(":"+nick+"!"+jop[[nick]],"MODE", config.channels[0], "+o", nick);
+			l.appendLog(":"+nick+"!"+jop[[nick]]+" MODE "+config.channels[0]+" +o "+nick);
 		} else if (voice[i] == nick) {
-			bot.send(":"+nick+"!"+getHost(nick),"MODE", config.channels[0], "+v", nick);
-			l.appendLog(":"+nick+"!"+getHost(nick)+" MODE "+config.channels[0]+" +v "+nick);
+			bot.send(":"+nick+"!"+jvoice[[nick]],"MODE", config.channels[0], "+v", nick);
+			l.appendLog(":"+nick+"!"+jvoice[[nick]]+" MODE "+config.channels[0]+" +v "+nick);
 			l.appendLog("Voiced "+nick);
 		}
 	}
@@ -102,6 +102,10 @@ bot.addListener("message", function(from, to, text, message) {
 	}
 });
 
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+
 // The function RandomQuote gets a random
 // Quote to be said back to a user in the
 // IRC channel if nothing else is said to
@@ -114,7 +118,8 @@ function RandomQuote() {
 // A message that someone says, and then
 // It finds just the URL from the String
 // And returns it.
-function findURL(message) {
+function findUrl(message) {
+	if (String(message.args[1]).indexOf("https") > -1) return findUrlHTTPS(message);
 	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("http")));
 	var msgAtURL = message.args[1].substring(before.length);
 	var after = msgAtURL.substring(msgAtURL.indexOf(" "));
@@ -129,9 +134,23 @@ function findURL(message) {
 	return url;
 }
 
-// The function getHost ...
-function getHost(nick) {
-	return jop[[nick]];
+// The function findURLHTTPS is called
+// When the function findURL finds out
+// That what it's searching for is not
+// An HTTP call.
+function findUrlHTTPS(message) {
+	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("https")));
+	var msgAtURL = message.args[1].substring(before.length);
+	var after = msgAtURL.substring(msgAtURL.indexOf(" "));
+	var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
+	if (url == "") url = after;
+	var host = url;
+	var path = "/";
+	if (url.substring(8).indexOf("/") > -1) {
+		host = url.substring(8, (url.substring(8).indexOf("/")+8));
+		path = url.substring(host.length+8);
+	}
+	return url;
 }
 
 // The function postLink gets a certain
