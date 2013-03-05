@@ -9,9 +9,13 @@ var l = require("./log");
 // Create Random Quotes
 var quotes = ["how many kittens?!", "you've got to be kitten me!"];
 
-// OP's and Voices
-var op = ["lukevers", "derpz", "werecat", "DuoNoxSol", "Dan68_", "thefinn93"];
-var voice = ["inhies", "unicorn", "dylwhich", "snap1"];
+// Set auto-ops
+var op = ["lukevers", "DuoNoxSol"];
+var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com"};
+
+// Set auto-voices
+var voice = ["dylwhich"];
+var jvoice = {"dylwhich":""};
 
 // Configure the bot
 var config = {
@@ -19,7 +23,7 @@ var config = {
 	realName: "Kitten IRC Bot",
 	autoRejoin: true,
 	autoConnect: true,
-	channels: ["#herpderpbot"],
+	channels: ["#herpderpmerp"],
 	server: "irc.efnet.org",
 	botName: "kittens"
 };
@@ -51,10 +55,11 @@ bot.addListener("join", function(channel, nick, message){
 	
 	for (var i = 0; i < op.length; i++) {
 		if (op[i] == nick) {
-			bot.action(config.channels[0], "/op "+nick);
-			l.appendLog("OP'd "+nick);
+			bot.send(":"+nick+"!"+getHost(nick),"MODE", config.channels[0], "+o", nick);
+			l.appendLog(":"+nick+"!"+getHost(nick)+" MODE "+config.channels[0]+" +o "+nick);
 		} else if (voice[i] == nick) {
-			bot.action(config.channels[0], "/voice "+nick);
+			bot.send(":"+nick+"!"+getHost(nick),"MODE", config.channels[0], "+v", nick);
+			l.appendLog(":"+nick+"!"+getHost(nick)+" MODE "+config.channels[0]+" +v "+nick);
 			l.appendLog("Voiced "+nick);
 		}
 	}
@@ -71,7 +76,7 @@ bot.addListener("message", function(from, to, text, message) {
 	// Check if someone posted a link. If so, then
 	// Get some information about the posted link.
 	if (String(message.args[1]).toLowerCase().indexOf("http") > -1) {
-		postLink(from, to, text, message);
+		postLink(findUrl(message), from);
 	} 
 	
 	// If someone says "kittens"
@@ -84,8 +89,7 @@ bot.addListener("message", function(from, to, text, message) {
 		// If someone just says a lone number,
 		// Get the relevant xkcd comic.
 		else if (!isNaN(msg.substring(8).trim())) {
-			l.appendLog("http://xkcd.com/");
-			bot.say(config.channels[0], "http://xkcd.com/"+msg.substring(8).trim()+"/");
+			postLink("http://xkcd.com/"+msg.substring(8).trim()+"/", from);
 		} 
 		// If someone says "kittens" but none
 		// Of the other conditions apply, the
@@ -105,11 +109,11 @@ function RandomQuote() {
 	return quotes[Math.floor(Math.random()*quotes.length)];
 }
 
-// The function postLink gets a certain
-// Link that someone said and then gets
-// The title of the link and relays the
-// Information back to the channel.
-function postLink(from, to, text, message) {
+// The function findURL searches through
+// A message that someone says, and then
+// It finds just the URL from the String
+// And returns it.
+function findURL(message) {
 	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("http")));
 	var msgAtURL = message.args[1].substring(before.length);
 	var after = msgAtURL.substring(msgAtURL.indexOf(" "));
@@ -121,11 +125,19 @@ function postLink(from, to, text, message) {
 		host = url.substring(7, (url.substring(7).indexOf("/")+7));
 		path = url.substring(host.length+7);
 	}
-	
-	l.appendLog("url : "+url);
-	l.appendLog("host: "+host);
-	l.appendLog("path: "+path);
-	
+	return url;
+}
+
+// The function getHost ...
+function getHost(nick) {
+	return jop[[nick]];
+}
+
+// The function postLink gets a certain
+// Link that someone said and then gets
+// The title of the link and relays the
+// Information back to the channel.
+function postLink(url, from) {
 	l.appendLog("GET request for ["+url+"] from "+from);
 	
 	request({
