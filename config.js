@@ -8,7 +8,7 @@
 //
 
 
-// Create random quotes
+// Set random quotes
 var quotes = ["how many kittens?!", "you've got to be kitten me!"];
 
 // Set auto-ops
@@ -20,6 +20,12 @@ var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonox
 // Set auto-voices
 var voice = ["dylwhich", "inhies"];
 var jvoice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
+
+// Set key-word threats
+var keyThreats = ["slice", "chop", "castrate", "skin", "kill", "destroy", "bake", "fry", "murder", "hurt", "burn"];
+
+// Set responses to threats
+var threats = ["I will claw your eyes out", "I will pee on everything you love"];
 
 // Configure the bot
 var config = {
@@ -40,3 +46,5 @@ exports.jop = jop;
 exports.voice = voice;
 exports.jvoice = jvoice;
 exports.config = config;
+exports.keyThreats = keyThreats;
+exports.threats = threats;

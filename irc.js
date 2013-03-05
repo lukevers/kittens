@@ -58,9 +58,15 @@ bot.addListener("message", function(from, to, text, message) {
 	// If someone says "kittens"
 	else if (String(message.args[1]).toLowerCase().indexOf(c.config.botName) > -1) {
 		var msg = String(message.args[1]).toLowerCase();
+		// If someone threatens the bot
+		// It can't just sit around and
+		// Not do anything! Fight back!
+		if (isThreatened(msg)) {
+			bot.say(message.args[0], from+": "+RandomThreat());
+		}
 		// If someone just says a lone number,
 		// Get the relevant xkcd comic.
-		if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
+		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
 			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);
 		} 
 		// If someone says "kittens" but none
@@ -83,6 +89,14 @@ bot.addListener("message", function(from, to, text, message) {
 // The bot when parsing.
 function RandomQuote() {
 	return c.quotes[Math.floor(Math.random()*c.quotes.length)];
+}
+
+// The function RandomThreat gets a random
+// Threat to be said back to a user in the
+// IRC channel if nothing else is going to
+// Be said to the bot when parsing.
+function RandomThreat() {
+	return (Math.round(Math.random()) % 2 == 0) ? "I will "+c.keyThreats[Math.floor(Math.random()*c.keyThreats.length)]+" you" : c.threats[Math.floor(Math.random()*c.threats.length)];
 }
 
 // The function findURL searches through
@@ -168,4 +182,16 @@ function autoVoice(nick, channel) {
 			l.appendLog("Voiced "+nick);
 		}
 	}
+}
+
+// The function isThreatened will check
+// A message that is sent to Kittens if
+// It is threatening the bot.
+function isThreatened(msg) {
+	for (var i = 0; i < c.keyThreats.length; i++) {
+		if (msg.indexOf(c.keyThreats[i]) > -1) {
+			return true;
+		}
+	}
+	return false;
 }
