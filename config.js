@@ -9,7 +9,13 @@
 
 
 // Set random quotes
-var quotes = ["how many kittens?!", "you've got to be kitten me!"];
+var quotes = ["how many kittens?!", "you've got to be kitten me!", "I've got a good feline about this!", "that's the cat's pajamas!"];
+
+// Set greetings to be said to people
+var greetings = ["hi", "hello", "howdy", "hai", "bonjour"];
+
+// Set farewells to be said to people
+var farewells = ["bye", "bai", "farewell", "have a nice day", "cherrio"];
 
 // Set auto-ops
 var op = ["lukevers", "DuoNoxSol", "Dan68_", "thefinn93", "derpz", "werecat"];
@@ -50,3 +56,5 @@ exports.jvoice = jvoice;
 exports.config = config;
 exports.keyThreats = keyThreats;
 exports.threats = threats;
+exports.greetings = greetings;
+exports.farewells = farewells;

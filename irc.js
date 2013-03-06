@@ -58,10 +58,22 @@ bot.addListener("message", function(from, to, text, message) {
 
 	// If someone says "kittens"
 	else if (msg.indexOf(c.config.botName) > -1) {
+		// If someone says hello to the
+		// Bot, then the bot should say
+		// Hello back to them!
+		if (containsGreeting(msg)) {
+			bot.say(message.args[0], from+": "+RandomGreeting());
+		}
+		// If someone says goodbye to the
+		// Bot then the bot should say it
+		// Back to them!
+		else if (containsFarewell(msg)) {
+			bot.say(message.args[0], from+": "+RandomFarewell());
+		}
 		// If someone threatens the bot
 		// It can't just sit around and
 		// Not do anything! Fight back!
-		if (isThreatened(msg)) {
+		else if (isThreatened(msg)) {
 			bot.say(message.args[0], from+": "+RandomThreat());
 		}
 		// If someone just says a lone number,
@@ -85,16 +97,28 @@ bot.addListener("message", function(from, to, text, message) {
 
 // The function RandomQuote gets a random
 // Quote to be said back to a user in the
-// IRC channel if nothing else is said to
-// The bot when parsing.
+// IRC channel.
 function RandomQuote() {
 	return c.quotes[Math.floor(Math.random()*c.quotes.length)];
 }
 
+// The function RandomGreeting gets a random
+// Greeting to be said back to a user in the
+// IRC channel.
+function RandomGreeting() {
+	return c.greetings[Math.floor(Math.random()*c.greetings.length)];
+}
+
+// The function RandomFarewell gets a random
+// Farewell to be said back to a user in the
+// IRC channel.
+function RandomFarewell() {
+	return c.farewells[Math.floor(Math.random()*c.farewells.length)];
+}
+
 // The function RandomThreat gets a random
 // Threat to be said back to a user in the
-// IRC channel if nothing else is going to
-// Be said to the bot when parsing.
+// IRC channel.
 function RandomThreat() {
 	return (Math.round(Math.random()) % 2 == 0) ? "I will "+c.keyThreats[Math.floor(Math.random()*c.keyThreats.length)]+" you" : c.threats[Math.floor(Math.random()*c.threats.length)];
 }
@@ -190,6 +214,30 @@ function autoVoice(nick, channel) {
 function isThreatened(msg) {
 	for (var i = 0; i < c.keyThreats.length; i++) {
 		if (msg.indexOf(c.keyThreats[i]) > -1) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// The function containsGreeting will
+// Check to see if the phrase said to
+// The bot contains a greeting.
+function containsGreeting(msg) {
+	for (var i = 0; i < c.greetings.length; i++) {
+		if (msg.indexOf(c.greetings[i]) > -1) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// The function containsFarewell will
+// Check to see if the phrase said to
+// The bot contains a farewell.
+function containsFarewell(msg) {
+	for (var i = 0; i < c.farewells.length; i++) {
+		if (msg.indexOf(c.farewells[i]) > -1) {
 			return true;
 		}
 	}
