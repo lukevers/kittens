@@ -2,24 +2,18 @@
 //
 // log.js
 
-// The function appendLog makes appending
-// The log easy without having to add the
-// Timestamp function before each message
-// Sent to the console.
+// appendLog appends to the log by prepending the timestamp and
+// sending the message to the console.
 function appendLog(message) {
-	// The function timestamp returns
-	// The current date and time in a
-	// String form, which is used for
-	// logging with the console.
+	// timestamp returns the current date and time in a string form,
+	// which is used for logging with the console.
 	function timestamp() {
 		var date = new Date();
-		// The function getCurrentDate returns
-		// The current date in a String form.
+		// getCurrentDate returns the current date in a String form.
 		function getCurrentDate() {
 			return (String(date.getMonth())+"."+String(date.getDay())+"."+String(date.getFullYear()));
 		}
-		// The function getCurrentTime returns
-		// The current time in a String form.
+		// getCurrentTime returns the current time in a String form.
 		function getCurrentTime() {
 			return (String(date.getHours())+":"+String(date.getMinutes())+":"+String(date.getSeconds()));
 		}
