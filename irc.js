@@ -28,10 +28,17 @@ bot.addListener("topic", function(channel, topic, nick, message){
 // be autooped or autovoiced.
 bot.addListener("join", function(channel, nick, message){
 	util.log(nick+" joined "+channel);
-	var userhost = message.user+"@"+message.host
-	// Attempt to op the user. If that fails, attempt to voice them.
-	if (!autoOP(nick, userhost, channel)) {
-		autoVoice(nick, userhost, channel);
+
+	// Use the 'users' map to apply the appropriate mode, if
+	// applicable.
+	userinfo = users[[nick]]
+	if (userinfo == null) {
+		return
+	}
+	userhost = message.user+"@"+message.host
+	if (userinfo.host == userhost) {
+		bot.send(":"+nick+"!"+userhost, "MODE", channel, userinfo.mode, nick);
+		util.log(userinfo.mode+" "+nick+" in "+channel);
 	}
 });
 
@@ -160,28 +167,6 @@ function postLink(url, from, channel) {
 			bot.say(channel, url+" - \u0002"+title[1]+"\u000f");
 		}
 	});
-}
-
-// autoOP searches the op map for the appropriate nickname, and
-// matches it to the host. If appropriate, it ops the user in the
-// given channel. It returns true if it does so.
-function autoOP(nick, userhost, channel) {
-	// The data structure of op is { "nick":"user@hostname", ... }.
-	if (c.op[[nick]] == userhost) {
-		bot.send(":"+nick+"!"+userhost, "MODE", channel, "+o", nick);
-		util.log("+o "+nick+" in "+channel);
-	}
-}
-
-// autoVoice behaves precisely like autoOP, but it voices the user
-// rather than opping them.
-function autoVoice(nick, userhost, channel) {
-	// The data structure of voice is the same as op.
-	if (c.voice[[nick]] == userhost) {
-		bot.send(":"+nick+"!"+userhost,"MODE", channel, "+v", nick);
-		util.log("+v "+nick+" in "+channel);
-		return true
-	}
 }
 
 // isThreatened will check a message that is sent to Kittens if it is
