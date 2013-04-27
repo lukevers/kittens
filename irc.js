@@ -28,8 +28,11 @@ bot.addListener("topic", function(channel, topic, nick, message){
 // be autooped or autovoiced.
 bot.addListener("join", function(channel, nick, message){
 	util.log(nick+" joined "+channel);
-	autoOP(nick, channel);
-	autoVoice(nick, channel);
+	var userhost = message.user+"@"+message.host
+	// Attempt to op the user. If that fails, attempt to voice them.
+	if (!autoOP(nick, userhost, channel)) {
+		autoVoice(nick, userhost, channel);
+	}
 });
 
 // Listen for any message said on channels first, it logs the message,
@@ -159,27 +162,25 @@ function postLink(url, from, channel) {
 	});
 }
 
-// autoOP cycles through the list of people that are always going to
-// be OP'd, and then if said person is on the list then they'll be
-// OP'd.
-function autoOP(nick, channel) {
-	for (var i = 0; i < c.op.length; i++) {
-		if (c.op[i] == nick) {
-			bot.send(":"+nick+"!"+c.jop[[nick]],"MODE", channel, "+o", nick);
-			util.log(":"+nick+"!"+c.jop[[nick]]+" MODE "+channel+" +o "+nick);
-		}
+// autoOP searches the op map for the appropriate nickname, and
+// matches it to the host. If appropriate, it ops the user in the
+// given channel. It returns true if it does so.
+function autoOP(nick, userhost, channel) {
+	// The data structure of op is { "nick":"user@hostname", ... }.
+	if (c.op[[nick]] == userhost) {
+		bot.send(":"+nick+"!"+userhost, "MODE", channel, "+o", nick);
+		util.log("+o "+nick+" in "+channel);
 	}
 }
 
-// autoVoice cycles through the list of people that should always be
-// voiced, and if the person is on it then they'll be voiced.
-function autoVoice(nick, channel) {
-	for (var i = 0; i < c.voice.length; i++) {
-		if (c.voice[i] == nick) {
-			bot.send(":"+nick+"!"+c.jvoice[[nick]],"MODE", channel, "+v", nick);
-			util.log(":"+nick+"!"+c.jvoice[[nick]]+" MODE "+channel+" +v "+nick);
-			util.log("Voiced "+nick);
-		}
+// autoVoice behaves precisely like autoOP, but it voices the user
+// rather than opping them.
+function autoVoice(nick, userhost, channel) {
+	// The data structure of voice is the same as op.
+	if (c.voice[[nick]] == userhost) {
+		bot.send(":"+nick+"!"+userhost,"MODE", channel, "+v", nick);
+		util.log("+v "+nick+" in "+channel);
+		return true
 	}
 }
 

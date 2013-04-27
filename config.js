@@ -16,14 +16,12 @@ var greetings = ["hi", "hello", "howdy", "hai", "bonjour"];
 var farewells = ["bye", "bai", "farewell", "have a nice day", "cherrio"];
 
 // Set auto-ops.
-var op = ["lukevers", "DuoNoxSol", "Dan68_", "thefinn93", "derpz", "werecat"];
-var jop = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com",
+var op = {"lukevers":"~luke@li557-106.members.linode.com", "DuoNoxSol":"~duonoxsol@li557-106.members.linode.com",
            "Dan68_":"~Dan@199.83.100.24", "derpz":"~derp@2600:3c01::f03c:91ff:fedf:a466", "thefinn93":"~thefinn93@thefinn93.com", 
 		   "werecat":"~werecatd@2002:44ae:bc22:0:1e6f:65ff:fea7:d09f"};
 
 // Set auto-voices.
-var voice = ["dylwhich", "inhies"];
-var jvoice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
+var voice = {"dylwhich":"~dylwhich@li557-106.members.linode.com", "inhies":"~inhies@8.23.56.82"};
 
 // Set key-word threats.
 var keyThreats = ["castrate", "kill", "destroy", "murder", "fuck", "fry", "bake", "hurt", "burn", "slice", "chop"];
@@ -47,9 +45,7 @@ var config = {
 // Set the variables for the main IRC file to be able to use.
 exports.quotes = quotes;
 exports.op = op;
-exports.jop = jop;
 exports.voice = voice;
-exports.jvoice = jvoice;
 exports.config = config;
 exports.keyThreats = keyThreats;
 exports.threats = threats;
