@@ -2,32 +2,32 @@
 // Kittens - IRC Bot
 //
 
+var util = require("util");
 var irc = require("irc");
 var request = require("request");
-var l = require("./log");
 var c = require("./config");
 
-l.appendLog("Configured "+c.config.botName);
+util.log("Configured "+c.config.botName);
 
 // Create the bot.
 var bot = new irc.Client(c.config.server, c.config.botName, {
 	channels: c.config.channels
 });
 
-l.appendLog("Created "+c.config.botName);
-l.appendLog("Connecting to "+c.config.server);
+util.log("Created "+c.config.botName);
+util.log("Connecting to "+c.config.server);
 
 // Listen for topic changes on channels, and when there is a topic
 // change, the bot will announce the new topic.
 bot.addListener("topic", function(channel, topic, nick, message){
-	l.appendLog("The new topic on "+channel+" is \""+topic+"\"");
+	util.log("The new topic on "+channel+" is \""+topic+"\"");
 	bot.say(channel, "The new topic on "+channel+" is \"\u0002"+topic+"\u000f\"");
 });
 
 // Listen for for joins to the channel so that the relevant people can
 // be autooped or autovoiced.
 bot.addListener("join", function(channel, nick, message){
-	l.appendLog(nick+" joined "+channel);
+	util.log(nick+" joined "+channel);
 	autoOP(nick, channel);
 	autoVoice(nick, channel);
 });
@@ -36,7 +36,7 @@ bot.addListener("join", function(channel, nick, message){
 // and then it parses the message to see what it is to do next.
 bot.addListener("message", function(from, to, text, message) {
 	// Log anything and everything just to have it.
-	l.appendLog(from+": "+String(message.args[1]));
+	util.log(from+": "+String(message.args[1]));
 	var msg = String(message.args[1]).toLowerCase();
 	
 	// Check if someone posted a link. If so, then get some
@@ -146,14 +146,14 @@ function findUrlHTTPS(message) {
 // postLink gets a certain link that someone said and then gets the
 // title of the link and relays the information back to the channel.
 function postLink(url, from, channel) {
-	l.appendLog("GET request for ["+url+"] from "+from);
+	util.log("GET request for ["+url+"] from "+from);
 	
 	request({
 		uri: url,
 	}, function(err, res, body) {
 		var title = /<title>(.*)<\/title>/.exec(body);
 		if (title != null) {
-			l.appendLog(url+" - "+title[1]);
+			util.log(url+" - "+title[1]);
 			bot.say(channel, url+" - \u0002"+title[1]+"\u000f");
 		}
 	});
@@ -166,7 +166,7 @@ function autoOP(nick, channel) {
 	for (var i = 0; i < c.op.length; i++) {
 		if (c.op[i] == nick) {
 			bot.send(":"+nick+"!"+c.jop[[nick]],"MODE", channel, "+o", nick);
-			l.appendLog(":"+nick+"!"+c.jop[[nick]]+" MODE "+channel+" +o "+nick);
+			util.log(":"+nick+"!"+c.jop[[nick]]+" MODE "+channel+" +o "+nick);
 		}
 	}
 }
@@ -177,8 +177,8 @@ function autoVoice(nick, channel) {
 	for (var i = 0; i < c.voice.length; i++) {
 		if (c.voice[i] == nick) {
 			bot.send(":"+nick+"!"+c.jvoice[[nick]],"MODE", channel, "+v", nick);
-			l.appendLog(":"+nick+"!"+c.jvoice[[nick]]+" MODE "+channel+" +v "+nick);
-			l.appendLog("Voiced "+nick);
+			util.log(":"+nick+"!"+c.jvoice[[nick]]+" MODE "+channel+" +v "+nick);
+			util.log("Voiced "+nick);
 		}
 	}
 }
