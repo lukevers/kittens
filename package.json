@@ -1,0 +1,9 @@
+{
+  "name": "Kittens",
+  "description": "An IRC bot written in NodeJS",
+  "version": "0.5",
+  "dependencies": {
+    "irc": "0.3.6",
+    "request": "2.21.0"
+  }
+}
