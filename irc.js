@@ -2,89 +2,88 @@
 // Kittens - IRC Bot
 //
 
+var util = require("util");
 var irc = require("irc");
 var request = require("request");
-var l = require("./log");
 var c = require("./config");
 
-l.appendLog("Configured "+c.config.botName);
+util.log("Configured "+c.config.botName);
 
-// Create the bot
+// Create the bot.
 var bot = new irc.Client(c.config.server, c.config.botName, {
 	channels: c.config.channels
 });
 
-l.appendLog("Created "+c.config.botName);
-l.appendLog("Connecting to "+c.config.server);
+util.log("Created "+c.config.botName);
+util.log("Connecting to "+c.config.server);
 
-// Listen for topic changes on channels,
-// And when there is a topic change, the
-// Bot will announce the new topic.
+// Listen for topic changes on channels, and when there is a topic
+// change, the bot will announce the new topic.
 bot.addListener("topic", function(channel, topic, nick, message){
-	l.appendLog("The new topic on "+channel+" is \""+topic+"\"");
+	util.log("The new topic on "+channel+" is \""+topic+"\"");
 	bot.say(channel, "The new topic on "+channel+" is \"\u0002"+topic+"\u000f\"");
 });
 
-// Listen for people to join the channels,
-// And if they're supposed to be an OP and
-// They're not already autooped, then they
-// Should be op'ed. Same for auto-voice.
+// Listen for for joins to the channel so that the relevant people can
+// be autooped or autovoiced.
 bot.addListener("join", function(channel, nick, message){
-	l.appendLog(nick+" joined "+channel);
-	autoOP(nick, channel);
-	autoVoice(nick, channel);
+	util.log(nick+" joined "+channel);
+
+	// Use the 'users' map to apply the appropriate mode, if
+	// applicable.
+	userinfo = users[[nick]]
+	if (userinfo == null) {
+		return
+	}
+	userhost = message.user+"@"+message.host
+	if (userinfo.host == userhost) {
+		bot.send(":"+nick+"!"+userhost, "MODE", channel, userinfo.mode, nick);
+		util.log(userinfo.mode+" "+nick+" in "+channel);
+	}
 });
 
-// Listen for any message said on channels
-// First, it logs the message, and then it
-// Parses the message to see what it is to
-// Do next.
+// Listen for any message said on channels first, it logs the message,
+// and then it parses the message to see what it is to do next.
 bot.addListener("message", function(from, to, text, message) {
-	// Log anything and everything just to have it
-	l.appendLog(from+": "+String(message.args[1]));
+	// Log anything and everything just to have it.
+	util.log(from+": "+String(message.args[1]));
 	var msg = String(message.args[1]).toLowerCase();
 	
-	// Check if someone posted a link. If so, then
-	// Get some information about the posted link.
+	// Check if someone posted a link. If so, then get some
+	// information about the posted link.
 	if (msg.indexOf("http") > -1) {
 		postLink(findUrl(message), from, message.args[0]);
 	} 
 	
-	// If someone says meow, then meow
-	// Back at them!
+	// If someone says meow, then meow back at them!
 	else if (msg.indexOf("meow") > -1) {
 		bot.say(message.args[0], from+": meow!");
 	}
 
 	// If someone says "kittens"
 	else if (msg.indexOf(c.config.botName) > -1) {
-		// If someone says hello to the
-		// Bot, then the bot should say
+		// If someone says hello to the bot, then the bot should say
 		// Hello back to them!
 		if (containsGreeting(msg)) {
 			bot.say(message.args[0], from+": "+RandomGreeting());
 		}
-		// If someone says goodbye to the
-		// Bot then the bot should say it
-		// Back to them!
+		// If someone says goodbye to the bot then the bot should say
+		// it back to them!
 		else if (containsFarewell(msg)) {
 			bot.say(message.args[0], from+": "+RandomFarewell());
 		}
-		// If someone threatens the bot
-		// It can't just sit around and
-		// Not do anything! Fight back!
+		// If someone threatens the bot it can't just sit around and
+		// not do anything! Fight back!
 		else if (isThreatened(msg)) {
 			bot.say(message.args[0], from+": "+RandomThreat());
 		}
-		// If someone just says a lone number,
-		// Get the relevant xkcd comic.
+		// If someone just says a lone number, get the relevant xkcd
+		// comic.
 		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
 			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);
 		} 
-		// If someone says "kittens" but none
-		// Of the other conditions apply, the
-		// Bot should just send the channel a
-		// Random quote.
+		// If someone says "kittens" but none of the other conditions
+		// apply, the bot should just send the channel a random quote.
 		else {
 			bot.say(message.args[0], from+": "+RandomQuote());
 		}
@@ -95,38 +94,32 @@ bot.addListener("message", function(from, to, text, message) {
 // --------------------------------------------------------------------------- //
 // --------------------------------------------------------------------------- //
 
-// The function RandomQuote gets a random
-// Quote to be said back to a user in the
+// RandomQuote gets a random quote to be said back to a user in the
 // IRC channel.
 function RandomQuote() {
 	return c.quotes[Math.floor(Math.random()*c.quotes.length)];
 }
 
-// The function RandomGreeting gets a random
-// Greeting to be said back to a user in the
-// IRC channel.
+// RandomGreeting gets a random qreeting to be said back to a user in
+// the IRC channel.
 function RandomGreeting() {
 	return c.greetings[Math.floor(Math.random()*c.greetings.length)];
 }
 
-// The function RandomFarewell gets a random
-// Farewell to be said back to a user in the
-// IRC channel.
+// The function RandomFarewell gets a random farewell to be said back
+// to a user in the IRC channel.
 function RandomFarewell() {
 	return c.farewells[Math.floor(Math.random()*c.farewells.length)];
 }
 
-// The function RandomThreat gets a random
-// Threat to be said back to a user in the
+// RandomThreat gets a random threat to be said back to a user in the
 // IRC channel.
 function RandomThreat() {
 	return (Math.round(Math.random()) % 2 == 0) ? "I will "+c.keyThreats[Math.floor(Math.random()*c.keyThreats.length)]+" you" : c.threats[Math.floor(Math.random()*c.threats.length)];
 }
 
-// The function findURL searches through
-// A message that someone says, and then
-// It finds just the URL from the String
-// And returns it.
+// findURL searches through a message that someone says, and then it
+// finds just the URL from the String and returns it.
 function findUrl(message) {
 	if (String(message.args[1]).indexOf("https") > -1) return findUrlHTTPS(message);
 	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("http")));
@@ -143,10 +136,8 @@ function findUrl(message) {
 	return url;
 }
 
-// The function findURLHTTPS is called
-// When the function findURL finds out
-// That what it's searching for is not
-// An HTTP call.
+// findURLHTTPS is called then the function findURL finds out that
+// what it's searching for is not an HTTP call.
 function findUrlHTTPS(message) {
 	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("https")));
 	var msgAtURL = message.args[1].substring(before.length);
@@ -162,55 +153,24 @@ function findUrlHTTPS(message) {
 	return url;
 }
 
-// The function postLink gets a certain
-// Link that someone said and then gets
-// The title of the link and relays the
-// Information back to the channel.
+// postLink gets a certain link that someone said and then gets the
+// title of the link and relays the information back to the channel.
 function postLink(url, from, channel) {
-	l.appendLog("GET request for ["+url+"] from "+from);
+	util.log("GET request for ["+url+"] from "+from);
 	
 	request({
 		uri: url,
 	}, function(err, res, body) {
 		var title = /<title>(.*)<\/title>/.exec(body);
 		if (title != null) {
-			l.appendLog(url+" - "+title[1]);
+			util.log(url+" - "+title[1]);
 			bot.say(channel, url+" - \u0002"+title[1]+"\u000f");
 		}
 	});
 }
 
-// The function autoOP cycles through
-// The list of people that are always
-// Going to be OP'd, and then if said
-// Person is on the list then they'll
-// Be OP'd.
-function autoOP(nick, channel) {
-	for (var i = 0; i < c.op.length; i++) {
-		if (c.op[i] == nick) {
-			bot.send(":"+nick+"!"+c.jop[[nick]],"MODE", channel, "+o", nick);
-			l.appendLog(":"+nick+"!"+c.jop[[nick]]+" MODE "+channel+" +o "+nick);
-		}
-	}
-}
-
-// The function autoVoice cycles through
-// The list of people that should always
-// Be voiced, and if the person is on it
-// Then they'll be voiced.
-function autoVoice(nick, channel) {
-	for (var i = 0; i < c.voice.length; i++) {
-		if (c.voice[i] == nick) {
-			bot.send(":"+nick+"!"+c.jvoice[[nick]],"MODE", channel, "+v", nick);
-			l.appendLog(":"+nick+"!"+c.jvoice[[nick]]+" MODE "+channel+" +v "+nick);
-			l.appendLog("Voiced "+nick);
-		}
-	}
-}
-
-// The function isThreatened will check
-// A message that is sent to Kittens if
-// It is threatening the bot.
+// isThreatened will check a message that is sent to Kittens if it is
+// threatening the bot.
 function isThreatened(msg) {
 	for (var i = 0; i < c.keyThreats.length; i++) {
 		if (msg.indexOf(c.keyThreats[i]) > -1) {
@@ -220,9 +180,8 @@ function isThreatened(msg) {
 	return false;
 }
 
-// The function containsGreeting will
-// Check to see if the phrase said to
-// The bot contains a greeting.
+// containsGreeting will check to see if the phrase said to the bot
+// contains a greeting.
 function containsGreeting(msg) {
 	for (var i = 0; i < c.greetings.length; i++) {
 		if (msg.indexOf(c.greetings[i]) > -1) {
@@ -232,9 +191,8 @@ function containsGreeting(msg) {
 	return false;
 }
 
-// The function containsFarewell will
-// Check to see if the phrase said to
-// The bot contains a farewell.
+// containsFarewell will check to see if the phrase said to the bot
+// contains a farewell.
 function containsFarewell(msg) {
 	for (var i = 0; i < c.farewells.length; i++) {
 		if (msg.indexOf(c.farewells[i]) > -1) {
