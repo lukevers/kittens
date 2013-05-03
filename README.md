@@ -8,3 +8,10 @@
 
 If you already have [`node`](http://nodejs.org/) and [`npm`](https://npmjs.org/) installed, skip this section. Otherwise, visit [here](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) to find out how to install properly. 
 
+### Install
+
+```bash
+git clone https://github.com/lukevers/kittens.git
+cd kittens
+npm install
+```
