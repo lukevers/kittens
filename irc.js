@@ -31,7 +31,7 @@ bot.addListener("join", function(channel, nick, message){
 
 	// Use the 'users' map to apply the appropriate mode, if
 	// applicable.
-	userinfo = users[[nick]]
+	userinfo = c.users[[nick]]
 	if (userinfo == null) {
 		return
 	}
