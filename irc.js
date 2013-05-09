@@ -124,36 +124,33 @@ function RandomFarewell() {
 // findURL searches through a message that someone says, and then it
 // finds just the URL from the String and returns it.
 function findUrl(message) {
-	if (String(message.args[1]).indexOf("https") > -1) return findUrlHTTPS(message);
-	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("http")));
-	var msgAtURL = message.args[1].substring(before.length);
-	var after = msgAtURL.substring(msgAtURL.indexOf(" "));
-	var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
-	if (url == "") url = after;
-	var host = url;
-	var path = "/";
-	if (url.substring(7).indexOf("/") > -1) {
-		host = url.substring(7, (url.substring(7).indexOf("/")+7));
-		path = url.substring(host.length+7);
+	if (String(message.args[1]).indexOf("https") > -1) {
+		var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("https")));
+		var msgAtURL = message.args[1].substring(before.length);
+		var after = msgAtURL.substring(msgAtURL.indexOf(" "));
+		var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
+		if (url == "") url = after;
+		var host = url;
+		var path = "/";
+		if (url.substring(8).indexOf("/") > -1) {
+			host = url.substring(8, (url.substring(8).indexOf("/")+8));
+			path = url.substring(host.length+8);
+		}
+		return url;
+	} else {
+		var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("http")));
+		var msgAtURL = message.args[1].substring(before.length);
+		var after = msgAtURL.substring(msgAtURL.indexOf(" "));
+		var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
+		if (url == "") url = after;
+		var host = url;
+		var path = "/";
+		if (url.substring(7).indexOf("/") > -1) {
+			host = url.substring(7, (url.substring(7).indexOf("/")+7));
+			path = url.substring(host.length+7);
+		}
+		return url;
 	}
-	return url;
-}
-
-// findURLHTTPS is called then the function findURL finds out that
-// what it's searching for is not an HTTP call.
-function findUrlHTTPS(message) {
-	var before = String(message.args[1].substring(0, String(message.args[1]).toLowerCase().indexOf("https")));
-	var msgAtURL = message.args[1].substring(before.length);
-	var after = msgAtURL.substring(msgAtURL.indexOf(" "));
-	var url = msgAtURL.substring(0, msgAtURL.indexOf(after));
-	if (url == "") url = after;
-	var host = url;
-	var path = "/";
-	if (url.substring(8).indexOf("/") > -1) {
-		host = url.substring(8, (url.substring(8).indexOf("/")+8));
-		path = url.substring(host.length+8);
-	}
-	return url;
 }
 
 // postLink gets a certain link that someone said and then gets the
