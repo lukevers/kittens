@@ -86,8 +86,14 @@ bot.addListener("message", function(from, to, text, message) {
 		// If someone just says a lone number, get the relevant xkcd
 		// comic.
 		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
-			console.log(msg.substring(c.config.botName.length+1).trim());
-			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);
+			var np = /\d+/g;
+			var is = msg.substring(c.config.botName.length+1).trim().match(np);
+			// if it's not a number, just send a fun message!
+			if (is == "" || is == " " || is == null || is == "\n") {
+				bot.say(message.args[0], from+": "+RandomQuote());
+			} else {
+				postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);	
+			}
 		} 
 		// If someone says "kittens" but none of the other conditions
 		// apply, the bot should just send the channel a random quote.
