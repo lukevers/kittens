@@ -32,6 +32,9 @@ bot.addListener("join", function(channel, nick, message){
 	// Use the 'users' map to apply the appropriate mode, if
 	// applicable.
 	userinfo = c.users[[nick]]
+	if (userinfo == null) {
+		return
+	}
 	
 	userhost = message.user+"@"+message.host
 	console.log("userhost: "+userhost);
