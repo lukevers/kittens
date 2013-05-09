@@ -287,6 +287,6 @@ function parseCommands(from, message) {
 			bot.say(message.args[0], from+": you do not have permission to do that!");
 		} // close is master	
 	} else {
-		bot.say(message.args[0], from+": try \"+help\"");
+		bot.say(message.args[0], from+": try using +help");
 	}
 } 
