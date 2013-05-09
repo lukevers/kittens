@@ -37,8 +37,6 @@ bot.addListener("join", function(channel, nick, message){
 	}
 	
 	userhost = message.user+"@"+message.host
-	console.log("userhost: "+userhost);
-	console.log("userinfo.host: "+userinfo.host);
 	if (userinfo.host == userhost) {
 		bot.send(":"+nick+"!"+userhost, "MODE", channel, userinfo.mode, nick);
 		util.log(userinfo.mode+" "+nick+" in "+channel);
