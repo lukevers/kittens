@@ -157,7 +157,6 @@ function findUrl(message) {
 // title of the link and relays the information back to the channel.
 function postLink(url, from, channel) {
 	util.log("GET request for ["+url+"] from "+from);
-	
 	request({
 		uri: url,
 	}, function(err, res, body) {
@@ -167,17 +166,6 @@ function postLink(url, from, channel) {
 			bot.say(channel, url+" - \u0002"+title[1]+"\u000f");
 		}
 	});
-}
-
-// isThreatened will check a message that is sent to Kittens if it is
-// threatening the bot.
-function isThreatened(msg) {
-	for (var i = 0; i < c.keyThreats.length; i++) {
-		if (msg.indexOf(c.keyThreats[i]) > -1) {
-			return true;
-		}
-	}
-	return false;
 }
 
 // containsGreeting will check to see if the phrase said to the bot
