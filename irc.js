@@ -212,7 +212,7 @@ function containsFarewell(msg) {
 // and if so then it will do stuff depending on what the command is
 function parseCommands(from, message) {
 	var commands = ["help", "op", "deop", "voice", "devoice"];
-	if (message[1].indexOf("+help") > -1) {
+	if (message.args[1].indexOf("+help") > -1) {
 		m = message.args[0], from+": ";
 		
 		bot.say(m);
