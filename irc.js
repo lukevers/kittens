@@ -194,16 +194,16 @@ function containsFarewell(msg) {
 // parseCommands will check to see if the command is a real command
 // and if so then it will do stuff depending on what the command is
 function parseCommands(from, message) {
-	var commands = ["help", "op", "deop", "voice", "devoice"];
+	var commands = ["+help", "+op", "+deop", "+voice", "+devoice"];
 	var command = message.args[1].split(" ")[0];
 	var isMaster = c.users[from].master;
 	
 	// Check if command is real, if not then show help.
 	if (commands.indexOf(command) > -1) {
 		if (command.indexOf("+help") == 0) {
-			m = from+":";
+			m = from+": ";
 			for (var i = 0; i < commands.length; i++) 
-				m+= " +"+commands[i];
+				m+= commands[i]+" ";
 			bot.say(message.args[0], m);
 		}
 		
