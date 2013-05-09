@@ -33,7 +33,7 @@ bot.addListener("join", function(channel, nick, message){
 	// Use the 'users' map to apply the appropriate mode, if
 	// applicable.
 	userinfo = c.users[[nick]]
-	if (userinfo == null) {
+	if (typeof userinfo == "undefined") {
 		return
 	}
 	
@@ -198,6 +198,8 @@ function parseCommands(from, message) {
 	var command = message.args[1].split(" ")[0];
 	var isMaster = c.users[from].master;
 	
+	// Check if command is real, if not then show help.
+	
 	if (command.indexOf("+help") == 0) {
 		m = from+":";
 		for (var i = 0; i < commands.length; i++) 
@@ -209,45 +211,78 @@ function parseCommands(from, message) {
 	else if (isMaster) {
 		var user = message.args[1].split(" ")[1];
 		if (command.indexOf("+op") == 0) {
-			if (c.users[user].mode == "+o") {
-				bot.say(message.args[0], from+": "+user+" already has mode +o!");
+			if (typeof c.users[user] == "undefined") {
+				bot.whois(user, function(info) {
+					c.users[user] = {"mode":"+o", "host":info.user+"@"+info.host};
+					bot.send(":"+user+"!"+info.user+"@"+info.host, "MODE", message.args[0], "+o", user);
+					// Now change the users.json file
+					fs.writeFile("./users.json", JSON.stringify(c.users), function(err) {
+						if(err) {
+							util.log(err);
+						} else {
+							util.log("The users file was updated!");
+						}
+					}); 
+				});
+				
 			} else {
-				c.users[user].mode = "+o";
+				if (c.users[user].mode == "+o") {
+					bot.say(message.args[0], from+": "+user+" already has mode +o!");
+				} else {
+					c.users[user].mode = "+o";
+					bot.send(":"+user+"!"+c.users[user].host, "MODE", message.args[0], "+o", user);
+				}
 			}
 		}
 		else if (command.indexOf("+deop") == 0) {
 			if (c.users[user].mode == "+o") {
+				bot.send(":"+user+"!"+c.users[user].host, "MODE", message.args[0], "-o", user);
 				delete c.users[user];
 			} else {
 				bot.say(message.args[0], from+": "+user+" already does not have mode +o!");
 			}
 		}
 		else if (command.indexOf("+voice") == 0) {
-			if (c.users[user].mode == "+o") {
-				bot.say(message.args[0], from+": "+user+" already has mode +o!");
-			} else if (c.users[user].mode == "+v") {
-				bot.say(message.args[0], from+": "+user+" already has mode +v!");
+			if (typeof c.users[user] == "undefined") {
+				bot.whois(user, function(info) {
+					c.users[user] = {"mode":"+v", "host":info.user+"@"+info.host};
+					bot.send(":"+user+"!"+info.user+"@"+info.host, "MODE", message.args[0], "+v", user);
+					// Now change the users.json file
+					fs.writeFile("./users.json", JSON.stringify(c.users), function(err) {
+						if(err) {
+							util.log(err);
+						} else {
+							util.log("The users file was updated!");
+						}
+					}); 
+				});
 			} else {
-				c.users[user].mode = "+v";
+				if (c.users[user].mode == "+o") {
+					bot.say(message.args[0], from+": "+user+" already has mode +o!");
+				} else if (c.users[user].mode == "+v") {
+					bot.say(message.args[0], from+": "+user+" already has mode +v!");
+				} else {
+					c.users[user].mode = "+v";
+					bot.send(":"+user+"!"+c.users[user].host, "MODE", message.args[0], "+v", user);
+				}
 			}
 		}
 		else if (command.indexOf("+devoice") == 0) {
 			if (c.users[user].mode == "+v") {
+				bot.send(":"+user+"!"+c.users[user].host, "MODE", message.args[0], "-v", user);
 				delete c.users[user];
 			} else {
 				bot.say(message.args[0], from+": "+user+" already does not have mode +v!");
 			}
 		}
-		
 		// Now change the users.json file
-		fs.writeFile("./users.json", c.users, function(err) {
+		fs.writeFile("./users.json", JSON.stringify(c.users), function(err) {
 			if(err) {
 				util.log(err);
 			} else {
-				util.log("The file was saved!");
+				util.log("The users file was updated!");
 			}
 		}); 
-		
 	} else {
 		bot.say(message.args[0], from+": you do not have permission to do that!");
 	} // close is master
