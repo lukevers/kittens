@@ -57,7 +57,7 @@ bot.addListener("message", function(from, to, text, message) {
 	} 
 	
 	// Parse every + request
-	else if (msg.indexOf("+") == 0) {
+	else if (msg.indexOf("+") > -1) {
 		parseCommands(from, message);
 	}
 	
@@ -85,7 +85,7 @@ bot.addListener("message", function(from, to, text, message) {
 		}
 		// If someone just says a lone number, get the relevant xkcd
 		// comic.
-		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
+		else if (msg.substring(c.config.botName.length+1).trim() != " " && !isNaN(msg.substring(c.config.botName.length+1).trim())) {
 			postLink("http://xkcd.com/"+msg.substring(c.config.botName.length+1).trim(), from, message.args[0]);
 		} 
 		// If someone says "kittens" but none of the other conditions
@@ -93,6 +93,7 @@ bot.addListener("message", function(from, to, text, message) {
 		else {
 			bot.say(message.args[0], from+": "+RandomQuote());
 		}
+		
 	}
 });
 
