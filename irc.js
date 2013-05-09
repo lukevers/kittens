@@ -194,10 +194,30 @@ function containsFarewell(msg) {
 // and if so then it will do stuff depending on what the command is
 function parseCommands(from, message) {
 	var commands = ["help", "op", "deop", "voice", "devoice"];
-	if (message.args[1].indexOf("+help") == 0) {
+	var command = message.args[1].split(" ")[0];
+	var isMaster = c.users[[from]].master;
+	util.log(isMaster);
+	
+	if (command.indexOf("+help") == 0) {
 		m = from+":";
 		for (var i = 0; i < commands.length; i++) 
 			m+= " +"+commands[i];
 		bot.say(message.args[0], m);
-	} 
+	}
+	
+	// The following commands below require you to be a "master"
+	else if (isMaster) {
+		if (command.indexOf("+op") == 0) {
+			
+		}
+		else if (command.indexOf("+deop") == 0) {
+			
+		}
+		else if (command.indexOf("+voice") == 0) {
+			
+		}
+		else if (command.indexOf("+devoice") == 0) {
+			
+		}
+	} // close master commands
 } 
