@@ -212,7 +212,7 @@ function parseCommands(from, message) {
 		}
 		
 		// The following commands below require you to be a "master"
-		else if (isMaster) {
+		else if (	isMaster) {
 			var user = message.args[1].split(" ")[1];
 			if (command.indexOf("+op") == 0) {
 				op(from, message, user);
@@ -299,7 +299,7 @@ function devoice(from, message, user) {
 }
 
 function writeFile(users) {
-	fs.writeFile("./users.json", JSON.stringify(users), function(err) {
+	fs.writeFile("./users.json", users, function(err) {
 		if(err) {
 			util.log(err);
 		} else {
