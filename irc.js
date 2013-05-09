@@ -78,11 +78,6 @@ bot.addListener("message", function(from, to, text, message) {
 		else if (containsFarewell(msg)) {
 			bot.say(message.args[0], from+": "+RandomFarewell());
 		}
-		// If someone threatens the bot it can't just sit around and
-		// not do anything! Fight back!
-		else if (isThreatened(msg)) {
-			bot.say(message.args[0], from+": "+RandomThreat());
-		}
 		// If someone just says a lone number, get the relevant xkcd
 		// comic.
 		else if (!isNaN(msg.substring(c.config.botName.length+1).trim())) {
@@ -124,12 +119,6 @@ function RandomGreeting() {
 // to a user in the IRC channel.
 function RandomFarewell() {
 	return c.farewells[Math.floor(Math.random()*c.farewells.length)];
-}
-
-// RandomThreat gets a random threat to be said back to a user in the
-// IRC channel.
-function RandomThreat() {
-	return (Math.round(Math.random()) % 2 == 0) ? "I will "+c.keyThreats[Math.floor(Math.random()*c.keyThreats.length)]+" you" : c.threats[Math.floor(Math.random()*c.threats.length)];
 }
 
 // findURL searches through a message that someone says, and then it

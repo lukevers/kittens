@@ -27,21 +27,11 @@ var greetings = ["hi", "hello", "howdy", "hai", "bonjour"];
 // Set farewells to be said to people.
 var farewells = ["bye", "bai", "farewell", "have a nice day", "cherrio"];
 
-// Set key-word threats.
-var keyThreats = ["castrate", "kill", "destroy", "murder", "fuck", "fry", "bake", "hurt", "burn", "slice", "chop"];
-
-// Set responses to threats.
-var threats = ["I will claw your eyes out", "I will pee on everything you love", "I will claw your walls",
-               "I will throw hairballs at you", "I will fart on you while you sleep",
-               "I will burn the \u0002heart\u000f out of you."];
-
 var users = require(config.usersFile);
 
 // Set the variables for the main IRC file to be able to use.
 exports.quotes = quotes;
 exports.config = config;
-exports.keyThreats = keyThreats;
-exports.threats = threats;
 exports.greetings = greetings;
 exports.farewells = farewells;
 exports.users = users;
