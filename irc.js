@@ -195,8 +195,7 @@ function containsFarewell(msg) {
 function parseCommands(from, message) {
 	var commands = ["help", "op", "deop", "voice", "devoice"];
 	var command = message.args[1].split(" ")[0];
-	var isMaster = JSON.stringify(c.users)[[from]].master;
-	util.log(isMaster);
+	var isMaster = c.users[from].master;
 	
 	if (command.indexOf("+help") == 0) {
 		m = from+":";
@@ -219,5 +218,7 @@ function parseCommands(from, message) {
 		else if (command.indexOf("+devoice") == 0) {
 			
 		}
-	} // close master commands
+	} else {
+		bot.say(message.args[0], from+": you do not have permission to do that!");
+	} // close is master
 } 
