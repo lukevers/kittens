@@ -195,7 +195,7 @@ function containsFarewell(msg) {
 function parseCommands(from, message) {
 	var commands = ["help", "op", "deop", "voice", "devoice"];
 	var command = message.args[1].split(" ")[0];
-	var isMaster = c.users[[from]].master;
+	var isMaster = JSON.stringify(c.users)[[from]].master;
 	util.log(isMaster);
 	
 	if (command.indexOf("+help") == 0) {
