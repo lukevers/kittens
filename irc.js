@@ -56,6 +56,11 @@ bot.addListener("message", function(from, to, text, message) {
 		postLink(findUrl(message), from, message.args[0]);
 	} 
 	
+	// Parse every + request
+	else if (msg.indexOf("+") == 0) {
+		parseCommands(from, message);
+	}
+	
 	// If someone says meow, then meow back at them!
 	else if (msg.indexOf("meow") > -1) {
 		bot.say(message.args[0], from+": meow!");
@@ -202,3 +207,14 @@ function containsFarewell(msg) {
 	}
 	return false;
 }
+
+// parseCommands will check to see if the command is a real command
+// and if so then it will do stuff depending on what the command is
+function parseCommands(from, message) {
+	var commands = ["help", "op", "deop", "voice", "devoice"];
+	if (message.indexOf("+help") > -1) {
+		m = message.args[0], from+": ";
+		
+		bot.say(m);
+	} 
+} 
