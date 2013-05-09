@@ -8,14 +8,14 @@
 // Most user configuration will go on here. Further customization,
 // however, is possible below.
 var config = {
-	userName: "kittens",
-	realName: "Kitten IRC Bot",
+	userName: "username",
+	realName: "Kittens IRC Bot",
 	autoRejoin: true,
 	autoConnect: true,
-	channels: ["#marylandmesh"],
+	channels: ["#lolchannel", "#lolchannel2"],
 	server: "irc.efnet.org",
-	botName: "kittens",
-	usersFile: "./users.json"
+	botName: "botname",
+	usersFile: "./example.users.json"
 };
 
 // Set random quotes.
