@@ -6,6 +6,7 @@ var util = require("util");
 var irc = require("irc");
 var request = require("request");
 var c = require("./config");
+var fs = require("fs");
 
 util.log("Configured "+c.config.botName);
 
@@ -206,18 +207,47 @@ function parseCommands(from, message) {
 	
 	// The following commands below require you to be a "master"
 	else if (isMaster) {
+		var user = message.args[1].split(" ")[1];
 		if (command.indexOf("+op") == 0) {
-			
+			if (c.users[user].mode == "+o") {
+				bot.say(message.args[0], from+": "+user+" already has mode +o!");
+			} else {
+				c.users[user].mode = "+o";
+			}
 		}
 		else if (command.indexOf("+deop") == 0) {
-			
+			if (c.users[user].mode == "+o") {
+				delete c.users[user];
+			} else {
+				bot.say(message.args[0], from+": "+user+" already does not have mode +o!");
+			}
 		}
 		else if (command.indexOf("+voice") == 0) {
-			
+			if (c.users[user].mode == "+o") {
+				bot.say(message.args[0], from+": "+user+" already has mode +o!");
+			} else if (c.users[user].mode == "+v") {
+				bot.say(message.args[0], from+": "+user+" already has mode +v!");
+			} else {
+				c.users[user].mode = "+v";
+			}
 		}
 		else if (command.indexOf("+devoice") == 0) {
-			
+			if (c.users[user].mode == "+v") {
+				delete c.users[user];
+			} else {
+				bot.say(message.args[0], from+": "+user+" already does not have mode +v!");
+			}
 		}
+		
+		// Now change the users.json file
+		fs.writeFile("./users.json", c.users, function(err) {
+			if(err) {
+				util.log(err);
+			} else {
+				util.log("The file was saved!");
+			}
+		}); 
+		
 	} else {
 		bot.say(message.args[0], from+": you do not have permission to do that!");
 	} // close is master
