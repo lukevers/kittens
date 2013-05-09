@@ -15,7 +15,7 @@ var config = {
 	channels: ["#lolchannel", "#lolchannel2"],
 	server: "irc.efnet.org",
 	botName: "botname",
-	usersFile: "./example.users.json"
+	usersFile: "./users.json"
 };
 
 // Set random quotes.
