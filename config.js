@@ -35,7 +35,7 @@ var threats = ["I will claw your eyes out", "I will pee on everything you love",
                "I will throw hairballs at you", "I will fart on you while you sleep",
                "I will burn the \u0002heart\u000f out of you."];
 
-users = require(config.usersFile);
+var users = require(config.usersFile);
 
 // Set the variables for the main IRC file to be able to use.
 exports.quotes = quotes;
