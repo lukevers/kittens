@@ -202,7 +202,7 @@ function parseCommands(from, message) {
 	var command = message.args[1].split(" ")[0];
 	var isMaster;
 	
-	if (typeof c.users[from].master == "undefined") {
+	if (typeof c.users[from] == "undefined") {
 		isMaster = false;
 	} else isMaster = c.users[from].master;
 	
