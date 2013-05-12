@@ -11,6 +11,7 @@
 //
 
 var util = require('util');
+var fs = require('fs');
 
 exports.writeFile = function writeFile(users) {
 	fs.writeFile('../users.json', JSON.stringify(users), function(err) {

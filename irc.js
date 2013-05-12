@@ -6,11 +6,10 @@ var util = require("util");
 var irc = require("irc");
 var request = require("request");
 var c = require("./config");
-var fs = require("fs");
 
 util.log("Configured "+c.config.botName);
+util.log("Creating "+c.config.botName);
 
-// Create the bot.
 var bot = new irc.Client(c.config.server, c.config.botName, {
 	channels: c.config.channels
 });
@@ -18,11 +17,19 @@ var bot = new irc.Client(c.config.server, c.config.botName, {
 util.log("Created "+c.config.botName);
 util.log("Connecting to "+c.config.server);
 
+require('./packages/op.js')(bot);
+
+
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+
+/*
+
 // Listen for topic changes on channels, and when there is a topic
 // change, the bot will announce the new topic.
 bot.addListener("topic", function(channel, topic, nick, message){
-	util.log("The new topic on "+channel+" is \""+topic+"\"");
-	bot.say(channel, "The new topic on "+channel+" is \"\u0002"+topic+"\u000f\"");
+	// if they want to log it
 });
 
 // Listen for for joins to the channel so that the relevant people can
@@ -51,11 +58,7 @@ bot.addListener("message", function(from, to, text, message) {
 	util.log(from+": "+String(message.args[1]));
 	var msg = String(message.args[1]).toLowerCase();
 	var channel = message.args[0];
-	
-	
+
 	
 });
-
-// --------------------------------------------------------------------------- //
-// --------------------------------------------------------------------------- //
-// --------------------------------------------------------------------------- //
+*/
