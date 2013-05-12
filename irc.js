@@ -200,7 +200,11 @@ function containsFarewell(msg) {
 function parseCommands(from, message) {
 	var commands = ["+help", "+op", "+deop", "+voice", "+devoice"];
 	var command = message.args[1].split(" ")[0];
-	var isMaster = c.users[from].master;
+	var isMaster;
+	
+	if (typeof c.users[from].master == "undefined") {
+		isMaster = false;
+	} else isMaster = c.users[from].master;
 	
 	// Check if command is real, if not then show help.
 	if (commands.indexOf(command) > -1) {
@@ -212,7 +216,7 @@ function parseCommands(from, message) {
 		}
 		
 		// The following commands below require you to be a "master"
-		else if (	isMaster) {
+		else if (isMaster) {
 			var user = message.args[1].split(" ")[1];
 			if (command.indexOf("+op") == 0) {
 				op(from, message, user);
