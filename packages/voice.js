@@ -29,7 +29,7 @@ module.exports = function(bot) {
 	function voice(from, message, user) {
 		if (typeof users[user] == "undefined") {
 			bot.whois(user, function(info) {
-				c.users[user] = {"mode":"+v", "host":info.user+"@"+info.host};
+				users[user] = {"mode":"+v", "host":info.user+"@"+info.host};
 				bot.send(":"+user+"!"+info.user+"@"+info.host, "MODE", message.args[0], "+v", user);
 				writeFile(users);
 			});
