@@ -3,9 +3,6 @@
 //	
 //	Modular package for Kittens for the use of 
 //	OPing and deOPing people.
-//
-//	op.js requires the use of the users.js
-//	package.
 //	
 //	Written by Luke Evers.
 //
@@ -49,6 +46,10 @@ module.exports = function(bot) {
 	}
 	
 	function deop(from, message, user) {
+		if (typeof users[user] == 'undefined') {
+			bot.say(message.args[0], from+': '+user+' already does not have mode +o!');
+			return;
+		}
 		if (users[user].mode == '+o') {
 			bot.send(':'+user+'!'+users[user].host, 'MODE', message.args[0], '-o', user);
 			delete users[user];
