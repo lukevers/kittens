@@ -4,3 +4,7 @@
 
 # Node Modules
 node_modules
+
+# Configuration files
+users.json
+
