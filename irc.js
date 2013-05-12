@@ -58,7 +58,7 @@ bot.addListener("message", function(from, to, text, message) {
 	} 
 	
 	// Parse every + request
-	else if (msg.indexOf("+") > -1) {
+	else if (msg.indexOf("+") == 0) {
 		parseCommands(from, message);
 	}
 	
