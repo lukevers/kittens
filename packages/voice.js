@@ -47,6 +47,10 @@ module.exports = function(bot) {
 	}
 	
 	function devoice(from, message, user) {
+		if (typeof users[user] == 'undefined') {
+			bot.say(message.args[0], from+': '+user+' already does not have mode +v!');
+			return;
+		}
 		if (users[user].mode == "+v") {
 			bot.send(":"+user+"!"+users[user].host, "MODE", message.args[0], "-v", user);
 			delete users[user];
