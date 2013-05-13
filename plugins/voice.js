@@ -2,7 +2,7 @@
 //	Kittens
 //	voice.js
 //	
-//	Modular package for Kittens for the use of 
+//	Modular plugin for Kittens for the use of 
 //	Voicing and devoicing people.
 //	
 //	Written by Luke Evers.

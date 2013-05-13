@@ -2,7 +2,7 @@
 //	Kittens
 //	topic.js
 //	
-//	Modular package for Kittens for the use of 
+//	Modular plugin for Kittens for the use of 
 //	stating the topic when it changes. This is
 //	mainly for logging purposes.
 //	

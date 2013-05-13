@@ -2,7 +2,7 @@
 //	Kittens
 //	op.js
 //	
-//	Modular package for Kittens for the use of 
+//	Modular plugin for Kittens for the use of 
 //	OPing and deOPing people.
 //	
 //	Written by Luke Evers.

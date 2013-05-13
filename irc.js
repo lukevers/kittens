@@ -7,31 +7,43 @@
 //	Written by Luke Evers.
 //
 
-var util = require("util");
-var irc = require("irc");
-var request = require("request");
-var c = require("./config");
+var util = require('util');
+var irc = require('irc');
 var fs = require('fs');
 
-util.log("Configured "+c.config.botName);
-util.log("Creating "+c.config.botName);
+util.log('Configuring bot');
 
-var bot = new irc.Client(c.config.server, c.config.botName, {
-	channels: c.config.channels
-});
+var conf = require('./config.json');
 
-util.log("Created "+c.config.botName);
-util.log("Connecting to "+c.config.server);
+var config = {
+	botName: conf.botName,
+	realName: conf.realName,
+	autoRejoin: conf.autoRejoin,
+	autoConnect: conf.autoConnect,
+	channels: conf.channels,
+	server: conf.server,
+	port: conf.port,
+	usersFile: conf.usersFile
+};
 
-fs.readdir('./packages', function(err, files) {
+util.log('Configured '+config.botName);
+util.log('Creating '+config.botName);
+
+var bot = new irc.Client(config.server, config.botName, config);
+
+util.log('Created '+config.botName);
+
+fs.readdir('./plugins', function(err, files) {
+	util.log('Loading plugins');
+	var plugin = require('./plugins.json');
 	for (var i = 0; i < files.length; i++) {
-		
-		//
-		// TODO: create a JSON list of packages people want and then
-		//       check it against each one
-		//
-		
-		util.log('Loading package: '+files[i].substring(0, files[i].length-3));
-		require('./packages/'+files[i])(bot);
+		for (var key in plugin) {
+			if ([[key]] == files[i].substring(0, files[i].length-3)) {
+				util.log('Loading plugin: '+files[i].substring(0, files[i].length-3));
+				require('./plugins/'+files[i])(bot);
+			}
+		}
 	}
 });
+
+util.log('Connecting to '+config.server);
