@@ -1,0 +1,10 @@
+# OS X Files
+._*
+.DS_Store
+
+# Node Modules
+node_modules
+
+# Configuration files
+users.json
+
