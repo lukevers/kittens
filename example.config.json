@@ -1,0 +1,14 @@
+{
+	"botName": "ircbot",
+	"realName": "IRC Bot",
+	"autoRejoin": true,
+	"autoConnect": true,
+	"server": "irc.efnet.org",
+	"port": 6667,
+	"usersFile": "./users.json",
+	"channels": [
+		"#channel",
+		"#channel_2",
+		"#channel_3" 
+	]
+}
