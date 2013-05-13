@@ -15,3 +15,16 @@ git clone https://github.com/lukevers/kittens.git
 cd kittens
 npm install
 ```
+
+## Configuration
+
+There are three JSON files that you must set up. There is an example of each JSON file called example.*.json in the repo.
+
+### Config.json
+
+Although many of the variables already set in `config.json` do not have to be changed, there are a few items that have to be changed.
+
+### Plugins.json
+
+
+### Users.json
