@@ -40,7 +40,7 @@ fs.readdir('./plugins', function(err, files) {
 	var plugin = require('./plugins.json');
 	for (var i = 0; i < files.length; i++) {
 		for (var key in plugin) {
-			if ([[key]] == files[i].substring(0, files[i].length-3)) {
+			if ([[key]] == files[i].substring(0, files[i].length-3) && plugin[key]) {
 				util.log('Loading plugin: '+files[i].substring(0, files[i].length-3));
 				var p = require('./plugins/'+files[i])(bot);
 				cmds.push(p);
