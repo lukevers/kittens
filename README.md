@@ -46,9 +46,9 @@ Every plugin is automatically loaded if you use the default `plugins.json` file.
 
 ```json
 {
-  "op": "true",
-  "voice": "true",
-  "topic": "true"
+  "op": true,
+  "voice": true,
+  "topic": true
 }
 ```
 
