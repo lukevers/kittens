@@ -33,6 +33,8 @@ var bot = new irc.Client(config.server, config.botName, config);
 
 util.log('Created '+config.botName);
 
+var cmds = ["+help"];
+
 fs.readdir('./plugins', function(err, files) {
 	util.log('Loading plugins');
 	var plugin = require('./plugins.json');
@@ -40,9 +42,16 @@ fs.readdir('./plugins', function(err, files) {
 		for (var key in plugin) {
 			if ([[key]] == files[i].substring(0, files[i].length-3)) {
 				util.log('Loading plugin: '+files[i].substring(0, files[i].length-3));
-				require('./plugins/'+files[i])(bot);
+				var p = require('./plugins/'+files[i])(bot);
+				cmds.push(p);
 			}
 		}
+	}
+});
+
+bot.addListener("message", function(from, to, text, message) {
+	if (message.args[1].indexOf("+help") == 0) {
+		bot.say(message.args[0], from+": "+cmds.join(" ").replace(/,|  /g, " "));
 	}
 });
 

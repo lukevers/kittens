@@ -11,7 +11,10 @@
 var util = require('util');
 var fs = require('fs');
 
+var commands = ["+voice", "+devoice"];
+
 module.exports = function(bot) {
+		
 	var users = readFile();
 	bot.addListener("message", function(from, to, text, message) {
 		if (typeof users[from] == "undefined") {
@@ -60,7 +63,9 @@ module.exports = function(bot) {
 			bot.say(message.args[0], from+": "+user+" already does not have mode +v!");
 		}
 	}
-};
+	
+	return commands;
+}
 
 function writeFile(users) {
 	fs.writeFile('../users.json', JSON.stringify(users), function(err) {
