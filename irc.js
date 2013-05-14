@@ -43,7 +43,7 @@ fs.readdir('./plugins', function(err, files) {
 			if ([[key]] == files[i].substring(0, files[i].length-3) && plugin[key]) {
 				util.log('Loading plugin: '+files[i].substring(0, files[i].length-3));
 				var p = require('./plugins/'+files[i])(bot);
-				cmds.push(p);
+				if (typeof p != "undefined") cmds.push(p);
 			}
 		}
 	}
