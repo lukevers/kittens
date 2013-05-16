@@ -30,6 +30,17 @@ module.exports = function(bot) {
 		} else return;
 	});
 	
+	bot.addListener("join", function(channel, nick, message) {
+		util.log(nick+" joined "+channel);
+		var userinfo = readFile();
+		if (userinfo == null) return;
+		userhost = message.user+"@"+message.host
+		if (userinfo.host == userhost && userinfo.mode == "+v") {
+			bot.send(":"+nick+"!"+userhost, "MODE", channel, userinfo.mode, nick);
+			util.log(userinfo.mode+" "+nick+" in "+channel);
+		}
+	});
+	
 	function voice(from, message, user) {
 		if (typeof users[user] == "undefined") {
 			bot.whois(user, function(info) {
