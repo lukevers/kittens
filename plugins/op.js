@@ -32,9 +32,10 @@ module.exports = function(bot) {
 	
 	bot.addListener("join", function(channel, nick, message) {
 		util.log(nick+" joined "+channel);
-		var userinfo = readFile();
-		if (userinfo == null) return;
-		userhost = message.user+"@"+message.host
+		var file = readFile();
+		var userinfo = file[[nick]];
+		if (typeof userinfo == "undefined") return;
+		var userhost = message.user+"@"+message.host;
 		if (userinfo.host == userhost && userinfo.mode == "+o") {
 			bot.send(":"+nick+"!"+userhost, "MODE", channel, userinfo.mode, nick);
 			util.log(userinfo.mode+" "+nick+" in "+channel);
