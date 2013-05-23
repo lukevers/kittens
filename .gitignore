@@ -7,4 +7,5 @@ node_modules
 
 # Configuration files
 users.json
-
+plugins.json
+config.json
