@@ -11,34 +11,43 @@
 var util = require('util');
 var fs = require('fs');
 
-var commands = ["+op", "+deop"];
+var commands = ['+op', '+deop'];
 
 module.exports = function(bot) {
 	
 	var users = readFile();
-	bot.addListener("message", function(from, to, text, message) {
-		if (typeof users[from] == "undefined") {
+	bot.addListener('message', function(from, to, text, message) {
+		if (typeof users[from] == 'undefined') {
 			isMaster = false;
 		} else isMaster = users[from].master;
-
-		if (message.args[1].indexOf("+op") == 0) {
-			if (isMaster) op(from, message, message.args[1].split(" ")[1]);
-			else bot.say(message.args[0], from+": you do not have permission to do that!");
-		} else if (message.args[1].indexOf("+deop") == 0) {
-			if (isMaster) deop(from, message, message.args[1].split(" ")[1]);
-			else bot.say(message.args[0], from+": you do not have permission to do that!");
+		if (message.args[1].indexOf('+op') == 0) {
+			if (message.args[1].replace(/ /g, '') == '+op') {
+				// HELP
+				bot.say(message.args[0], from+': The command +op requires a user to be specified. By +op\'ing a user, the bot will remember to op them every time they sign in.');
+			} else {
+				if (isMaster) op(from, message, message.args[1].split(' ')[1]);
+				else bot.say(message.args[0], from+': you do not have permission to do that!');
+			}
+		} else if (message.args[1].indexOf('+deop') == 0) {
+			if (message.args[1].replace(/ /g, '') == '+deop') {
+				// HELP
+				bot.say(message.args[0], from+': The command +deop requires a user to be specified. By +deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
+			} else {
+				if (isMaster) deop(from, message, message.args[1].split(' ')[1]);
+				else bot.say(message.args[0], from+': you do not have permission to do that!');
+			}
 		} else return;
 	});
 	
-	bot.addListener("join", function(channel, nick, message) {
-		util.log(nick+" joined "+channel);
+	bot.addListener('join', function(channel, nick, message) {
+		util.log(nick+' joined '+channel);
 		var file = readFile();
 		var userinfo = file[[nick]];
-		if (typeof userinfo == "undefined") return;
-		var userhost = message.user+"@"+message.host;
-		if (userinfo.host == userhost && userinfo.mode == "+o") {
-			bot.send(":"+nick+"!"+userhost, "MODE", channel, userinfo.mode, nick);
-			util.log(userinfo.mode+" "+nick+" in "+channel);
+		if (typeof userinfo == 'undefined') return;
+		var userhost = message.user+'@'+message.host;
+		if (userinfo.host == userhost && userinfo.mode == '+o') {
+			bot.send(':'+nick+'!'+userhost, 'MODE', channel, userinfo.mode, nick);
+			util.log(userinfo.mode+' '+nick+' in '+channel);
 		}
 	});
 	
