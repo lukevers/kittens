@@ -9,3 +9,6 @@ node_modules
 users.json
 plugins.json
 config.json
+
+# Log files
+*.log
