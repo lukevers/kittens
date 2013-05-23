@@ -22,7 +22,6 @@ module.exports = function(bot) {
 		} else isMaster = users[from].master;
 		if (message.args[1].indexOf('+op') == 0) {
 			if (message.args[1].replace(/ /g, '') == '+op') {
-				// HELP
 				bot.say(message.args[0], from+': The command +op requires a user to be specified. By +op\'ing a user, the bot will remember to op them every time they sign in.');
 			} else {
 				if (isMaster) op(from, message, message.args[1].split(' ')[1]);
