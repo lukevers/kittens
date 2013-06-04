@@ -15,6 +15,17 @@ var commands = ['+setWelcomeMessage'];
 
 module.exports = function(bot) {
 	var users = require('../users.json');
+	// If 'welcome.json' exists, load it
+	// Else we need to create it, then load it
+	fs.exists('./welcome.json', function(exists) {
+		if (!exists) {
+			fs.writeFile('./welcome.json', function(err) {
+				if (err) util.log(err);
+				else util.log('welcome.json was created.');
+			});
+		}
+	});
+	var file = require('./welcome.json');
 	
 	bot.addListener('message', function(from, to, text, message) {
 		if (typeof users[from] == 'undefined') {
@@ -24,6 +35,12 @@ module.exports = function(bot) {
 			if (isOP) setWelcomeMessage(message.args[0], message.args[1].substring(19));
 			else bot.say(message.args[0], from+': you do not have permission to do that!');
 		}
+	});
+	
+	bot.addListener('join', function(channel, nick, message) {
+		// Check to see if 
+		
+		
 	});
 	
 	// will do in a bit
