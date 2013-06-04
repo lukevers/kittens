@@ -17,23 +17,26 @@ module.exports = function(bot) {
 	
 	var users = readFile();
 	bot.addListener('message', function(from, to, text, message) {
+		var channel = message.args[0];
+		
 		if (typeof users[from] == 'undefined') {
-			isMaster = false;
-		} else isMaster = users[from].master;
+			isOP = false;
+		} else isOP = users[from][channel].mode;
+		
 		if (message.args[1].indexOf('+op') == 0) {
 			if (message.args[1].replace(/ /g, '') == '+op') {
-				bot.say(message.args[0], from+': The command +op requires a user to be specified. By +op\'ing a user, the bot will remember to op them every time they sign in.');
+				bot.say(channel, from+': The command +op requires a user to be specified. By +op\'ing a user, the bot will remember to op them every time they sign in.');
 			} else {
-				if (isMaster) op(from, message, message.args[1].split(' ')[1]);
-				else bot.say(message.args[0], from+': you do not have permission to do that!');
+				if (isOP) op(from, message, message.args[1].split(' ')[1], channel);
+				else bot.say(channel, from+': you do not have permission to do that!');
 			}
 		} else if (message.args[1].indexOf('+deop') == 0) {
 			if (message.args[1].replace(/ /g, '') == '+deop') {
 				// HELP
-				bot.say(message.args[0], from+': The command +deop requires a user to be specified. By +deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
+				bot.say(channel, from+': The command +deop requires a user to be specified. By +deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
 			} else {
-				if (isMaster) deop(from, message, message.args[1].split(' ')[1]);
-				else bot.say(message.args[0], from+': you do not have permission to do that!');
+				if (isOP) deop(from, message, message.args[1].split(' ')[1], channel);
+				else bot.say(channel, from+': you do not have permission to do that!');
 			}
 		} else return;
 	});
@@ -41,8 +44,8 @@ module.exports = function(bot) {
 	bot.addListener('join', function(channel, nick, message) {
 		util.log(nick+' joined '+channel);
 		var file = readFile();
-		var userinfo = file[[nick]];
-		if (typeof userinfo == 'undefined') return;
+		if (typeof file[[nick]] == 'undefined') return;
+		var userinfo = file[[nick]][channel];
 		var userhost = message.user+'@'+message.host;
 		if (userinfo.host == userhost && userinfo.mode == '+o') {
 			bot.send(':'+nick+'!'+userhost, 'MODE', channel, userinfo.mode, nick);
@@ -50,36 +53,37 @@ module.exports = function(bot) {
 		}
 	});
 	
-	function op(from, message, user) {
-		if (typeof users[user] == 'undefined') {
+	function op(from, message, user, channel) {
+		if (typeof users[user][channel] == 'undefined') {
+			users[user] = {};
 			bot.whois(user, function(info) {
-				users[user] = {'mode':'+o', 'host':info.user+'@'+info.host};
-				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', message.args[0], '+o', user);
+				users[user][channel] = {'mode':'+o', 'host':info.user+'@'+info.host};
+				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', user);
 				writeFile(users);
 				});
 			} 
 		else {		
-		if (users[user].mode == '+o') {
-			bot.say(message.args[0], from+': '+user+' already has mode +o!');
+		if (users[user][channel].mode == '+o') {
+			bot.say(channel, from+': '+user+' already has mode +o!');
 		} else {
-			users[user].mode = '+o';
-			bot.send(':'+user+'!'+users[user].host, 'MODE', message.args[0], '+o', user);
+			users[user][channel].mode = '+o';
+			bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+o', user);
 			writeFile(users);
 			}
 		}
 	}
 	
-	function deop(from, message, user) {
-		if (typeof users[user] == 'undefined') {
-			bot.say(message.args[0], from+': '+user+' already does not have mode +o!');
+	function deop(from, message, user, channel) {
+		if (typeof users[user][channel] == 'undefined') {
+			bot.say(channel, from+': '+user+' already does not have mode +o!');
 			return;
 		}
-		if (users[user].mode == '+o') {
-			bot.send(':'+user+'!'+users[user].host, 'MODE', message.args[0], '-o', user);
-			delete users[user];
+		if (users[user][channel].mode == '+o') {
+			bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '-o', user);
+			delete users[user][channel];
 			writeFile(users);
 		} else {
-			bot.say(message.args[0], from+': '+user+' already does not have mode +o!');
+			bot.say(channel, from+': '+user+' already does not have mode +o!');
 		}
 	}
 	
