@@ -18,6 +18,9 @@ module.exports = function(bot) {
 	var file = require('../welcome.json');
 	bot.addListener('message', function(from, to, text, message) {
 		var channel = message.args[0];
+		if (typeof users[from] == 'undefined') {
+			users[from] = {};	
+		}
 		if (typeof users[from][channel] == 'undefined') {
 			isOP = false;
 		} else isOP = (users[from][channel].mode == '+o');
