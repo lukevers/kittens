@@ -21,7 +21,7 @@ module.exports = function(bot) {
 			isOP = false;
 		} else isOP = (users[from].mode == '+o');
 		if (message.args[1].indexOf('+setWelcomeMessage') == 0) {
-			if (isOP) setWelcomeMessage(message.args[0], message.args[1].substring(19));
+			if (isOP) setWelcomeMessage(message.args[0], message.args[1].substring(19), from);
 			else bot.say(message.args[0], from+': you do not have permission to do that!');
 		}
 	});
@@ -37,8 +37,10 @@ module.exports = function(bot) {
 	});
 	
 	// will do in a bit
-	function setWelcomeMessage(channel, message) {
-		bot.say(channel, message);
+	function setWelcomeMessage(channel, message, setby) {
+		file.message = message;
+		bot.say(channel, 'The new welcome message, set by ' + setby + ', is '+message);
+		writeFile(file);
 	}
 	
 	return commands;
