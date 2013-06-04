@@ -33,6 +33,9 @@ module.exports = function(bot) {
 	});
 	
 	bot.addListener('join', function(channel, nick, message) {
+		if (typeof file[channel] == 'undefined') {
+			file[channel] = {'old': '', 'message': 'Welcome to {channel}, {nick}!'};
+		}
 		if (file[channel].old.indexOf(nick) == -1) {			
 			file[channel].old = file[channel].old+nick;
 			var msg = parseMessage(file[channel].message, channel, nick);
