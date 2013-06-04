@@ -15,18 +15,7 @@ var commands = ['+setWelcomeMessage'];
 
 module.exports = function(bot) {
 	var users = require('../users.json');
-	// If 'welcome.json' exists, load it
-	// Else we need to create it, then load it
-	fs.exists('./welcome.json', function(exists) {
-		if (!exists) {
-			fs.writeFile('./welcome.json', function(err) {
-				if (err) util.log(err);
-				else util.log('welcome.json was created.');
-			});
-		}
-	});
-	var file = require('./welcome.json');
-	
+	var file = require('../welcome.json');
 	bot.addListener('message', function(from, to, text, message) {
 		if (typeof users[from] == 'undefined') {
 			isOP = false;
@@ -37,10 +26,12 @@ module.exports = function(bot) {
 		}
 	});
 	
-	bot.addListener('join', function(channel, nick, message) {
-		// Check to see if 
-		
-		
+	bot.addListener('join', function(channel, nick, message) {	
+		if (JSON.stringify(file.old).indexOf(nick) == -1) {			
+			var msg = parseMessage(JSON.stringify(file.message), channel, nick);
+			bot.say(channel, msg);
+			util.log(msg);
+		}
 	});
 	
 	// will do in a bit
@@ -49,4 +40,16 @@ module.exports = function(bot) {
 	}
 	
 	return commands;
+}
+ 
+//  -- Parse Message --
+//  
+//  Replaces certain words with 
+//  channel names or nick names
+//  
+//  {channel} -> channel name
+//  {nick}    -> nick name
+//  
+function parseMessage(message, channel, nick) {	
+	return message.substring(1, message.length-1).replace(/{channel}/g, channel).replace(/{nick}/g, nick);
 }

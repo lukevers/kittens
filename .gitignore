@@ -9,6 +9,7 @@ node_modules
 users.json
 plugins.json
 config.json
+welcome.json
 
 # Log files
 *.log
