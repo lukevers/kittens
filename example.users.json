@@ -1,8 +1,8 @@
 {
         "lukevers": {
-		"#marylandmesh": {
-	                "mode": "+o",
-        	        "host": "~lukevers@dylwhich.xen.prgmr.com"
-        	}
-	}
+                "#marylandmesh": {
+                        "mode": "+o",
+                        "host": "~lukevers@dylwhich.xen.prgmr.com"
+                }
+        }
 }

@@ -11,7 +11,7 @@
 var util = require('util');
 var fs = require('fs');
 
-var commands = ['+op', '+deop'];
+var commands = ['!op', '!deop'];
 
 module.exports = function(bot) {
 	
@@ -19,21 +19,21 @@ module.exports = function(bot) {
 	bot.addListener('message', function(from, to, text, message) {
 		var channel = message.args[0];
 		
-		if (typeof users[from] == 'undefined') {
+		if (typeof users[from][channel] == 'undefined') {
 			isOP = false;
 		} else isOP = users[from][channel].mode;
 		
-		if (message.args[1].indexOf('+op') == 0) {
-			if (message.args[1].replace(/ /g, '') == '+op') {
-				bot.say(channel, from+': The command +op requires a user to be specified. By +op\'ing a user, the bot will remember to op them every time they sign in.');
+		if (message.args[1].indexOf('!op') == 0) {
+			if (message.args[1].replace(/ /g, '') == '!op') {
+				bot.say(channel, from+': The command !op requires a user to be specified. By !op\'ing a user, the bot will remember to op them every time they sign in.');
 			} else {
 				if (isOP) op(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
 			}
-		} else if (message.args[1].indexOf('+deop') == 0) {
-			if (message.args[1].replace(/ /g, '') == '+deop') {
+		} else if (message.args[1].indexOf('!deop') == 0) {
+			if (message.args[1].replace(/ /g, '') == '!deop') {
 				// HELP
-				bot.say(channel, from+': The command +deop requires a user to be specified. By +deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
+				bot.say(channel, from+': The command !deop requires a user to be specified. By !deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
 			} else {
 				if (isOP) deop(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
@@ -54,21 +54,26 @@ module.exports = function(bot) {
 	});
 	
 	function op(from, message, user, channel) {
-		if (typeof users[user][channel] == 'undefined') {
+		if (typeof users[user] == 'undefined') {
 			users[user] = {};
 			bot.whois(user, function(info) {
 				users[user][channel] = {'mode':'+o', 'host':info.user+'@'+info.host};
 				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', user);
 				writeFile(users);
 				});
-			} 
-		else {		
-		if (users[user][channel].mode == '+o') {
-			bot.say(channel, from+': '+user+' already has mode +o!');
-		} else {
-			users[user][channel].mode = '+o';
-			bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+o', user);
-			writeFile(users);
+		} else if (typeof users[user][channel] == 'undefined') {
+			bot.whois(user, function(info) {
+				users[user][channel] = {'mode':'+o', 'host':info.user+'@'+info.host};
+				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', user);
+				writeFile(users);
+				});
+		} else {		
+			if (users[user][channel].mode == '+o') {
+				bot.say(channel, from+': '+user+' already has mode +o!');
+			} else {
+				users[user][channel].mode = '+o';
+				bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+o', user);
+				writeFile(users);
 			}
 		}
 	}

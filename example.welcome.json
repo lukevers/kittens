@@ -1,4 +1,6 @@
 {
-	"message": "Welcome to {channel}, {nick}!",
-	"old": ""
+	"#marylandmesh": {
+		"message": "Welcome to {channel}, {nick}!",
+		"old": ""
+	}
 }

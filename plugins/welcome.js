@@ -11,34 +11,40 @@
 var util = require('util');
 var fs = require('fs');
 
-var commands = ['+setWelcomeMessage'];
+var commands = ['!setWelcomeMessage'];
 
 module.exports = function(bot) {
 	var users = require('../users.json');
 	var file = require('../welcome.json');
 	bot.addListener('message', function(from, to, text, message) {
-		if (typeof users[from] == 'undefined') {
+		var channel = message.args[0];
+		if (typeof users[from][channel] == 'undefined') {
 			isOP = false;
-		} else isOP = (users[from].mode == '+o');
-		if (message.args[1].indexOf('+setWelcomeMessage') == 0) {
-			if (isOP) setWelcomeMessage(message.args[0], message.args[1].substring(19), from);
-			else bot.say(message.args[0], from+': you do not have permission to do that!');
+		} else isOP = (users[from][channel].mode == '+o');
+		
+		if (message.args[1].indexOf('!setWelcomeMessage') == 0) {
+			if (message.args[1].replace(/ /g, '') == '!setWelcomeMessage') {
+				bot.say(channel, from+': The command !setWelcomeMessage requires a new welcome message to be specified. Every time a new user logs on, they will recieve the welcome message.');
+			} else {
+				if (isOP) setWelcomeMessage(channel, message.args[1].substring(19), from);
+				else bot.say(channel, from+': you do not have permission to do that!');
+			}
 		}
 	});
 	
 	bot.addListener('join', function(channel, nick, message) {
-		if (file.old.indexOf(nick) == -1) {			
-			file.old = file.old+nick;
-			var msg = parseMessage(file.message, channel, nick);
+		if (file[channel].old.indexOf(nick) == -1) {			
+			file[channel].old = file[channel].old+nick;
+			var msg = parseMessage(file[channel].message, channel, nick);
 			bot.say(channel, msg);
-			util.log(nick+' joined for the first time and was given the message: '+msg);
+			util.log(nick+' joined '+channel+' for the first time and was given the message: '+msg);
 			writeFile(file);
 		}
 	});
 	
 	// will do in a bit
 	function setWelcomeMessage(channel, message, setby) {
-		file.message = message;
+		file[channel].message = message;
 		bot.say(channel, 'The new welcome message, set by ' + setby + ', is '+message);
 		writeFile(file);
 	}

@@ -11,27 +11,27 @@
 var util = require('util');
 var fs = require('fs');
 
-var commands = ['+voice', '+devoice'];
+var commands = ['!voice', '!devoice'];
 
 module.exports = function(bot) {
 		
 	var users = readFile();
 	bot.addListener('message', function(from, to, text, message) {
 		var channel = message.args[0];
-		if (typeof users[from] == 'undefined') {
+		if (typeof users[from][channel] == 'undefined') {
 			isOP = false;
 		} else isOP = users[from][channel].mode;
 
-		if (message.args[1].indexOf('+voice') == 0) {
-			if (message.args[1].replace(/ /g, '') == '+voice') {
-				bot.say(channel, from+': The command +voice requires a user to be specified. By +voice\'ing a user, the bot will remember to voice them every time they sign in.');
+		if (message.args[1].indexOf('!voice') == 0) {
+			if (message.args[1].replace(/ /g, '') == '!voice') {
+				bot.say(channel, from+': The command !voice requires a user to be specified. By !voice\'ing a user, the bot will remember to voice them every time they sign in.');
 			} else {
 				if (isOP) voice(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
 			}
-		} else if (message.args[1].indexOf('+devoice') == 0) {
-			if (message.args[1].replace(/ /g, '') == '+devoice') {
-				bot.say(channel, from+': The command +devoice requires a user to be specified. By +devoice\'ing a user, the bot will not remember to voice them every time they sign in anymore.');
+		} else if (message.args[1].indexOf('!devoice') == 0) {
+			if (message.args[1].replace(/ /g, '') == '!devoice') {
+				bot.say(channel, from+': The command !devoice requires a user to be specified. By !devoice\'ing a user, the bot will not remember to voice them every time they sign in anymore.');
 			} else {
 				if (isOP) devoice(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
@@ -52,6 +52,14 @@ module.exports = function(bot) {
 	});
 	
 	function voice(from, message, user, channel) {
+		if (typeof users[user] == 'undefined') {
+			users[user] = {};
+			bot.whois(user, function(info) {
+				users[user][channel] = {'mode':'+v', 'host':info.user+'@'+info.host};
+				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', user);
+				writeFile(users);
+			});
+		}
 		if (typeof users[user][channel] == 'undefined') {
 			bot.whois(user, function(info) {
 				users[user][channel] = {'mode':'+v', 'host':info.user+'@'+info.host};
