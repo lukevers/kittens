@@ -1,4 +1,4 @@
 {
-	message: "Welcome to {channel}, {nick}!",
-	old: []
+	"message": "Welcome to {channel}, {nick}!",
+	"old": ""
 }

@@ -87,7 +87,7 @@ module.exports = function(bot) {
 }
 
 function writeFile(users) {
-	fs.writeFile('../users.json', JSON.stringify(users), function(err) {
+	fs.writeFile('./users.json', JSON.stringify(users), function(err) {
 		if(err) {
 			util.log(err);
 		} else {
@@ -97,5 +97,5 @@ function writeFile(users) {
 }
 	
 function readFile() {
-	return require('../users.json');
+	return require('./users.json');
 }

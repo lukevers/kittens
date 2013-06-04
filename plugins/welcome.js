@@ -26,11 +26,13 @@ module.exports = function(bot) {
 		}
 	});
 	
-	bot.addListener('join', function(channel, nick, message) {	
-		if (JSON.stringify(file.old).indexOf(nick) == -1) {			
-			var msg = parseMessage(JSON.stringify(file.message), channel, nick);
+	bot.addListener('join', function(channel, nick, message) {
+		if (file.old.indexOf(nick) == -1) {			
+			file.old = file.old+nick;
+			var msg = parseMessage(file.message, channel, nick);
 			bot.say(channel, msg);
-			util.log(msg);
+			util.log(nick+' joined for the first time and was given the message: '+msg);
+			writeFile(file);
 		}
 	});
 	
@@ -51,5 +53,15 @@ module.exports = function(bot) {
 //  {nick}    -> nick name
 //  
 function parseMessage(message, channel, nick) {	
-	return message.substring(1, message.length-1).replace(/{channel}/g, channel).replace(/{nick}/g, nick);
+	return message.replace(/{channel}/g, channel).replace(/{nick}/g, nick);
+}
+
+function writeFile(file) {
+	fs.writeFile('./welcome.json', JSON.stringify(file), function(err) {
+		if(err) {
+			util.log(err);
+		} else {
+			util.log('The welcome.json file was updated!');
+		}
+	}); 
 }
