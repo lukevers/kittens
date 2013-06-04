@@ -98,5 +98,5 @@ function writeFile(users) {
 }
 	
 function readFile() {
-	return require('./users.json');
+	return require('../users.json');
 }
