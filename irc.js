@@ -33,7 +33,7 @@ var bot = new irc.Client(config.server, config.botName, config);
 
 util.log('Created '+config.botName);
 
-var cmds = ['+help'];
+var cmds = ['!help'];
 
 fs.readdir('./plugins', function(err, files) {
 	util.log('Loading plugins');
@@ -50,7 +50,7 @@ fs.readdir('./plugins', function(err, files) {
 });
 
 bot.addListener('message', function(from, to, text, message) {
-	if (message.args[1].indexOf('+help') == 0) {
+	if (message.args[1].indexOf('!help') == 0) {
 		bot.say(message.args[0], from+': '+cmds.join(' ').replace(/,|  /g, ' '));
 	}
 });
