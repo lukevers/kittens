@@ -45,9 +45,11 @@ module.exports = function(bot) {
 	bot.addListener('join', function(channel, nick, message) {
 		util.log(nick+' joined '+channel);
 		var file = readFile();
-		if (typeof file[[nick]] == 'undefined') return;
+		if (typeof file[[nick]] == 'undefined' || typeof file[[nick]][channel] == 'undefined') return;
 		var userinfo = file[[nick]][channel];
+		util.log(userinfo);
 		var userhost = message.user+'@'+message.host;
+		if (typeof userinfo.host == 'undefined' || typeof userinfo.mode == 'undefined') return;
 		if (userinfo.host == userhost && userinfo.mode == '+v') {
 			bot.send(':'+nick+'!'+userhost, 'MODE', channel, userinfo.mode, nick);
 			util.log(userinfo.mode+' '+nick+' in '+channel);
