@@ -49,6 +49,10 @@ fs.readdir('./plugins', function(err, files) {
 	}
 });
 
+bot.addListener('error', function(message) {
+    util.log('error: ', message);
+});
+
 bot.addListener('message', function(from, to, text, message) {
 	if (message.args[1].indexOf('!help') == 0) {
 		bot.say(message.args[0], from+': '+cmds.join(' ').replace(/,|  /g, ' '));
