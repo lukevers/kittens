@@ -42,7 +42,7 @@ module.exports = function(bot) {
 		if (file[channel].old.indexOf(nick) == -1) {			
 			file[channel].old = file[channel].old+nick;
 			var msg = parseMessage(file[channel].message, channel, nick);
-			bot.notice(nick, message);
+			bot.notice(nick, msg);
 			util.log(nick+' joined '+channel+' for the first time and was given the message: '+msg);
 			writeFile(file);
 		}
