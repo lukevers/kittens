@@ -44,7 +44,6 @@ module.exports = function(bot) {
 	});
 	
 	bot.addListener('join', function(channel, nick, message) {
-		util.log(nick+' joined '+channel);
 		var file = readFile();
 		if (typeof file[[nick]] == 'undefined' || typeof file[[nick]][channel] == 'undefined') return;
 		var userinfo = file[[nick]][channel];
