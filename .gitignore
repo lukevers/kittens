@@ -10,6 +10,7 @@ users.json
 plugins.json
 config.json
 welcome.json
+repos.json
 
 # Log files
 *.log
