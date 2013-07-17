@@ -39,11 +39,13 @@ module.exports = function(bot) {
 			if (number == '#') {
 				number = message.args[1].substring(message.args[1].indexOf('#')+1);
 			}
-			var owner = repos[channel];
-			owner = owner.substring('https://github.com/'.length);
-			var url = 'https://api.github.com/repos/'+owner+'/issues/'+number;
-			url += '?client_id='+conf.client_id+'&client_secret='+conf.client_secret;
-			if (!isNaN(parseInt(number))) postLink(bot, url, channel, parseInt(number));
+			if (!(typeof repos[channel] == 'undefined')) {
+				var owner = repos[channel];
+				owner = owner.substring('https://github.com/'.length);
+				var url = 'https://api.github.com/repos/'+owner+'/issues/'+number;
+				url += '?client_id='+conf.client_id+'&client_secret='+conf.client_secret;
+				if (!isNaN(parseInt(number))) postLink(bot, url, channel, parseInt(number));
+			}
 		}
 	});
 	
