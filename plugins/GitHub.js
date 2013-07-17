@@ -61,7 +61,7 @@ function postLink(bot, url, channel, number) {
 		msg = b["message"];
 		state = b["state"];
 		if (state == "closed") {
-			state = ' [\u0003'+state+'\u000f] ';
+			state = ' [\u0002'+state+'\u000f] ';
 		} else state = ' ';
 		if ((typeof msg != 'undefined') && msg.indexOf('API Rate Limit Exceeded') > -1) {
 			bot.say(channel, 'API Rate Limit Exceeded for the hour.');
