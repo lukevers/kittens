@@ -59,9 +59,10 @@ function postLink(bot, url, channel, number) {
 		b = JSON.parse(b);
 		str = b["title"];
 		msg = b["message"];
+		state = b["state"];
 		if ((typeof msg != 'undefined') && msg.indexOf('API Rate Limit Exceeded') > -1) {
 			bot.say(channel, 'API Rate Limit Exceeded for the hour.');
-		} else bot.say(channel, '#'+number+' - \u0002'+str+'\u000f');
+		} else bot.say(channel, '#'+number+' [\u0002'+state+'\u000f] - \u0002'+str+'\u000f');
 	});
 }
 
