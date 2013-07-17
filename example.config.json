@@ -4,6 +4,8 @@
 	"autoRejoin": true,
 	"autoConnect": true,
 	"server": "irc.efnet.org",
+	"client_secret": "xkawdjk",
+	"client_id": "me",
 	"port": 6667,
 	"usersFile": "./users.json",
 	"channels": [

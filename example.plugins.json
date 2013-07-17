@@ -1,5 +1,7 @@
 {
 	"op": true,
 	"voice": true,
-	"topic": true
+	"topic": true,
+	"welcome": false,
+	"GitHub": false
 }

@@ -18,6 +18,7 @@ module.exports = function(bot) {
 	
 	var users = readFile('users');
 	var repos = readFile('repos');
+	var conf = readFile('config');
 	
 	bot.addListener('message', function(from, to, text, message) {
 		var channel = message.args[0];
@@ -41,6 +42,7 @@ module.exports = function(bot) {
 			var owner = repos[channel];
 			owner = owner.substring('https://github.com/'.length);
 			var url = 'https://api.github.com/repos/'+owner+'/issues/'+number;
+			url += '?client_id='+conf.client_id+'&client_secret='+conf.client_secret;
 			if (!isNaN(parseInt(number))) postLink(bot, url, channel, parseInt(number));
 		}
 	});
@@ -55,7 +57,7 @@ function postLink(bot, url, channel, number) {
 		b = JSON.parse(b);
 		str = b["title"];
 		msg = b["message"];
-		if (msg.indexOf('API Rate Limit Exceeded') > -1) {
+		if ((typeof msg != 'undefined') && msg.indexOf('API Rate Limit Exceeded') > -1) {
 			bot.say(channel, 'API Rate Limit Exceeded for the hour.');
 		} else bot.say(channel, '#'+number+' - \u0002'+str+'\u000f');
 	});
