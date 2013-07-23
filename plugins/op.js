@@ -34,7 +34,6 @@ module.exports = function(bot) {
 			}
 		} else if (message.args[1].indexOf('!deop') == 0) {
 			if (message.args[1].replace(/ /g, '') == '!deop') {
-				// HELP
 				bot.say(channel, from+': The command !deop requires a user to be specified. By !deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
 			} else {
 				if (isOP) deop(from, message, message.args[1].split(' ')[1], channel);
@@ -47,7 +46,6 @@ module.exports = function(bot) {
 		var file = readFile();
 		if (typeof file[[nick]] == 'undefined' || typeof file[[nick]][channel] == 'undefined') return;
 		var userinfo = file[[nick]][channel];
-		util.log(userinfo);
 		var userhost = message.user+'@'+message.host;
 		if (typeof userinfo.host == 'undefined' || typeof userinfo.mode == 'undefined') return;
 		if (userinfo.host == userhost && userinfo.mode == '+o') {
@@ -72,7 +70,8 @@ module.exports = function(bot) {
 				});
 		} else {		
 			if (users[user][channel].mode == '+o') {
-				bot.say(channel, from+': '+user+' already has mode +o!');
+				bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+o', user);
+				writeFile(users);
 			} else {
 				users[user][channel].mode = '+o';
 				bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+o', user);
@@ -82,6 +81,10 @@ module.exports = function(bot) {
 	}
 	
 	function deop(from, message, user, channel) {
+		if (typeof users[user] == 'undefined') {
+			bot.say(channel, from+': '+user+' already does not have mode +o!');
+			return;	
+		}
 		if (typeof users[user][channel] == 'undefined') {
 			bot.say(channel, from+': '+user+' already does not have mode +o!');
 			return;

@@ -46,7 +46,6 @@ module.exports = function(bot) {
 		var file = readFile();
 		if (typeof file[[nick]] == 'undefined' || typeof file[[nick]][channel] == 'undefined') return;
 		var userinfo = file[[nick]][channel];
-		util.log(userinfo);
 		var userhost = message.user+'@'+message.host;
 		if (typeof userinfo.host == 'undefined' || typeof userinfo.mode == 'undefined') return;
 		if (userinfo.host == userhost && userinfo.mode == '+v') {
@@ -63,18 +62,16 @@ module.exports = function(bot) {
 				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', user);
 				writeFile(users);
 			});
-		}
-		if (typeof users[user][channel] == 'undefined') {
+		} if (typeof users[user][channel] == 'undefined') {
 			bot.whois(user, function(info) {
 				users[user][channel] = {'mode':'+v', 'host':info.user+'@'+info.host};
 				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', user);
 				writeFile(users);
 			});
 		} else {
-			if (users[user][channel].mode == '+o') {
-				bot.say(channel, from+': '+user+' already has mode +o!');
-			} else if (users[user][channel].mode == '+v') {
-				bot.say(channel, from+': '+user+' already has mode +v!');
+			if (users[user][channel].mode == '+v') {
+				bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+v', user);
+				writeFile(users);
 			} else {
 				users[user][channel].mode = '+v';
 				bot.send(':'+user+'!'+users[user][channel].host, 'MODE', channel, '+v', user);
@@ -84,6 +81,10 @@ module.exports = function(bot) {
 	}
 	
 	function devoice(from, message, user, channel) {
+		if (typeof users[user] == 'undefined') {
+			bot.say(channel, from+': '+user+' already does not have mode +v!');
+			return;	
+		}
 		if (typeof users[user][channel] == 'undefined') {
 			bot.say(channel, from+': '+user+' already does not have mode +v!');
 			return;
