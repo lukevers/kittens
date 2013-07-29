@@ -16,8 +16,8 @@ var commands = ['!setRepo'];
 
 module.exports = function(bot) {
 	
-	var users = readFile('users');
-	var repos = readFile('repos');
+	var users = readFile('plugins')['users'];
+	var repos = readFile('plugins')['repos'];
 	var conf = readFile('config');
 	
 	bot.addListener('message', function(from, to, text, message) {
@@ -70,11 +70,13 @@ function postLink(bot, url, channel, number) {
 }
 
 function writeFile(config) {
-	fs.writeFile('./repos.json', JSON.stringify(config), function(err) {
+	var file = require('../plugins.json');
+	file['repos'] = config;
+	fs.writeFile('./plugins.json', JSON.stringify(file, null, 4), function(err) {
 		if(err) {
 			util.log(err);
 		} else {
-			util.log('The repos.json file was updated!');
+			util.log('The plugins.json file was updated!');
 		}
 	}); 
 }

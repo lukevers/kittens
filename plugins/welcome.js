@@ -14,8 +14,8 @@ var fs = require('fs');
 var commands = ['!setWelcomeMessage'];
 
 module.exports = function(bot) {
-	var users = require('../users.json');
-	var file = require('../welcome.json');
+	var users = require('../plugins.json')['users'];
+	var file = require('../plugins.json')['welcome'];
 	bot.addListener('message', function(from, to, text, message) {
 		var channel = message.args[0];
 		if (typeof users[from] == 'undefined') {
@@ -70,12 +70,14 @@ function parseMessage(message, channel, nick) {
 	return message.replace(/{channel}/g, channel).replace(/{nick}/g, nick);
 }
 
-function writeFile(file) {
-	fs.writeFile('./welcome.json', JSON.stringify(file), function(err) {
+function writeFile(welc) {
+	var file = require('../plugins.json');
+	file['welcome'] = welc;
+	fs.writeFile('./plugins.json', JSON.stringify(file, null, 4), function(err) {
 		if(err) {
 			util.log(err);
 		} else {
-			util.log('The welcome.json file was updated!');
+			util.log('The plugins.json file was updated!');
 		}
 	}); 
 }

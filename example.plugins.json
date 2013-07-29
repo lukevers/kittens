@@ -1,7 +1,26 @@
 {
-	"op": true,
-	"voice": true,
-	"topic": true,
-	"welcome": false,
-	"GitHub": false
+    "plugins": {
+        "op": true,
+        "voice": true,
+        "topic": true,
+        "welcome": false,
+        "GitHub": true
+        },
+    "users": {
+        "lukevers": {
+            "#kittenstest": {
+                "mode": "+o",
+                "host": "~lukevers@fcb8:6c35:5c90:243e:686e:f944:5cc8:1d99"
+            }
+        }
+    },
+    "welcome": {
+        "#marylandmesh": {
+                "message": "Welcome to {channel}, {nick}!",
+                "old": ""
+        }
+    },
+    "repos": {
+        "#nodeatlas": "https://github.com/ProjectMeshnet/nodeatlas"
+    }
 }

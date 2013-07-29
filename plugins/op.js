@@ -15,7 +15,7 @@ var commands = ['!op', '!deop'];
 
 module.exports = function(bot) {
 	
-	var users = readFile();
+	var users = require('../plugins.json')['users'];
 	bot.addListener('message', function(from, to, text, message) {
 		var channel = message.args[0];
 		if (typeof users[from] == 'undefined') {
@@ -43,7 +43,7 @@ module.exports = function(bot) {
 	});
 	
 	bot.addListener('join', function(channel, nick, message) {
-		var file = readFile();
+		var file = require('../plugins.json')['users'];
 		if (typeof file[[nick]] == 'undefined' || typeof file[[nick]][channel] == 'undefined') return;
 		var userinfo = file[[nick]][channel];
 		var userhost = message.user+'@'+message.host;
@@ -102,15 +102,13 @@ module.exports = function(bot) {
 }
 
 function writeFile(users) {
-	fs.writeFile('./users.json', JSON.stringify(users), function(err) {
+	var file = require('../plugins.json');
+	file['users'] = users;
+	fs.writeFile('./plugins.json', JSON.stringify(file, null, 4), function(err) {
 		if(err) {
 			util.log(err);
 		} else {
-			util.log('The users.json file was updated!');
+			util.log('The plugins.json file was updated!');
 		}
 	}); 
-}
-	
-function readFile() {
-	return require('../users.json');
 }

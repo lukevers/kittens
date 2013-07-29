@@ -37,7 +37,7 @@ var cmds = ['!help'];
 
 fs.readdir('./plugins', function(err, files) {
 	util.log('Loading plugins');
-	var plugin = require('./plugins.json');
+	var plugin = require('./plugins.json')['plugins'];
 	for (var i = 0; i < files.length; i++) {
 		for (var key in plugin) {
 			if ([[key]] == files[i].substring(0, files[i].length-3) && plugin[key]) {
