@@ -62,7 +62,7 @@ module.exports = function(bot) {
 				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', user);
 				writeFile(users);
 			});
-		} if (typeof users[user][channel] == 'undefined') {
+		} else if (typeof users[user][channel] == 'undefined') {
 			bot.whois(user, function(info) {
 				users[user][channel] = {'mode':'+v', 'host':info.user+'@'+info.host};
 				bot.send(':'+user+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', user);
