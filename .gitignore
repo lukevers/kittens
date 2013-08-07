@@ -6,11 +6,8 @@
 node_modules
 
 # Configuration files
-users.json
 plugins.json
 config.json
-welcome.json
-repos.json
 
 # Log files
 *.log
