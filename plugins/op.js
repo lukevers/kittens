@@ -29,14 +29,14 @@ module.exports = function(bot) {
 			if (message.args[1].replace(/ /g, '') == '!op') {
 				bot.say(channel, from+': The command !op requires a user to be specified. By !op\'ing a user, the bot will remember to op them every time they sign in.');
 			} else {
-				if (isOP) op(from, message, message.args[1].split(' ')[1], channel);
+				if (isOP == '+o') op(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
 			}
 		} else if (message.args[1].indexOf('!deop') == 0) {
 			if (message.args[1].replace(/ /g, '') == '!deop') {
 				bot.say(channel, from+': The command !deop requires a user to be specified. By !deoping\'ing a user, the bot will not remember to op them every time they sign in anymore.');
 			} else {
-				if (isOP) deop(from, message, message.args[1].split(' ')[1], channel);
+				if (isOP == '+o') deop(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
 			}
 		} else return;

@@ -29,14 +29,14 @@ module.exports = function(bot) {
 			if (message.args[1].replace(/ /g, '') == '!voice') {
 				bot.say(channel, from+': The command !voice requires a user to be specified. By !voice\'ing a user, the bot will remember to voice them every time they sign in.');
 			} else {
-				if (isOP) voice(from, message, message.args[1].split(' ')[1], channel);
+				if (isOP == '+o') voice(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
 			}
 		} else if (message.args[1].indexOf('!devoice') == 0) {
 			if (message.args[1].replace(/ /g, '') == '!devoice') {
 				bot.say(channel, from+': The command !devoice requires a user to be specified. By !devoice\'ing a user, the bot will not remember to voice them every time they sign in anymore.');
 			} else {
-				if (isOP) devoice(from, message, message.args[1].split(' ')[1], channel);
+				if (isOP == '+o') devoice(from, message, message.args[1].split(' ')[1], channel);
 				else bot.say(channel, from+': you do not have permission to do that!');
 			}
 		} else return;
