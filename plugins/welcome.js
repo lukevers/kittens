@@ -1,12 +1,6 @@
+// welcome.js
 //
-//	Kittens
-//	welcome.js
-//	
-//	Modular plugin for Kittens for the use of 
-//	welcoming new users to channels.
-//	
-//	Written by Luke Evers.
-//
+// Send welcome message to new people in the channels
 
 var util = require('util');
 var fs = require('fs');

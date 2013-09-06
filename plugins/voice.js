@@ -1,13 +1,7 @@
+// voice.js
 //
-//	Kittens
-//	voice.js
-//	
-//	Modular plugin for Kittens for the use of 
-//	Voicing and devoicing people.
-//	
-//	Written by Luke Evers.
-//
-
+// Keep track of Voices in channels by their nickname and their host
+// name.
 var util = require('util');
 var fs = require('fs');
 

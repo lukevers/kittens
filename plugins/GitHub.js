@@ -1,12 +1,7 @@
+// GitHub.js
 //
-//	Kittens
-//  GitHub.js
-//	
-//	Modular plugin for Kittens for the use of 
-//	fetching HEAD <title> data about issues
-//	
-//	Written by Luke Evers.
-//
+// Fetches issue information from GitHub when a user types an issue
+// number with a # in front of the number.
 
 var util = require('util');
 var fs = require('fs');

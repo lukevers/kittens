@@ -1,12 +1,7 @@
-//
-//	Kittens
-//	op.js
-//	
-//	Modular plugin for Kittens for the use of 
-//	OPing and deOPing people.
-//	
-//	Written by Luke Evers.
-//
+// op.js
+// 
+// Keep track of OPs in channels by their nickname and their host
+// name. 
 
 var util = require('util');
 var fs = require('fs');
