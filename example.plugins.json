@@ -2,9 +2,8 @@
     "plugins": {
         "op": true,
         "voice": true,
-        "topic": true,
         "welcome": false,
-        "GitHub": true
+        "GitHub": false
         },
     "users": {
         "lukevers": {
