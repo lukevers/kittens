@@ -35,11 +35,11 @@ module.exports = function(bot) {
 		number = message.args[1].substring(message.args[1].indexOf('#')+1);
 	    }
 	    if (!(typeof repos[channel] == 'undefined')) {
-		var owner = repos[channel];
+		var owner = stripTrailingSlash(repos[channel]);
 		owner = owner.substring('https://github.com/'.length);
 		var url = 'https://api.github.com/repos/'+owner+'/issues/'+number;
 		url += '?client_id='+conf.client_id+'&client_secret='+conf.client_secret;
-		if (!isNaN(parseInt(number))) postLink(bot, url, channel, parseInt(number), repos[channel]+'/issues/'+number);
+		if (!isNaN(parseInt(number))) postLink(bot, url, channel, parseInt(number), stripTrailingSlash(repos[channel])+'/issues/'+number);
 	    }
 	}
     });
@@ -82,6 +82,13 @@ function writeFile(config) {
 	    util.log('The plugins.json file was updated!');
 	}
     }); 
+}
+
+function stripTrailingSlash(str) {
+    if(str.substr(-1) == '/') {
+        return str.substr(0, str.length - 1);
+    }
+    return str;
 }
 
 function readFile(which) {
