@@ -1,16 +1,13 @@
 {
-	"botName": "ircbot",
-	"realName": "IRC Bot",
-	"autoRejoin": true,
-	"autoConnect": true,
-	"server": "irc.efnet.org",
-	"client_secret": "xkawdjk",
-	"client_id": "me",
-	"port": 6667,
-	"usersFile": "./users.json",
-	"channels": [
-		"#channel",
-		"#channel_2",
-		"#channel_3" 
-	]
+	"Name": "ircbot",
+	"Server": {
+		  "Name": "Efnet",
+		  "Network": "irc.efnet.org",
+		  "Port": 6667,
+		  "Channels": [
+	  	      "#channel",
+		      "#channel_2",
+		      "#channel_3"
+		  ]
+	}
 }
