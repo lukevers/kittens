@@ -1,5 +1,7 @@
 {
-	"Name": "ircbot",
+	"Nick": "kittens",
+	"Name": "Kittens IRC Bot",
+	"Host": "kittens",
 	"Server": {
 		  "Name": "Efnet",
 		  "Network": "irc.efnet.org",

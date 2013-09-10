@@ -6,9 +6,17 @@ import (
 )
 
 type Config struct {
-	// Name is a string that defines the default name of the bot
-	// that will be connection to the IRC server.
+	// Nick is a string that defines the nick name of the bot that
+	// will connect to the server.
+	Nick string
+
+	// Name is a string that defines the real name of the bot that
+	// will connect to the server.
 	Name string
+
+	// Host is a string that defines the host of the bot that will
+	// connect to the server.
+	Host string
 
 	// Server is a struct which contains information for the
 	// servers that it connects to.
