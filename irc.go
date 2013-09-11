@@ -9,6 +9,8 @@ var (
 	r event.EventRegistry
 )
 
+// CreateBot is a function that creates the physical bot that will
+// connect to the server.
 func CreateBot(config *Config) *client.Conn {
 	r = event.NewRegistry()
 	bot := client.Client(config.Nick, config.Host, config.Name, r)
@@ -18,13 +20,11 @@ func CreateBot(config *Config) *client.Conn {
 	return bot
 }
 
+// Connect is a function that connects to the server and joins all of
+// the channels that are set in the configuration file.
 func Connect(bot *client.Conn, config *Config) {
-
-	bot.AddHandler(client.CONNECTED, func(conn *client.Conn, line *client.Line) {
-		for i := range config.Server.Channels {
-			bot.Join(config.Server.Channels[i])
-		}
-	})
+	// Join channels
+	bot.AddHandler(client.CONNECTED, func (conn *client.Conn, line *client.Line) { JoinChannels(bot, config) })
 
 	quit := make(chan bool)
 
@@ -36,4 +36,12 @@ func Connect(bot *client.Conn, config *Config) {
 	}
 
 	<-quit
+}
+
+// JoinChannels is a function that is called before connecting to the
+// server so it knows what channels to connect to.
+func JoinChannels(bot *client.Conn, config *Config) {
+	for i := range config.Server.Channels {
+		bot.Join(config.Server.Channels[i])
+	}
 }
