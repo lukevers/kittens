@@ -15,22 +15,23 @@ var (
 
 func main() {
 	
+	// Load the configuration file
+	config, err := ReadConfig("example.config.json")
+	if err != nil {
+		fmt.Printf("Could not read configuration file: %s", err)
+		os.Exit(1)
+	}
+	
 	// Start the logger
-	l, err := log.NewLevel(LogLevel, true, LogFile, "", LogFlags)
+	l, err = log.NewLevel(LogLevel, true, LogFile, "", LogFlags)
 	if err != nil {
 		fmt.Printf("Could not start logger: %s", err)
 		os.Exit(1)
 	}
 
-	// Load the configuration file
-	config, err := ReadConfig("example.config.json")
-	if err != nil {
-		l.Fatalf("Could not read configuration file: %s", err)
-	}
-
 	// Create the bot
 	bot := CreateBot(config)
-		
+
 	// Add listeners
 	// todo
 	
