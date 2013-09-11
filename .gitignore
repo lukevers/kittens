@@ -2,12 +2,13 @@
 ._*
 .DS_Store
 
-# Node Modules
-node_modules
-
 # Configuration files
-plugins.json
 config.json
 
-# Log files
-*.log
+# Binaries
+kittens
+
+# Editor temporary files
+*~
+\#*
+.\#*
