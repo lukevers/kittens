@@ -1,15 +1,14 @@
 {
-	"Nick": "kittens",
+	"Nick": "meow",
 	"Name": "Kittens IRC Bot",
 	"Host": "kittens",
 	"Server": {
-		  "Name": "Efnet",
-		  "Network": "irc.efnet.org",
+		  "Name": "hypeirc",
+		  "Network": "irc.appno.de",
 		  "Port": 6667,
+		  "SSL": false,
 		  "Channels": [
-	  	      "#channel",
-		      "#channel_2",
-		      "#channel_3"
-		  ]
+	  	      "#go-nuts"
+		      ]
 	}
 }

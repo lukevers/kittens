@@ -33,6 +33,10 @@ type Config struct {
 		// used to connect to the IRC server.
 		Port int
 		
+		// SSL is a bool value that determines if the bot
+		// should use SSL to connect to the server or not.
+		SSL bool
+
 		// Channels is a slice of strings that defines what
 		// channels the bot should join upon connecting to the
 		// server.

@@ -1,21 +1,23 @@
 package main
 
 import (
-	irc "github.com/fluffle/goirc/client"
-	"github.com/fluffle/goevent/event"
-)
-
-var (
-	r event.EventRegistry
+	"fmt"
 )
 
 func main() {
 
 	config, err := ReadConfig("example.config.json")
+
 	if err != nil {
-		panic(err)
+		fmt.Printf("Can not create config: %s\n",err)
 	}
+
+	// Create the bot
+	bot := CreateBot(config)
+		
+	// Add listeners
+	// todo
 	
-	conn := irc.Client(config.Nick, config.Host, config.Name, r)
-	err = conn.Connect(config.Server.Network)
+	// Connect to server
+	Connect(bot, config)
 }
