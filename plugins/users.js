@@ -24,131 +24,80 @@ module.exports = function(bot) {
 	    if (message.args[1].replace(/ /g, '') == '!op') {
 		bot.say(channel, from+': The command !op requires a thisUser to be specified. By !op\'ing a thisUser, the bot will remember to op them every time they sign in.');
 	    } else {
-		if (isOP == '+o') op(from, message, message.args[1].split(' '), channel);
+		if (isOP == '+o') add(from, message, message.args[1].split(' '), channel, '+o');
 		else bot.say(channel, from+': you do not have permission to do that!');
 	    }
 	} else if (message.args[1].indexOf('!deop') == 0) {
 	    if (message.args[1].replace(/ /g, '') == '!deop') {
 		bot.say(channel, from+': The command !deop requires a thisUser to be specified. By !deoping\'ing a thisUser, the bot will not remember to op them every time they sign in anymore.');
 	    } else {
-		if (isOP == '+o') deop(from, message, message.args[1].split(' '), channel);
+		if (isOP == '+o') remove(from, message, message.args[1].split(' '), channel, '-o');
 		else bot.say(channel, from+': you do not have permission to do that!');
 	    }
 	} else	if (message.args[1].indexOf('!voice') == 0) {
 	    if (message.args[1].replace(/ /g, '') == '!voice') {
 		bot.say(channel, from+': The command !voice requires a thisUser to be specified. By !voice\'ing a thisUser, the bot will remember to voice them every time they sign in.');
 	    } else {
-		if (isOP == '+o') voice(from, message, message.args[1].split(' '), channel);
+		if (isOP == '+o') add(from, message, message.args[1].split(' '), channel, '+v');
 		else bot.say(channel, from+': you do not have permission to do that!');
 	    }
 	} else if (message.args[1].indexOf('!devoice') == 0) {
 	    if (message.args[1].replace(/ /g, '') == '!devoice') {
 		bot.say(channel, from+': The command !devoice requires a thisUser to be specified. By !devoice\'ing a thisUser, the bot will not remember to voice them every time they sign in anymore.');
 	    } else {
-		if (isOP == '+o') devoice(from, message, message.args[1].split(' '), channel);
+		if (isOP == '+o') remove(from, message, message.args[1].split(' '), channel, '-v');
 		else bot.say(channel, from+': you do not have permission to do that!');
 	    }
 	} else return;
     });
-
-    function op(from, message, user, channel) {
-	for (var i = 1; i < user.length; i++) {
-	    util.log("OP for "+user[i]);
-	    var thisUser = user[i];
-	    if (typeof users[thisUser] == 'undefined') {
-		users[thisUser] = {};
-		bot.whois(thisUser, function(info) {
-		    users[thisUser][channel] = {'mode':'+o', 'host':info.user+'@'+info.host};
-		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', thisUser);
-		    writeFile(users);
-		});
-	    } else if (typeof users[thisUser][channel] == 'undefined') {
-		bot.whois(thisUser, function(info) {
-		    users[thisUser][channel] = {'mode':'+o', 'host':info.user+'@'+info.host};
-		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', thisUser);
-		    writeFile(users);
-		});
-	    } else {
-		if (users[thisUser][channel].mode == '+o') {
-		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '+o', thisUser);
-		    writeFile(users);
-		} else {
-		    users[thisUser][channel].mode = '+o';
-		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '+o', thisUser);
-		    writeFile(users);
-		}
-	    }
-	}
-    }
     
-    function deop(from, message, user, channel) {
-	var thisUser = user[i];
-	for (var i = 1; i < user.length; i++) {
-	    if (typeof users[thisUser] == 'undefined') {
-		bot.say(channel, from+': '+thisUser+' already does not have mode +o!');
-		return;
-	    }
-	    if (typeof users[thisUser][channel] == 'undefined') {
-		bot.say(channel, from+': '+thisUser+' already does not have mode +o!');
-		return;
-	    }
-	    if (users[thisUser][channel].mode == '+o') {
-		bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '-o', thisUser);
-		delete users[thisUser][channel];
-	    writeFile(users);
-	    } else {
-		bot.say(channel, from+': '+thisUser+' already does not have mode +o!');
-	    }
-	}
-    }
-
-    function voice(from, message, user, channel) {
-	for (var i = 1; i < user.length; i++) {
-	    util.log("Voice for "+user[i]);
-	    var thisUser = user[i];
-	    if (typeof users[thisUser] == 'undefined') {
-		users[thisUser] = {};
-		bot.whois(thisUser, function(info) {
-		    users[thisUser][channel] = {'mode':'+v', 'host':info.user+'@'+info.host};
-		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', thisUser);
+    function add(from, message, user, channel, which) {
+    	for (var i = 1; i < user.length; i++) {
+    	    util.log(which+" for "+user[i]);
+    	    var thisUser = user[i];
+    	    if (typeof users[thisUser] == 'undefined') {
+	        users[thisUser] = {};
+	        bot.whois(thisUser, function(info) {
+		    users[thisUser][channel] = {'mode':which, 'host':info.user+'@'+info.host};
+		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, which, thisUser);
 		    writeFile(users);
-		});
-	    } else if (typeof users[thisUser][channel] == 'undefined') {
+	 	});
+    	    } else if (typeof users[thisUser][channel] == 'undefined') {
 		bot.whois(thisUser, function(info) {
-		    users[thisUser][channel] = {'mode':'+v', 'host':info.user+'@'+info.host};
-		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', thisUser);
+		    users[thisUser][channel] = {'mode':which, 'host':info.user+'@'+info.host};
+		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, which, thisUser);
 		    writeFile(users);
 		});
 	    } else {
-		if (users[thisUser][channel].mode == '+v') {
-		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '+v', thisUser);
+		if (users[thisUser][channel].mode == which) {
+		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
 		    writeFile(users);
 		} else {
-		    users[thisUser][channel].mode = '+v';
-		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '+v', thisUser);
+		    users[thisUser][channel].mode = which;
+		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
 		    writeFile(users);
 		}
 	    }
-	}
+    	}
     }
 
-    function devoice(from, message, user, channel) {
+    function remove(from, message, user, channel, which) {
 	for (var i = 1; i < user.length; i++) {
 	    var thisUser = user[i];
 	    if (typeof users[thisUser] == 'undefined') {
-		bot.say(channel, from+': '+thisUser+' already does not have mode +v!');
-		return;
+		bot.say(channel, from+': '+thisUser+' already does not have mode!');
+		continue;
 	    }
 	    if (typeof users[thisUser][channel] == 'undefined') {
-		bot.say(channel, from+': '+thisUser+' already does not have mode +v!');
-		return;
+		bot.say(channel, from+': '+thisUser+' already does not have mode!');
+		continue;
 	    }
-	    if (users[thisUser][channel].mode == '+v') {
-		bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '-v', thisUser);
+	    if (users[thisUser][channel].mode == which) {
+		bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
 		delete users[thisUser][channel];
-		writeFile(users);
+	        writeFile(users);
 	    } else {
-		bot.say(channel, from+': '+thisUser+' already does not have mode +v!');
+		bot.say(channel, from+': '+thisUser+' already does not have mode!');
 	    }
 	}
     }
