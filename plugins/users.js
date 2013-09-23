@@ -53,6 +53,7 @@ module.exports = function(bot) {
 
     function op(from, message, user, channel) {
 	for (var i = 1; i < user.length; i++) {
+	    util.log("OP for "+user[i]);
 	    var thisUser = user[i];
 	    if (typeof users[thisUser] == 'undefined') {
 		users[thisUser] = {};
@@ -81,7 +82,6 @@ module.exports = function(bot) {
     }
     
     function deop(from, message, user, channel) {
-
 	var thisUser = user[i];
 	for (var i = 1; i < user.length; i++) {
 	    if (typeof users[thisUser] == 'undefined') {
@@ -104,6 +104,7 @@ module.exports = function(bot) {
 
     function voice(from, message, user, channel) {
 	for (var i = 1; i < user.length; i++) {
+	    util.log("Voice for "+user[i]);
 	    var thisUser = user[i];
 	    if (typeof users[thisUser] == 'undefined') {
 		users[thisUser] = {};
