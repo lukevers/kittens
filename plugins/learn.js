@@ -71,9 +71,26 @@ module.exports = function(bot) {
 		}
 	    }
 	} else if (msg.indexOf('!unlearn') == 0) {
+	    var learned = msg.split(' ');
+	    var global = (msg.indexOf('global') > -1);
 	    
-	    // TODO
-	    
+	    if (global) {
+		if (typeof book['global'][learned[1]] == 'undefined') {
+		    bot.say(channel, 'I don\'t know '+learned[1]+' as anything globally!');
+		} else {
+		    delete book['global'][learned[1]];
+		    bot.say(channel, 'Okay, I will forget '+learned[1]);
+		    writeFile(book);
+		}
+	    } else {
+		if (typeof book[channel][learned[1]] == 'undefined') {
+		    bot.say(channel, 'I don\'t know '+learned[1]+' as anything!');
+		} else {
+		    delete book[channel][learned[1]];
+		    bot.say(channel, 'Okay, I will forget '+learned[1]);
+		    writeFile(book);
+		}
+	    }
 	}
     });
     
