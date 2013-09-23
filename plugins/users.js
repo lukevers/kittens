@@ -52,7 +52,8 @@ module.exports = function(bot) {
     });
 
     function op(from, message, user, channel) {
-	for (var i = 1; i < user.length-1; i++) {
+	for (var i = 1; i < user.length; i++) {
+	    if (user[i] == "" || user[i] == " ") continue;
 	    if (typeof users[user[i]] == 'undefined') {
 		users[user[i]] = {};
 		bot.whois(user[i], function(info) {
@@ -80,7 +81,8 @@ module.exports = function(bot) {
     }
     
     function deop(from, message, user, channel) {
-	for (var i = 1; i < user.length-1; i++) {
+	for (var i = 1; i < user.length; i++) {
+	    if (user[i] == "" || user[i] == " ") continue;
 	    if (typeof users[user[i]] == 'undefined') {
 		bot.say(channel, from+': '+user[i]+' already does not have mode +o!');
 		return;
@@ -100,7 +102,8 @@ module.exports = function(bot) {
     }
 
     function voice(from, message, user, channel) {
-	for (var i = 1; i < user.length-1; i++) {
+	for (var i = 1; i < user.length; i++) {
+	    if (user[i] == "" || user[i] == " ") continue;
 	    if (typeof users[user[i]] == 'undefined') {
 		users[user[i]] = {};
 		bot.whois(user[i], function(info) {
@@ -128,7 +131,8 @@ module.exports = function(bot) {
     }
 
     function devoice(from, message, user, channel) {
-	for (var i = 1; i < user.length-1; i++) {
+	for (var i = 1; i < user.length; i++) {
+	    if (user[i] == "" || user[i] == " ") continue;
 	    if (typeof users[user[i]] == 'undefined') {
 		bot.say(channel, from+': '+user[i]+' already does not have mode +v!');
 		return;
