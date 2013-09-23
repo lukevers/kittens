@@ -63,6 +63,7 @@ module.exports = function(bot) {
 		});
 	    } else if (typeof users[user[i]][channel] == 'undefined') {
 		bot.whois(user[i], function(info) {
+		    users[user[i]][channel] = {};
 		    users[user[i]][channel] = {'mode':'+o', 'host':info.user[i]+'@'+info.host};
 		    bot.send(':'+user[i]+'!'+info.user[i]+'@'+info.host, 'MODE', channel, '+o', user[i]);
 		    writeFile(users);
@@ -112,6 +113,7 @@ module.exports = function(bot) {
 		    writeFile(users);
 		});
 	    } else if (typeof users[user[i]][channel] == 'undefined') {
+	    	users[user[i]][channel] = {};
 		bot.whois(user[i], function(info) {
 		    users[user[i]][channel] = {'mode':'+v', 'host':info.user[i]+'@'+info.host};
 		    bot.send(':'+user[i]+'!'+info.user[i]+'@'+info.host, 'MODE', channel, '+v', user[i]);
