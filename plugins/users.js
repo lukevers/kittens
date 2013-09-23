@@ -50,35 +50,39 @@ module.exports = function(bot) {
 	    }
 	} else return;
     });
+
+    function addTo(from, message, user, channel, which, i) {
+	util.log(which+" for "+user[i]);
+        var thisUser = user[i];
+        if (typeof users[thisUser] == 'undefined') {
+            users[thisUser] = {};
+            bot.whois(thisUser, function(info) {
+                users[thisUser][channel] = {'mode':which, 'host':info.user+'@'+info.host};
+                bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, which, thisUser);
+                writeFile(users);
+            });
+        } else if (typeof users[thisUser][channel] == 'undefined') {
+            bot.whois(thisUser, function(info) {
+                users[thisUser][channel] = {'mode':which, 'host':info.user+'@'+info.host};
+                bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, which, thisUser);
+                writeFile(users);
+            });
+        } else {
+            if (users[thisUser][channel].mode == which) {
+                bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
+                writeFile(users);
+            } else {
+                users[thisUser][channel].mode = which;
+                bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
+                writeFile(users);
+            }
+        }	
+    }
     
     function add(from, message, user, channel, which) {
     	for (var i = 1; i < user.length; i++) {
-    	    util.log(which+" for "+user[i]);
-    	    var thisUser = user[i];
-    	    if (typeof users[thisUser] == 'undefined') {
-	        users[thisUser] = {};
-	        bot.whois(thisUser, function(info) {
-		    users[thisUser][channel] = {'mode':which, 'host':info.user+'@'+info.host};
-		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, which, thisUser);
-		    writeFile(users);
-	 	});
-    	    } else if (typeof users[thisUser][channel] == 'undefined') {
-		bot.whois(thisUser, function(info) {
-		    users[thisUser][channel] = {'mode':which, 'host':info.user+'@'+info.host};
-		    bot.send(':'+thisUser+'!'+info.user+'@'+info.host, 'MODE', channel, which, thisUser);
-		    writeFile(users);
-		});
-	    } else {
-		if (users[thisUser][channel].mode == which) {
-		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
-		    writeFile(users);
-		} else {
-		    users[thisUser][channel].mode = which;
-		    bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
-		    writeFile(users);
-		}
-	    }
-    	}
+	    setTimeout(addTo(from, message, user, channel, which, i), 1000+((1000*i)/10));
+	}
     }
 
     function remove(from, message, user, channel, which) {
