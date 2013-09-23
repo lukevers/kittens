@@ -93,6 +93,9 @@ module.exports = function(bot) {
 	    }
 	} else {
 	    var check = msg.split(' ')[0];
+	    if (typeof book[channel] == 'undefined') book[channel] = {};
+	    if (typeof book['global'] == 'undefined') book['global'] = {};
+	    
 	    if (typeof book[channel][check] != 'undefined') {
 		bot.say(channel, book[channel][check]);
 	    } else if (typeof book['global'][check] != 'undefined') {
