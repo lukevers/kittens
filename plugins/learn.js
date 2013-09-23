@@ -91,6 +91,13 @@ module.exports = function(bot) {
 		    writeFile(book);
 		}
 	    }
+	} else {
+	    var check = msg.split(' ')[0];
+	    if (typeof book[channel][check] != 'undefined') {
+		bot.say(channel, book[channel][check]);
+	    } else if (typeof book['global'][check] != 'undefined') {
+		bot.say(channel, book['global'][check]);
+	    }
 	}
     });
     
