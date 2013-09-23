@@ -92,8 +92,8 @@ module.exports = function(bot) {
 		bot.say(channel, from+': '+thisUser+' already does not have mode!');
 		continue;
 	    }
-	    if (users[thisUser][channel].mode == which) {
-		bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, '+'+which.substring(1), thisUser);
+	    if (users[thisUser][channel].mode == '+'+which.substring(1)) {
+		bot.send(':'+thisUser+'!'+users[thisUser][channel].host, 'MODE', channel, which, thisUser);
 		delete users[thisUser][channel];
 	        writeFile(users);
 	    } else {
