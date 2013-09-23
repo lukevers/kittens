@@ -54,7 +54,7 @@ module.exports = function(bot) {
     function op(from, message, user, channel) {
 	for (var i = 1; i < user.length-1; i++) {
 	    if (typeof users[user[i]] == 'undefined') {
-		users[user[i] = {};
+		users[user[i]] = {};
 		bot.whois(user[i], function(info) {
 		    users[user[i]][channel] = {'mode':'+o', 'host':info.user[i]+'@'+info.host};
 		    bot.send(':'+user[i]+'!'+info.user[i]+'@'+info.host, 'MODE', channel, '+o', user[i]);
