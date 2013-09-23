@@ -1,7 +1,6 @@
 {
     "plugins": {
-        "op": true,
-        "voice": true,
+    	"users": true,
         "welcome": false,
         "GitHub": false
         },
