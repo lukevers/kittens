@@ -34,6 +34,7 @@ func main() {
 
 	// Add listeners
 	// todo
+	bot = AddHandler(bot)
 	
 	// Connect to server
 	Connect(bot, config)

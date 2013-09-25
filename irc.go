@@ -18,6 +18,7 @@ func CreateBot(config *Config) *client.Conn {
 	if config.Server.SSL {
 		bot.SSL = true
 	}
+	bot.EnableStateTracking()
 	l.Infof("Created %s the bot", config.Nick)
 	return bot
 }
@@ -38,7 +39,8 @@ func Connect(bot *client.Conn, config *Config) {
 		func(conn *client.Conn, line *client.Line) { 
 			quit <- true 
 		})
-
+	
+	l.Infof("Connecting to %s", config.Server.Network)
 	// Connect to server
 	if err := bot.Connect(config.Server.Network); err != nil {
 		l.Fatalf("Error: %s", err)
@@ -54,4 +56,11 @@ func JoinChannels(bot *client.Conn, config *Config) {
 		l.Infof("Joining channel %s", config.Server.Channels[i])
 		bot.Join(config.Server.Channels[i])
 	}
+}
+
+func AddHandler(bot *client.Conn) *client.Conn {
+	
+	
+		
+	return bot
 }
