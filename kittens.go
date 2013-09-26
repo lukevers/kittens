@@ -32,6 +32,9 @@ func main() {
 	// Create the bot
 	bot := CreateBot(config)
 
+	// Add plugins
+	bot = AddPlugins(bot)
+	
 	// Connect to server
 	Connect(bot, config)
 

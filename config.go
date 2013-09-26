@@ -42,6 +42,12 @@ type Config struct {
 		// server.
 		Channels []string
 	}
+	
+	// Plugins is a struct which contains information for the
+	// plugins that it uses.
+	Plugins struct {
+		
+	}
 }
 
 // ReadConfig reads the configuration file from JSON and returns it in

@@ -9,8 +9,8 @@ var (
 	r event.EventRegistry
 )
 
-// CreateBot is a function that creates the physical bot that will
-// connect to the server.
+// CreateBot is a func that creates the physical bot that will connect
+// to the server.
 func CreateBot(config *Config) *client.Conn {
 	l.Infof("Creating %s the bot", config.Nick)
 
@@ -39,7 +39,8 @@ func CreateBot(config *Config) *client.Conn {
 	return bot
 }
 
-// Connect
+// Connect is a func that connects to the server and stays connected
+// until being disconnected.
 func Connect(bot *client.Conn, config *Config) {
 
 	// Join channels on connect
@@ -55,12 +56,6 @@ func Connect(bot *client.Conn, config *Config) {
 			quit <- true 
 		})
 	
-	// Handler for reading
-	bot.HandleFunc("privmsg",
-		func(conn *client.Conn, line *client.Line) {
-			
-		})
-
 	// Connect to server
 	l.Infof("Connecting to %s", config.Server.Name)
 	
@@ -72,7 +67,7 @@ func Connect(bot *client.Conn, config *Config) {
 	<-quit
 }
 
-// JoinChannels is a function that is called before connecting to the
+// JoinChannels is a func that is called before connecting to the
 // server so it knows what channels to connect to.
 func JoinChannels(bot *client.Conn, config *Config) {
 	for i := range config.Server.Channels {
