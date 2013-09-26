@@ -13,39 +13,62 @@ var (
 // connect to the server.
 func CreateBot(config *Config) *client.Conn {
 	l.Infof("Creating %s the bot", config.Nick)
-	r = event.NewRegistry()
-	bot := client.Client(config.Nick, config.Host, config.Name, r)
+
+	conf := client.NewConfig(config.Nick, []string{config.Host, config.Name}...)
+	
+	// Check for SSL
 	if config.Server.SSL {
-		bot.SSL = true
+		conf.SSL = true
 	}
+
+	// Get the server/port we are going to connect to
+	if config.Server.Port != 6667 {
+		conf.Server = config.Server.Network + ":" + string(config.Server.Port)
+	} else {
+		conf.Server = config.Server.Network
+	}
+
+	// Create the new client with the configurations we added to
+	// *client.Config from our *Config.
+	bot := client.Client(conf)
+	
+	// Enable state tracking
 	bot.EnableStateTracking()
+	
 	l.Infof("Created %s the bot", config.Nick)
 	return bot
 }
 
-// Connect is a function that connects to the server and joins all of
-// the channels that are set in the configuration file.
+// Connect
 func Connect(bot *client.Conn, config *Config) {
-	l.Infof("Preparing to connect to %s", config.Server.Network)
-	// Join channels
-	bot.AddHandler(client.CONNECTED, 
-		func (conn *client.Conn, line *client.Line) { 
-			JoinChannels(bot, config) 
+
+	// Join channels on connect
+	bot.HandleFunc("connected",
+		func (conn *client.Conn, line *client.Line) {
+			JoinChannels(bot, config)
 		})
-
+	
+	// Handler for disconnect events
 	quit := make(chan bool)
-
-	bot.AddHandler(client.DISCONNECTED, 
+	bot.HandleFunc("disconnected",
 		func(conn *client.Conn, line *client.Line) { 
 			quit <- true 
 		})
 	
-	l.Infof("Connecting to %s", config.Server.Network)
-	// Connect to server
-	if err := bot.Connect(config.Server.Network); err != nil {
-		l.Fatalf("Error: %s", err)
-	}
+	// Handler for reading
+	bot.HandleFunc("privmsg",
+		func(conn *client.Conn, line *client.Line) {
+			
+		})
 
+	// Connect to server
+	l.Infof("Connecting to %s", config.Server.Name)
+	
+	if err := bot.Connect(); err != nil {
+		l.Emergf("Connection error: %s", err)
+	}
+	
+	// Wait for quit
 	<-quit
 }
 
@@ -56,11 +79,4 @@ func JoinChannels(bot *client.Conn, config *Config) {
 		l.Infof("Joining channel %s", config.Server.Channels[i])
 		bot.Join(config.Server.Channels[i])
 	}
-}
-
-func AddHandler(bot *client.Conn) *client.Conn {
-	
-	
-		
-	return bot
 }

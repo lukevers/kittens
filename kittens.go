@@ -32,10 +32,7 @@ func main() {
 	// Create the bot
 	bot := CreateBot(config)
 
-	// Add listeners
-	// todo
-	bot = AddHandler(bot)
-	
 	// Connect to server
 	Connect(bot, config)
+
 }
