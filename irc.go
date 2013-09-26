@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fluffle/goirc/client"
+	"github.com/lukevers/goirc/client"
 	"github.com/fluffle/goevent/event"
 )
 

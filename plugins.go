@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fluffle/goirc/client"
+	"github.com/lukevers/goirc/client"
 )
 
 // AddPlugins is a func that scans the plugin folder to see what
