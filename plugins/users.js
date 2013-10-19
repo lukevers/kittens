@@ -59,6 +59,7 @@ module.exports = function(bot) {
 	if (userinfo.host == userhost && (userinfo.mode == '+o' || userinfo.mode == '+v')) { 
 	    bot.send(':'+nick+'!'+userhost, 'MODE', channel, userinfo.mode, nick); 
 	    util.log(userinfo.mode+' '+nick+' in '+channel); 
+	}
     });
 
     function addTo(from, message, user, channel, which, i) {
