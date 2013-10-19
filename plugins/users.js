@@ -52,8 +52,8 @@ module.exports = function(bot) {
     });
 
     bot.addListener('join', function(channel, nick, message) {
-	if (typeof users[from] == 'undefined') return;
-	var userinfo = users[from][channel];
+	if (typeof users[nick] == 'undefined') return;
+	var userinfo = users[nick][channel];
 	var userhost = message.user+'@'+message.host;
 	if (typeof userinfo.host == 'undefined' || typeof userinfo.mode == 'undefined') return; 
 	if (userinfo.host == userhost && (userinfo.mode == '+o' || userinfo.mode == '+v')) { 
