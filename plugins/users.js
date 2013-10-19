@@ -51,6 +51,16 @@ module.exports = function(bot) {
 	} else return;
     });
 
+    bot.addListener('join', function(channel, nick, message) {
+	if (typeof users[from] == 'undefined') return;
+	var userinfo = users[from][channel];
+	var userhost = message.user+'@'+message.host;
+	if (typeof userinfo.host == 'undefined' || typeof userinfo.mode == 'undefined') return; 
+	if (userinfo.host == userhost && (userinfo.mode == '+o' || userinfo.mode == '+v')) { 
+	    bot.send(':'+nick+'!'+userhost, 'MODE', channel, userinfo.mode, nick); 
+	    util.log(userinfo.mode+' '+nick+' in '+channel); 
+    });
+
     function addTo(from, message, user, channel, which, i) {
 	util.log(which+" for "+user[i]);
         var thisUser = user[i];
