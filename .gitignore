@@ -1,13 +1,10 @@
-# OS X Files
-._*
-.DS_Store
-
 # Node Modules
 node_modules
 
-# Configuration files
-plugins.json
-config.json
+# Editor temporary files
+*~
+\#*
+.\#*
 
-# Log files
-*.log
+# Javascript source files
+lib
