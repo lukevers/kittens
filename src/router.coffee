@@ -1,4 +1,4 @@
-module.exports = (app) ->
+module.exports = (app, client) ->
 
         app.get '/', (req, res) ->
                 res.send 'TEST'

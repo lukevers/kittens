@@ -5,6 +5,20 @@ fs = require 'fs'
 Config = if fs.existsSync './config.json' then require './config.json' else require './example.json'
 
 ###########
+### IRC ###
+###########
+
+# Load modules for IRC
+irc = require 'irc'
+
+# Create client
+client = new irc.Client Config.IRC.server, Config.IRC.botName, Config.IRC
+
+# Add error handling
+client.addListener 'error', (message) ->
+        console.log 'error: ', message
+
+###########
 ### WEB ###
 ###########
 
@@ -20,21 +34,7 @@ app.set 'view engine', 'coffee'
 app.engine 'coffee', require('coffeecup').__express
 
 # Load the router for the web server
-require('./lib/router') app
+require('./lib/router') app, client
 
 # Serve the web server
 http.createServer(app).listen(Config.Web.Port, '::')
-
-###########
-### IRC ###
-###########
-
-# Load modules for IRC
-irc = require 'irc'
-
-# Create client
-client = new irc.Client Config.IRC.server, Config.IRC.botName, Config.IRC
-
-# Add error handling
-client.addListener 'error', (message) ->
-        console.log 'error: ', message
