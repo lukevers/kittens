@@ -1,5 +1,5 @@
 {
-    "name": "NEWNAME",
+    "name": "Kittens",
     "preferGlobal": false,
     "version": "1.0.0",
     "author": "Luke Evers",
@@ -12,7 +12,7 @@
     ],
     "repository": {
 	"type": "git",
-	"url": "https://github.com/lukevers/NEWNAME.git"
+	"url": "https://github.com/lukevers/kittens.git"
     },
     "dependencies": {
 	"express": "3.4.x",
