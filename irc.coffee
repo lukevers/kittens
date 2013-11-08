@@ -1,5 +1,8 @@
+# Load  modules
+fs = require 'fs'
+
 # Load the configuration file
-Config = require './config.json'
+Config = if fs.existsSync './config.json' then require './config.json' else require './example.json'
 
 ###########
 ### WEB ###
@@ -28,3 +31,10 @@ http.createServer(app).listen(Config.Web.Port, '::')
 
 # Load modules for IRC
 irc = require 'irc'
+
+# Create client
+client = new irc.Client Config.IRC.server, Config.IRC.botName, Config.IRC
+
+# Add error handling
+client.addListener 'error', (message) ->
+        console.log 'error: ', message
