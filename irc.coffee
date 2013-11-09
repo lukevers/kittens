@@ -35,6 +35,12 @@ fs.readdir './lib/plugins', (err, files) ->
                         commands.push p[j] unless typeof p[j] is 'undefined'
 
 ###########
+### LOG ###
+###########
+
+require('./lib/logging') client
+
+###########
 ### WEB ###
 ###########
 

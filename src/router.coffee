@@ -1,7 +1,10 @@
 module.exports = (app, client) ->
 
         app.get '/', (req, res) ->
-                res.send 'TEST'
+                res.render 'index'
+
+        app.get '/admin', (req, res) ->
+                res.render 'admin'
 
         app.get '*', (req, res) ->
                 res.status 404
