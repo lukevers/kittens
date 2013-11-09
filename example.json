@@ -13,6 +13,7 @@
 	    "#test",
 	    "#test2"
 	],
-	"autoConnect": true
+	"autoConnect": true,
+	"commandSymbol": "!"
     }
 }
