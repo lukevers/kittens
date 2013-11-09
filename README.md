@@ -1,6 +1,6 @@
 # kittens
 
-*kittens* is an IRC bot, written in Javascript that runs on a Node.js server. For more information about Node.js, visit their [website](http://nodejs.org/). 
+*kittens*(also known as котята) is an IRC bot, written in Javascript that runs on a Node.js server. For more information about Node.js, visit their [website](http://nodejs.org/). 
 
 ## Install
 
@@ -42,3 +42,5 @@ Although many of the variables already set in `config.json` do not have to be ch
 ### Plugins.json
 
 TODO
+
+*котята!*
