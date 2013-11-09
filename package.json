@@ -1,9 +1,27 @@
 {
-  "name": "Kittens",
-  "description": "An IRC bot written in NodeJS",
-  "version": "0.2.6",
-  "dependencies": {
-    "irc": "0.3.6",
-    "request": "2.21.0"
-  }
+    "name": "Kittens",
+    "preferGlobal": false,
+    "version": "1.0.0",
+    "author": "Luke Evers",
+    "description": "A modular IRC bot",
+    "contributors": [
+	{
+	    "name": "Luke Evers",
+	    "email": "luke@lukevers.com"
+	}
+    ],
+    "repository": {
+	"type": "git",
+	"url": "https://github.com/lukevers/kittens.git"
+    },
+    "dependencies": {
+	"coffee-script": "1.6.x",
+	"express": "3.4.x",
+	"coffeecup": "0.3.x",
+	"irc": "0.3.x"
+    },
+    "license": "GPLv3",
+    "scripts": {
+    	"test": "cake build"
+    }
 }
