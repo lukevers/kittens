@@ -15,9 +15,10 @@
 	"url": "https://github.com/lukevers/kittens.git"
     },
     "dependencies": {
+    	"coffee-script": "1.6.x"
 	"express": "3.4.x",
-	"coffeecup": "0.3.21",
-	"irc": "0.3.6"
+	"coffeecup": "0.3.x",
+	"irc": "0.3.x"
     },
     "license": "GPLv3",
     "scripts": {
