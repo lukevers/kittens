@@ -39,4 +39,10 @@ initChannel = (channel) ->
 # Write to file
 writeFile = (channel, message) ->
         initChannel channel
-        fs.appendFileSync './logging/' + channel, message + '\n'
+        fs.appendFileSync './logging/' + channel, message.timestamp() + '\n'
+
+# Append timestamp to message
+String::timestamp = ->
+        time = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
+        time = '[' + time + '] ' + this;
+        time
