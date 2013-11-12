@@ -3,7 +3,6 @@
 ####################
 
 fs       = require 'fs'
-irc      = require 'irc'
 readline = require 'readline'
 
 ##############
@@ -12,7 +11,7 @@ readline = require 'readline'
 
 green = `'\033[0;32m'`
 reset = `'\033[0m'`
-red = `'\033[0;31m'`
+red   = `'\033[0;31m'`
 
 ####################
 ### KITTENS LOGO ###
@@ -33,15 +32,18 @@ console.log reset
 ### INIT CONFIG ###
 ###################
 
-config =
-        'botName': 'kittens'
-        'username': 'kittens'
-        'realName': 'kittens'
-        'server': 'irc.hypeirc.net'
-        'port': 6667
-        'autoConnect': true
-        'commandSymbol': '!'
-        'channels': []
+if !fs.existsSync './config.json'
+        config = 
+                'botName': 'kittens'
+                'userName': 'kittens'
+                'realName': 'kittens'
+                'server': 'irc.hypeirc.net'
+                'port': 6667
+                'autoConnect': true
+                'commandSymbol': '!'
+                'channels': []
+else
+        config = require './config.json'
 
 ####################
 ### CHECK CONFIG ###
@@ -56,8 +58,10 @@ ask = (q, next) ->
 
 # Create config
 init = ->
-        fs.writeFileSync './config.json', JSON.stringify(config)
+        fs.writeFileSync './config.json', JSON.stringify config
         console.log green + 'Config file generated!' + reset
+        require('./lib/irc')(config)
+        require('./lib/command')(config)
 
 # Get channels, go to init
 channels = (a) ->
@@ -87,7 +91,7 @@ realname = (a) ->
 
 # Get username, go to realname
 username = (a) ->
-        config.username = a if a != ''
+        config.userName = a if a != ''
         ask 'Real Name', realname
 
 # Get botname, go to username
@@ -100,15 +104,6 @@ if !fs.existsSync './config.json'
         console.log red + '\nNo config file was found!' + reset + ' Creating a new one.'
         console.log 'Leave each blank for their default value'
         ask 'Bot Name', botname
-
-####################
-### START UP IRC ###
-####################
-
-# Create client
-client = new irc.Client config.server config.botName config
-
-# Add error handling
-client.addListener 'error', (message) ->
-        console.log 'error: ' + message
-
+else
+        require('./lib/irc')(config)
+        require('./lib/command')(config)
