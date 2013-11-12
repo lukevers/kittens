@@ -16,8 +16,7 @@
     },
     "dependencies": {
 	"coffee-script": "1.6.x",
-	"express": "3.4.x",
-	"coffeecup": "0.3.x",
+	"commander": "2.0.x",
 	"irc": "0.3.x"
     },
     "license": "GPLv3",

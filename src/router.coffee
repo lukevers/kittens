@@ -1,10 +1,11 @@
-module.exports = (app, client) ->
+module.exports = (app, client, config) ->
 
         app.get '/', (req, res) ->
                 res.render 'index'
 
         app.get '/admin', (req, res) ->
-                res.render 'admin'
+                console.log config
+                res.render 'admin', conf: config
 
         app.get '*', (req, res) ->
                 res.status 404
