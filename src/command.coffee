@@ -24,7 +24,13 @@ module.exports = (config) ->
         # COMMANDS
         #
         # - help
-        # - quit
+        #
+        # - disconnect
+        # - reconnect
+        #
+        # - cycle all
+        # - cycle [channel]
+        # 
         # - join [channel]
         # - part [channel]
         # - whois [nick]
@@ -34,7 +40,8 @@ module.exports = (config) ->
         # - set nick [nick]
         # - set user [user]
         # - set name [name]
-        # 
+        #
+
         parseCommand = (command) ->
                 args = command.split ' '
                 
