@@ -20,5 +20,24 @@ module.exports = (config) ->
         ### PARSE COMMANDS ###
         ######################
 
+        #
+        # COMMANDS
+        #
+        # - help
+        # - quit
+        # - join [channel]
+        # - part [channel]
+        # - whois [nick]
+        #
+        # - say [channel] [message]
+        #
+        # - set nick [nick]
+        # - set user [user]
+        # - set name [name]
+        # 
         parseCommand = (command) ->
-                console.log command
+                args = command.split ' '
+                
+
+String::startsWith = (it) ->
+        @slice(0, it.length) is it
