@@ -1,4 +1,4 @@
-# Node Modules
+# Node modules
 node_modules
 
 # Editor temporary files
@@ -11,3 +11,6 @@ lib
 
 # Log files
 logging
+
+# Configuration files
+*.json
