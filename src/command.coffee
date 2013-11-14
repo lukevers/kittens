@@ -25,21 +25,28 @@ module.exports = (config) ->
         #
         # - help
         #
-        # - disconnect
-        # - reconnect
+        # - disconnect all
+        # - disconnect [server]
+        #
+        # - reconnect all
+        # - reconnect [server]
         #
         # - cycle all
-        # - cycle [channel]
+        # - cycle [server] all
+        # - cycle [server] [channel]
         # 
-        # - join [channel]
-        # - part [channel]
-        # - whois [nick]
+        # - join [server] [channel]
+        # - part [server] [channel]
+        # - whois [server] [nick]
         #
-        # - say [channel] [message]
+        # - say [server] [channel] [message]
         #
-        # - set nick [nick]
-        # - set user [user]
-        # - set name [name]
+        # - set [server] server [server]
+        # - set [server] port [port]
+        # - set [server] commandSymbol [symbol]
+        # - set [server] nick [nick]
+        # - set [server] user [user]
+        # - set [server] name [name]
         #
 
         parseCommand = (command) ->
