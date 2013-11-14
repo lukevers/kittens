@@ -32,8 +32,11 @@ console.log reset
 ### INIT CONFIG ###
 ###################
 
+i = 0
+
 if !fs.existsSync './config.json'
-        config = 
+        config = []
+        tpconf =
                 'botName': 'kittens'
                 'userName': 'kittens'
                 'realName': 'kittens'
@@ -63,47 +66,77 @@ init = ->
         require('./lib/irc')(config)
         require('./lib/command')(config)
 
+# Again?
+again = (a) ->
+        if a.substring(0, 1) is 'y' or a.substring(0, 1) is 'Y'
+                i++
+                addServer()
+        else
+                init()
+
 # Get channels, go to init
 channels = (a) ->
         a = a.replace(/\ /g, '')
-        config.channels = a.split(',') if a != ''
-        init()
+        config[i].channels = a.split(',') if a != ''
+        ask 'Add another server? (yes/no)', again
 
 # Get commandsymbol, go to channels
 commandsymbol = (a) ->
-        config.commandSymbol = a if a != ''
+        config[i].commandSymbol = a if a != ''
+        config[i].commandSymbol = '!' if a is ''
         ask 'Channels', channels
 
 # Get port, go to commandsymbol
 port = (a) ->
-        config.port = parseInt(a) if a != ''
+        config[i].port = parseInt(a) if a != ''
+        config[i].port = 6667 if a is ''
         ask 'Command Symbol', commandsymbol
 
 # Get server, go to port
 server = (a) ->
-        config.server = a if a != ''
+        config[i].server = a if a != ''
+        config[i].server = 'irc.hypeirc.net' if a is ''
         ask 'Port', port
 
 # Get realname, go to server
 realname = (a) ->
-        config.realName = a if a != ''
+        config[i].realName = a if a != ''
+        config[i].realName = 'kittens' if a is ''
         ask 'Server', server
 
 # Get username, go to realname
 username = (a) ->
-        config.userName = a if a != ''
+        config[i].userName = a if a != ''
+        config[i].userName = 'kittens' if a is ''
         ask 'Real Name', realname
 
 # Get botname, go to username
 botname = (a) ->
-        config.botName = a if a != ''
+        config[i].botName = a if a != ''
+        config[i].botName = 'kittens' if a is ''
         ask 'Username', username
+
+clone = (obj) ->
+        if not obj? or typeof obj isnt 'object'
+                return obj
+                
+        newInstance = new obj.constructor()
+
+        for key of obj
+                newInstance[key] = clone obj[key]
+        
+        return newInstance
+
+# Add server
+addServer = ->
+        config[i] = clone(tpconf)
+        ask 'Bot Name', botname
 
 # If `./config.json` does not exist, make a new one.
 if !fs.existsSync './config.json'
         console.log red + '\nNo config file was found!' + reset + ' Creating a new one.'
         console.log 'Leave each blank for their default value'
-        ask 'Bot Name', botname
+        addServer()
 else
         require('./lib/irc')(config)
         require('./lib/command')(config)
