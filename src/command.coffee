@@ -32,10 +32,6 @@ module.exports = (clients, config) ->
         # - connect all
         # - connect [server]
         #
-        # - cycle all
-        # - cycle [server] all
-        # - cycle [server] [channel]
-        # 
         # - join [server] [channel]
         # - part [server] [channel]
         # - whois [server] [nick]
@@ -59,7 +55,6 @@ module.exports = (clients, config) ->
                         when 'quit' then quit(args); break
                         when 'disconnect' then disconnect(args); break
                         when 'connect' then connect(args); break
-                        when 'cycle' then cycle(args); break
                         when 'join' then join(args); break
                         when 'part' then part(args); break
                         when 'say' then say(args); break 
@@ -74,9 +69,6 @@ module.exports = (clients, config) ->
                 console.log '- disconnect [server]'
                 console.log '\n- connect all'
                 console.log '- connect [server]'
-                console.log '\n- cycle all'
-                console.log '- cycle [server] all'
-                console.log '- cycle [server] [channel]'
                 console.log '\n- join [server] [channel]'
                 console.log '- part [server] [channel]'
                 console.log '- whois [server] [nick]'
@@ -118,9 +110,6 @@ module.exports = (clients, config) ->
                                         clients[i].connect
                                         return
                         console.log red + 'Server does not exist' + reset
-
-        cycle = (args) ->
-                console.log 'cycle'
 
         join = (args) ->
                 console.log 'join'
