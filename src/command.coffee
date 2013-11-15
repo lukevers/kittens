@@ -67,8 +67,27 @@ module.exports = (clients, config) ->
                         else console.log red + 'Use help for a list of commands' + reset
 
         help = (args) ->
-                console.log 'help'
-
+                console.log green + 'COMMANDS' + reset
+                console.log '\n- help'
+                console.log '- quit'
+                console.log '\n- disconnect all'
+                console.log '- disconnect [server]'
+                console.log '\n- connect all'
+                console.log '- connect [server]'
+                console.log '\n- cycle all'
+                console.log '- cycle [server] all'
+                console.log '- cycle [server] [channel]'
+                console.log '\n- join [server] [channel]'
+                console.log '- part [server] [channel]'
+                console.log '- whois [server] [nick]'
+                console.log '\n- say [server] [channel] [message]'
+                console.log '\n- set [server] server [server]'
+                console.log '- set [server] port [port]'
+                console.log '- set [server] commandSymbol [symbol]'
+                console.log '- set [server] nick [nick]'
+                console.log '- set [server] user [user]'
+                console.log '- set [server] name [name]'
+                
         quit = (args) ->
                 args[1] = 'all'
                 disconnect(args)
