@@ -5,7 +5,7 @@ module.exports = (config) ->
         ####################
         
         irc = require 'irc'
-
+        clients = []
 
         for i in [0..config.length-1] by 1
                 client = new irc.Client config[i].server, config[i].botName, config[i]
@@ -17,4 +17,7 @@ module.exports = (config) ->
                 client.addListener 'error', (message) ->
                         console.log 'error from ' + message.server + ': ' + JSON.stringify message
 
-                require('./logging') client, server
+                require('./logging') client, config[i].server
+                clients[i] = client
+
+        require('./command') clients, config

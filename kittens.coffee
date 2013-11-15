@@ -64,7 +64,6 @@ init = ->
         fs.writeFileSync './config.json', JSON.stringify config
         console.log green + 'Config file generated!' + reset
         require('./lib/irc')(config)
-        require('./lib/command')(config)
 
 # Again?
 again = (a) ->
@@ -139,4 +138,3 @@ if !fs.existsSync './config.json'
         addServer()
 else
         require('./lib/irc')(config)
-        require('./lib/command')(config)
