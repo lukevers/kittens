@@ -1,3 +1,11 @@
+##############
+### COLORS ###
+##############
+
+green = `'\033[0;32m'`
+reset = `'\033[0m'`
+red = `'\033[0;31m'`
+
 module.exports = (config) ->
         
         ####################
@@ -15,7 +23,7 @@ module.exports = (config) ->
                         console.log 'Connected to ' + message.server
 
                 client.addListener 'error', (message) ->
-                        console.log 'error from ' + message.server + ': ' + JSON.stringify message
+                        console.log red + 'error from ' + message.server + ': ' + JSON.stringify(message) + reset
 
                 require('./logging') client, config[i].server
                 clients[i] = client

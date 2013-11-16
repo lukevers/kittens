@@ -159,7 +159,14 @@ module.exports = (clients, config) ->
                 console.log red + 'Server does not exist' + reset
 
         say = (args) ->
-                console.log 'say'
+                for i in [0..clients.length-1] by 1
+                        if args[1] is config[i].server
+                                msg = ''
+                                for j in [3..args.length-1] by 1
+                                        msg += args[j] + ' '
+                                clients[i].say args[2],  msg
+                                return
+                console.log red + 'Server does not exist' + reset
 
         set = (args) ->
                 console.log 'set'
