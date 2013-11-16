@@ -16,7 +16,6 @@
     },
     "dependencies": {
 	"coffee-script": "1.6.x",
-	"commander": "2.0.x",
 	"irc": "0.3.x"
     },
     "license": "GPLv3",
