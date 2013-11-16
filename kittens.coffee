@@ -62,7 +62,7 @@ ask = (q, next) ->
 # Create config
 init = ->
         fs.writeFileSync './config.json', JSON.stringify config
-        console.log green + 'Config file generated!' + reset
+        console.log green + 'Config file generated' + reset
         require('./lib/irc')(config)
 
 # Again?

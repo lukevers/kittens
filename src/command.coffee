@@ -1,12 +1,22 @@
+####################
+### LOAD MODULES ###
+####################
+
+fs = require 'fs'
+
+##############
+### COLORS ###
+##############
+
+green = `'\033[0;32m'`
+reset = `'\033[0m'`
+red   = `'\033[0;31m'`
+
+##############
+### MODULE ###
+##############
+
 module.exports = (clients, config) ->
-
-        ##############
-        ### COLORS ###
-        ##############
-
-        green = `'\033[0;32m'`
-        reset = `'\033[0m'`
-        red   = `'\033[0;31m'`
 
         #############
         ### STDIN ###
@@ -57,6 +67,7 @@ module.exports = (clients, config) ->
                         when 'connect' then connect(args); break
                         when 'join' then join(args); break
                         when 'part' then part(args); break
+                        when 'whois' then whois(args); break
                         when 'say' then say(args); break 
                         when 'set' then set(args); break
                         else console.log red + 'Use help for a list of commands' + reset
@@ -112,10 +123,40 @@ module.exports = (clients, config) ->
                         console.log red + 'Server does not exist' + reset
 
         join = (args) ->
-                console.log 'join'
+                for i in [0..clients.length-1] by 1
+                        if args[1] is config[i].server
+                                args[2] = '#' + args[2] if !args[2].startsWith '#'
+                                console.log 'Joining ' + args[1] + ' ' + args[2]
+                                clients[i].join args[2], ->
+                                        console.log 'Joined ' + args[1] + ' ' + args[2]
+                                        config[i].channels.push args[2]
+                                        updateConfig(config)
+                                        return
+                                return
+                console.log red + 'Server does not exist' + reset
 
         part = (args) ->
-                console.log 'part'
+                for i in [0..clients.length-1] by 1
+                        if args[1] is config[i].server
+                                args[2] = '#' + args[2] if !args[2].startsWith '#'
+                                console.log 'Parting ' + args[1] + ' ' + args[2]
+                                clients[i].part args[2], ->
+                                        console.log 'Parted ' + args[1] + ' ' + args[2]
+                                        index = config[i].channels.indexOf args[2]
+                                        config[i].channels.splice index, 1 if index > -1
+                                        updateConfig(config)
+                                        return
+                                return
+                console.log red + 'Server does not exist' + reset
+
+        whois = (args) ->
+                for i in [0..clients.length-1] by 1
+                        if args[1] is config[i].server
+                                clients[i].whois args[2], (info) ->
+                                        console.log JSON.stringify info
+                                        return
+                                return
+                console.log red + 'Server does not exist' + reset
 
         say = (args) ->
                 console.log 'say'
@@ -125,3 +166,7 @@ module.exports = (clients, config) ->
 
 String::startsWith = (it) ->
         @slice(0, it.length) is it
+
+updateConfig = (config) ->
+        fs.writeFileSync './config.json', JSON.stringify config
+        console.log green + 'Config file updated' + reset
