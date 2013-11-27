@@ -169,7 +169,67 @@ module.exports = (clients, config) ->
                 console.log red + 'Server does not exist' + reset
 
         set = (args) ->
-                console.log 'set'
+                for i in [0..clients.length-1] by 1
+                        if args[1] is config[i].server
+                                switch args[2]
+                                        when 'server' then setServer(args, i); return
+                                        when 'port' then setPort(args, i); return
+                                        when 'commandsymbol' then setCS(args, i); return
+                                        when 'nick' then setNick(args, i); return
+                                        when 'user' then setUser(args, i); return
+                                        when 'name' then setName(args, i); return
+                                        else console.log red + 'Use help for a list of commands' + reset
+                                        
+                console.log red + 'Server does not exist' + reset
+
+        # Set server
+        setServer = (args, i) ->
+                if args[3]
+                        config[i].server = args[3]
+                        console.log green + 'The server ' + args[3] + ' will be used on restart' + reset
+                        updateConfig(config)
+                else console.log red + 'A new server can\'t be empty' + reset
+
+        # Set port
+        setPort = (args, i) ->
+                if args[3]
+                        config[i].port = args[3]
+                        console.log green + 'port ' + args[3] + ' will be used on restart' + reset
+                        updateConfig(config)
+                else console.log red + 'A new port can\'t be empty' + reset
+
+        # Set command symbol
+        setCS = (args, i) ->
+                if args[3]
+                        config[i].commandSymbol = args[3]
+                        updateConfig(config)
+                        console.log green + 'Command symbol updated to ' + args[3] + reset
+                else console.log red + 'A new command symbol can\'t be empty' + reset
+                
+        # Set nickname
+        setNick = (args, i) ->
+                if args[3]
+                        config[i].botName = args[3]
+                        updateConfig(config)
+                        clients[i].send 'NICK', args[3]
+                        console.log green + 'Nick updated to ' + args[3] + reset
+                else console.log red + 'A new nick can\'t be empty' + reset
+
+        # Set username
+        setUser = (args, i) ->
+                if args[3]
+                        config[i].userName = args[3]
+                        updateConfig(config)
+                        console.log green + 'The username ' + args[3] + ' will be used on restart' + reset
+                else console.log red + 'A new user can\'t be empty' + reset
+
+        # Set realname
+        setName = (args, i) ->
+                if args[3]
+                        config[i].realName = args[3]
+                        updateConfig(config)
+                        console.log green + 'The realname ' + args[3] + ' will be used on restart' + reset
+                else console.log red + 'A new name can\'t be empty' + reset
 
 String::startsWith = (it) ->
         @slice(0, it.length) is it
