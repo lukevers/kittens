@@ -56,6 +56,7 @@ module.exports = (clients, config) ->
         # - set [server] name [name]
         #
 
+        # Parse Command
         parseCommand = (command) ->
                 command = command.replace /\r?\n|\r/g, ''
                 command = command.toLowerCase()
@@ -72,6 +73,7 @@ module.exports = (clients, config) ->
                         when 'set' then set(args); break
                         else console.log red + 'Use help for a list of commands' + reset
 
+        # Help
         help = (args) ->
                 console.log green + 'COMMANDS' + reset
                 console.log '\n- help'
@@ -90,11 +92,13 @@ module.exports = (clients, config) ->
                 console.log '- set [server] nick [nick]'
                 console.log '- set [server] user [user]'
                 console.log '- set [server] name [name]'
-                
+
+        # Quit
         quit = (args) ->
                 args[1] = 'all'
                 disconnect(args)
 
+        # Disconnect
         disconnect = (args) ->
                 if args[1] is 'all'
                         for i in [0..clients.length-1] by 1
@@ -109,6 +113,7 @@ module.exports = (clients, config) ->
                                         return
                         console.log red + 'Server does not exist' + reset
 
+        # Connect
         connect = (args) ->
                 if args[1] is 'all'
                         for i in [0..clients.length-1] by 1
@@ -122,6 +127,7 @@ module.exports = (clients, config) ->
                                         return
                         console.log red + 'Server does not exist' + reset
 
+        # Join
         join = (args) ->
                 for i in [0..clients.length-1] by 1
                         if args[1] is config[i].server
@@ -135,6 +141,7 @@ module.exports = (clients, config) ->
                                 return
                 console.log red + 'Server does not exist' + reset
 
+        # Part
         part = (args) ->
                 for i in [0..clients.length-1] by 1
                         if args[1] is config[i].server
@@ -149,6 +156,7 @@ module.exports = (clients, config) ->
                                 return
                 console.log red + 'Server does not exist' + reset
 
+        # Whois
         whois = (args) ->
                 for i in [0..clients.length-1] by 1
                         if args[1] is config[i].server
@@ -158,6 +166,7 @@ module.exports = (clients, config) ->
                                 return
                 console.log red + 'Server does not exist' + reset
 
+        # Say
         say = (args) ->
                 for i in [0..clients.length-1] by 1
                         if args[1] is config[i].server
@@ -168,6 +177,7 @@ module.exports = (clients, config) ->
                                 return
                 console.log red + 'Server does not exist' + reset
 
+        # Set
         set = (args) ->
                 for i in [0..clients.length-1] by 1
                         if args[1] is config[i].server
@@ -231,9 +241,11 @@ module.exports = (clients, config) ->
                         console.log green + 'The realname ' + args[3] + ' will be used on restart' + reset
                 else console.log red + 'A new name can\'t be empty' + reset
 
+# Starts with
 String::startsWith = (it) ->
         @slice(0, it.length) is it
 
+# Update config
 updateConfig = (config) ->
         fs.writeFileSync './config.json', JSON.stringify config
         console.log green + 'Config file updated' + reset

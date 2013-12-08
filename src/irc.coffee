@@ -6,6 +6,10 @@ green = `'\033[0;32m'`
 reset = `'\033[0m'`
 red = `'\033[0;31m'`
 
+##############
+### MODULE ###
+##############
+
 module.exports = (config) ->
         
         ####################
@@ -26,6 +30,8 @@ module.exports = (config) ->
                         console.log red + 'error from ' + message.server + ': ' + JSON.stringify(message) + reset
 
                 require('./logging') client, config[i].server
+                require('./plugin') client, config[i]
                 clients[i] = client
 
         require('./command') clients, config
+        

@@ -115,6 +115,7 @@ botname = (a) ->
         config[i].botName = 'kittens' if a is ''
         ask 'Username', username
 
+# Clone
 clone = (obj) ->
         if not obj? or typeof obj isnt 'object'
                 return obj

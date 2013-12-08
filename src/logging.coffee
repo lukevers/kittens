@@ -1,5 +1,11 @@
-# Load modules
+####################
+### LOAD MODULES ###
+####################
 fs = require 'fs'
+
+##############
+### MODULE ###
+##############
 
 module.exports = (client, server) ->
 
