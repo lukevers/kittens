@@ -8,7 +8,7 @@ fs = require 'fs'
 ### MODULE ###
 ##############
 
-cmds = ['help']
+cmds = ['  help']
 
 module.exports = (client, server) ->
         console.log 'Loading plugins for ' + server.server
@@ -20,4 +20,5 @@ module.exports = (client, server) ->
 
         # Add listener for `help` command
         client.addListener 'message', (from, to, text, message) ->
-                # TODO
+                if message.args[1].split(' ')[0] == server.commandSymbol + 'help'
+                        client.say message.args[0], from + ':' + cmds.join(' ' + server.commandSymbol).replace(/,|  /g, ' ' + server.commandSymbol)
