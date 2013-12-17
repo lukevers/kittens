@@ -63,9 +63,24 @@ module.exports = (client, config, i) ->
                         
         # Listen for joins
         client.addListener 'join', (channel, nick, message) ->
+                # Check if the user exists
                 if !config[i].users[nick]?
                         config[i].users[nick] = {}
                         updateConfig config
+
+                # Check if the channel exists for the user
+                if !config[i].users[from][channel]?
+                        config[i].users[from][channel] = {}
+                        config[i].users[from][channel].mode = ""
+                        updateConfig config
+
+                # Check if the user is op or not
+                isop = (config[i].users[from][channel].mode is '+o')
+
+                if isop
+                        # op user
+                else if (config[i].users[from][channel].mode is '+v')
+                        # voice user
         
         # Return commands
         return commands
