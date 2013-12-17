@@ -135,7 +135,6 @@ module.exports = (clients, config) ->
                                 console.log 'Joining ' + args[1] + ' ' + args[2]
                                 clients[i].join args[2], ->
                                         console.log 'Joined ' + args[1] + ' ' + args[2]
-                                        config[i].channels.push args[2]
                                         updateConfig(config)
                                         return
                                 return
@@ -150,7 +149,6 @@ module.exports = (clients, config) ->
                                 clients[i].part args[2], ->
                                         console.log 'Parted ' + args[1] + ' ' + args[2]
                                         index = config[i].channels.indexOf args[2]
-                                        config[i].channels.splice index, 1 if index > -1
                                         updateConfig(config)
                                         return
                                 return
