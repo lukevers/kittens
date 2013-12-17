@@ -22,6 +22,10 @@ commands = ['op', 'deop', 'voice', 'devoice']
 ### MODULE ###
 ##############
 
+# default variables
+cs = ""
+isop = false
+
 module.exports = (client, config, i) ->
 
         # Set the command symbol to cs for easy use
@@ -47,12 +51,15 @@ module.exports = (client, config, i) ->
                         config[i].users[from][channel] = {}
                         config[i].users[from][channel].mode = ""
                         updateConfig config
-                
+
+                # Check if the user is op or not
+                isop = (config[i].users[from][channel].mode is '+o')
+
                 # Check if the user said any of the commands
-                op config, from, msg if msg.indexOf(cs + 'op') is 0
-                deop config, from, msg if msg.indexOf(cs + 'deop') is 0
-                voice config, from, msg if msg.indexOf(cs + 'voice') is 0
-                devoice config, from, msg if msg.indexOf(cs + 'devoice') is 0
+                op client, config, from, message if msg.indexOf(cs + 'op') is 0
+                deop client, config, from, message if msg.indexOf(cs + 'deop') is 0
+                voice client, config, from, message if msg.indexOf(cs + 'voice') is 0
+                devoice client, config, from, message if msg.indexOf(cs + 'devoice') is 0
                         
         # Listen for joins
         client.addListener 'join', (channel, nick, message) ->
@@ -64,20 +71,44 @@ module.exports = (client, config, i) ->
         return commands
 
 # op command
-op = (config, nick, msg) ->
-        console.log 'wat'
+op = (client, config, nick, message) ->
+        if !isop
+                client.say message.args[0], nick + ': you don\'t have permission to do this!'
+                return
+
+        # Now we let the real op do stuff
+        if message.args[1].replace(/\ /g, '') is (cs + 'op')
+                client.say message.args[0], nick + ': you can\'t op the ghosts in here!'
 
 # deop command
-deop = (config, nick, msg) ->
-        console.log 'wat'
+deop = (client, config, nick, msg) ->
+        if !isop
+                client.say message.args[0], nick + ': you don\'t have permission to do this!'
+                return
+
+        # Now we let the real op do stuff
+        if message.args[1].replace(/\ /g, '') is (cs + 'deop')
+                client.say message.args[0], nick + ': you can\'t deop the ghosts in here!'
 
 # voice command
-voice = (config, nick, msg) ->
-        console.log 'wat'
+voice = (client, config, nick, msg) ->
+        if !isop
+                client.say message.args[0], nick + ': you don\'t have permission to do this!'
+                return
+
+        # Now we let the real op do stuff
+        if message.args[1].replace(/\ /g, '') is (cs + 'voice')
+                client.say message.args[0], nick + ': you can\'t voice the ghosts in here!'
 
 # devoice command
-devoice = (config, nick, msg) ->
-        console.log 'wat'
+devoice = (client, config, nick, msg) ->
+        if !isop
+                client.say message.args[0], nick + ': you don\'t have permission to do this!'
+                return
+
+        # Now we let the real op do stuff
+        if message.args[1].replace(/\ /g, '') is (cs + 'devoice')
+                client.say message.args[0], nick + ': you can\'t devoice the ghosts in here!'
 
 # Update config
 updateConfig = (config) ->
