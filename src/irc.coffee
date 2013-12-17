@@ -30,7 +30,7 @@ module.exports = (config) ->
                         console.log red + 'error from ' + message.server + ': ' + JSON.stringify(message) + reset
 
                 require('./logging') client, config[i].server
-                require('./plugin') client, config[i]
+                require('./plugin') client, config, i
                 clients[i] = client
 
         require('./command') clients, config
