@@ -18,13 +18,16 @@ red = `'\033[0;31m'`
 
 commands = ['op', 'deop', 'voice', 'devoice']
 
+########################
+### GLOBAL VARIABLES ###
+########################
+
+cs = ""
+isop = false
+
 ##############
 ### MODULE ###
 ##############
-
-# default variables
-cs = ""
-isop = false
 
 module.exports = (client, config, i) ->
 
