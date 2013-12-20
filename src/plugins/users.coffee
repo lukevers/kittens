@@ -24,6 +24,7 @@ commands = ['op', 'deop', 'voice', 'devoice']
 
 cs = ""
 isop = false
+host = ""
 
 ##############
 ### MODULE ###
@@ -38,11 +39,12 @@ module.exports = (client, config, i) ->
         if !config[i].users?
                 config[i].users = {}
                 updateConfig config
-        
+                
         # Listen for commands
         client.addListener 'message', (from, to, text, message) ->
                 channel = message.args[0]
                 msg = message.args[1]
+                host = message.user + '@' + message.host
 
                 # Check if the user exists
                 if !config[i].users[from]?
@@ -53,38 +55,47 @@ module.exports = (client, config, i) ->
                 if !config[i].users[from][channel]?
                         config[i].users[from][channel] = {}
                         config[i].users[from][channel].mode = ""
+                        config[i].users[from][channel].host = host
                         updateConfig config
 
                 # Check if the user is op or not
                 isop = (config[i].users[from][channel].mode is '+o')
-
+                isop = isop and (config[i].users[from][channel].host is host)
+                
                 # Check if the user said any of the commands
                 op client, config, from, message if msg.indexOf(cs + 'op') is 0
                 deop client, config, from, message if msg.indexOf(cs + 'deop') is 0
                 voice client, config, from, message if msg.indexOf(cs + 'voice') is 0
                 devoice client, config, from, message if msg.indexOf(cs + 'devoice') is 0
-                        
-        # Listen for joins
+
+        # Listen for joins 
         client.addListener 'join', (channel, nick, message) ->
+                # Get the host of the user that joined
+                host = message.user + '@' + message.host
+                
                 # Check if the user exists
                 if !config[i].users[nick]?
                         config[i].users[nick] = {}
                         updateConfig config
 
                 # Check if the channel exists for the user
-                if !config[i].users[from][channel]?
-                        config[i].users[from][channel] = {}
-                        config[i].users[from][channel].mode = ""
+                if !config[i].users[nick][channel]?
+                        config[i].users[nick][channel] = {}
+                        config[i].users[nick][channel].mode = ""
+                        config[i].users[nick][channel].host = host
                         updateConfig config
 
                 # Check if the user is op or not
-                isop = (config[i].users[from][channel].mode is '+o')
+                isop = (config[i].users[nick][channel].mode is '+o')
+                isop = isop and (config[i].users[from][channel].host is host)
 
                 if isop
-                        # op user
-                else if (config[i].users[from][channel].mode is '+v')
-                        # voice user
-        
+                        client.send ':'+nick+'!'+host, 'MODE', channel, '+o', nick
+                        
+                else if config[i].users[from][channel].mode is '+v'
+                        if config[i].users[from][channel].host is host
+                                client.send ':'+nick+'!'+host, 'MODE', channel, '+v', nick
+
         # Return commands
         return commands
 
