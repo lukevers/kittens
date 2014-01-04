@@ -83,24 +83,52 @@ module.exports = (client, config, i) ->
         
                                 else
                                         if msg.indexOf(cs + 'op') is 0
-                                                config[i].users[from][channel].mode = '+o'
-                                                updateConfig config
-                                                client.send ':'+from+'!'+host, 'MODE', channel, '+o', from
+                                                who = msg.split(' ')
+                                                j = 1
+                                                while j < who.length
+                                                        client.whois who[j], (info) ->
+                                                                config[i].users[who[j]][channel] = {}
+                                                                config[i].users[who[j]][channel].mode = '+o'
+                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                updateConfig config
+                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', who[j]
+                                                        j++
                 
                                         if msg.indexOf(cs + 'deop') is 0
-                                                config[i].users[from][channel].mode = ''
-                                                updateConfig config
-                                                client.send ':'+from+'!'+host, 'MODE', channel, '-o', from
+                                                who = msg.split(' ')
+                                                j = 1
+                                                while j < who.length
+                                                        client.whois who[j], (info) ->
+                                                                config[i].users[who[j]][channel] = {}
+                                                                config[i].users[who[j]][channel].mode = ''
+                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                updateConfig config
+                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '-o', who[j]
+                                                        j++
                                 
                                         if msg.indexOf(cs + 'voice') is 0
-                                                config[i].users[from][channel].mode = '+v'
-                                                updateConfig config
-                                                client.send ':'+from+'!'+host, 'MODE', channel, '+v', from
+                                                who = msg.split(' ')
+                                                j = 1
+                                                while j < who.length
+                                                        client.whois who[j], (info) ->
+                                                                config[i].users[who[j]][channel] = {}
+                                                                config[i].users[who[j]][channel].mode = '+v'
+                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                updateConfig config
+                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', who[j]
+                                                        j++
                 
                                         if msg.indexOf(cs + 'devoice') is 0
-                                                config[i].users[from][channel].mode = ''
-                                                updateConfig config
-                                                client.send ':'+from+'!'+host, 'MODE', channel, '-v', from
+                                                who = msg.split(' ')
+                                                j = 1
+                                                while j < who.length
+                                                        client.whois who[j], (info) ->
+                                                                config[i].users[who[j]][channel] = {}
+                                                                config[i].users[who[j]][channel].mode = '-v'
+                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                updateConfig config
+                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '-v', who[j]
+                                                        j++
 
         # Listen for joins 
         client.addListener 'join', (channel, nick, message) ->
