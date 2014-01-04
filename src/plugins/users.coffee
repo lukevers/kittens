@@ -62,11 +62,38 @@ module.exports = (client, config, i) ->
                 isop = (config[i].users[from][channel].mode is '+o')
                 isop = isop and (config[i].users[from][channel].host is host)
                 
-                # Check if the user said any of the commands
-                op client, config, from, message if msg.indexOf(cs + 'op') is 0
-                deop client, config, from, message if msg.indexOf(cs + 'deop') is 0
-                voice client, config, from, message if msg.indexOf(cs + 'voice') is 0
-                devoice client, config, from, message if msg.indexOf(cs + 'devoice') is 0
+                if !isop
+                        client.say message.args[0], from + ': you don\'t have permission to do this!'
+
+                # Now we let the real op do stuff.
+                
+                if message.args[1].replace(/\ /g, '') is (cs + 'op')
+                        client.say message.args[0], from + ': you can\'t op the ghosts in here!'
+                        return
+                        
+                if message.args[1].replace(/\ /g, '') is (cs + 'deop')
+                        client.say message.args[0], from + ': you can\'t deop the ghosts in here!'
+                        return
+                
+                if message.args[1].replace(/\ /g, '') is (cs + 'voice')
+                        client.say message.args[0], from + ': you can\'t voice the ghosts in here!'
+                        return
+                        
+                if message.args[1].replace(/\ /g, '') is (cs + 'devoice')
+                        client.say message.args[0], from + ': you can\'t devoice the ghosts in here!'
+                        return
+        
+                if msg.indexOf(cs + 'op') is 0
+                        client.send ':'+from+'!'+host, 'MODE', channel, '+o', from
+                
+                if msg.indexOf(cs + 'deop') is 0
+                        client.send ':'+from+'!'+host, 'MODE', channel, '-o', from
+                        
+                if msg.indexOf(cs + 'voice') is 0
+                        client.send ':'+from+'!'+host, 'MODE', channel, '+v', from
+                
+                if msg.indexOf(cs + 'devoice') is 0
+                        client.send ':'+from+'!'+host, 'MODE', channel, '-v', from
 
         # Listen for joins 
         client.addListener 'join', (channel, nick, message) ->
@@ -98,46 +125,6 @@ module.exports = (client, config, i) ->
 
         # Return commands
         return commands
-
-# op command
-op = (client, config, nick, message) ->
-        if !isop
-                client.say message.args[0], nick + ': you don\'t have permission to do this!'
-                return
-
-        # Now we let the real op do stuff
-        if message.args[1].replace(/\ /g, '') is (cs + 'op')
-                client.say message.args[0], nick + ': you can\'t op the ghosts in here!'
-
-# deop command
-deop = (client, config, nick, message) ->
-        if !isop
-                client.say message.args[0], nick + ': you don\'t have permission to do this!'
-                return
-
-        # Now we let the real op do stuff
-        if message.args[1].replace(/\ /g, '') is (cs + 'deop')
-                client.say message.args[0], nick + ': you can\'t deop the ghosts in here!'
-
-# voice command
-voice = (client, config, nick, message) ->
-        if !isop
-                client.say message.args[0], nick + ': you don\'t have permission to do this!'
-                return
-
-        # Now we let the real op do stuff
-        if message.args[1].replace(/\ /g, '') is (cs + 'voice')
-                client.say message.args[0], nick + ': you can\'t voice the ghosts in here!'
-
-# devoice command
-devoice = (client, config, nick, message) ->
-        if !isop
-                client.say message.args[0], nick + ': you don\'t have permission to do this!'
-                return
-
-        # Now we let the real op do stuff
-        if message.args[1].replace(/\ /g, '') is (cs + 'devoice')
-                client.say message.args[0], nick + ': you can\'t devoice the ghosts in here!'
 
 # Update config
 updateConfig = (config) ->
