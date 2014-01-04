@@ -94,8 +94,6 @@ module.exports = (client, config, i) ->
                                                                 config[i].users[info.nick][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
                                                                 client.send ':'+info.nick+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', info.nick
-                                                                
-                                                        
                                                         j++
                                                 
                                         if msg.indexOf(cs + 'deop') is 0
@@ -103,12 +101,12 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length-1
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {}
-                                                                config[i].users[who[j]][channel] = {} 
-                                                                config[i].users[who[j]][channel].mode = ''
-                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                config[i].users[info.nick] = {} if !config[i].users[info.nick]?
+                                                                config[i].users[info.nick][channel] = {} if !config[i].users[info.nick][channel]?
+                                                                config[i].users[info.nick][channel].mode = ''
+                                                                config[i].users[info.nick][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
-                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '-o', who[j]
+                                                                client.send ':'+info.nick+'!'+info.user+'@'+info.host, 'MODE', channel, '-o', info.nick
                                                         j++
                                 
                                         if msg.indexOf(cs + 'voice') is 0
@@ -116,12 +114,12 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length-1
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {}
-                                                                config[i].users[who[j]][channel] = {}
-                                                                config[i].users[who[j]][channel].mode = '+v'
-                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                config[i].users[info.nick] = {} if !config[i].users[info.nick]?
+                                                                config[i].users[info.nick][channel] = {} if !config[i].users[info.nick][channel]?
+                                                                config[i].users[info.nick][channel].mode = '+v'
+                                                                config[i].users[info.nick][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
-                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', who[j]
+                                                                client.send ':'+info.nick+'!'+info.user+'@'+info.host, 'MODE', channel, '+v', info.nick
                                                         j++
                 
                                         if msg.indexOf(cs + 'devoice') is 0
@@ -129,12 +127,12 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length-1
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {}
-                                                                config[i].users[who[j]][channel] = {}
-                                                                config[i].users[who[j]][channel].mode = '-v'
-                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                config[i].users[info.nick] = {} if !config[i].users[info.nick]?
+                                                                config[i].users[info.nick][channel] = {} if !config[i].users[info.nick][channel]?
+                                                                config[i].users[info.nick][channel].mode = ''
+                                                                config[i].users[info.nick][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
-                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '-v', who[j]
+                                                                client.send ':'+info.nick+'!'+info.user+'@'+info.host, 'MODE', channel, '-v', info.nick
                                                         j++
 
         # Listen for joins 
