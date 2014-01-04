@@ -84,15 +84,23 @@ module.exports = (client, config, i) ->
                         return
         
                 if msg.indexOf(cs + 'op') is 0
+                        config[i].users[from][channel].mode = '+o'
+                        updateConfig config
                         client.send ':'+from+'!'+host, 'MODE', channel, '+o', from
                 
                 if msg.indexOf(cs + 'deop') is 0
+                        config[i].users[from][channel].mode = ''
+                        updateConfig config
                         client.send ':'+from+'!'+host, 'MODE', channel, '-o', from
                         
                 if msg.indexOf(cs + 'voice') is 0
+                        config[i].users[from][channel].mode = '+v'
+                        updateConfig config
                         client.send ':'+from+'!'+host, 'MODE', channel, '+v', from
                 
                 if msg.indexOf(cs + 'devoice') is 0
+                        config[i].users[from][channel].mode = ''
+                        updateConfig config
                         client.send ':'+from+'!'+host, 'MODE', channel, '-v', from
 
         # Listen for joins 
