@@ -85,20 +85,23 @@ module.exports = (client, config, i) ->
                                         if msg.indexOf(cs + 'op') is 0
                                                 who = msg.split(' ')
                                                 j = 1
-                                                while j < who.length
+                                                
+                                                while j < who.length-1
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {} 
-                                                                config[i].users[who[j]][channel] = {} 
-                                                                config[i].users[who[j]][channel].mode = '+o'
-                                                                config[i].users[who[j]][channel].host = info.user + '@' + info.host
+                                                                config[i].users[info.nick] = {} if !config[i].users[info.nick]?
+                                                                config[i].users[info.nick][channel] = {} if !config[i].users[info.nick][channel]?
+                                                                config[i].users[info.nick][channel].mode = '+o'
+                                                                config[i].users[info.nick][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
-                                                                client.send ':'+who[j]+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', who[j]
+                                                                client.send ':'+info.nick+'!'+info.user+'@'+info.host, 'MODE', channel, '+o', info.nick
+                                                                
+                                                        
                                                         j++
-                
+                                                
                                         if msg.indexOf(cs + 'deop') is 0
                                                 who = msg.split(' ')
                                                 j = 1
-                                                while j < who.length
+                                                while j < who.length-1
                                                         client.whois who[j], (info) ->
                                                                 config[i].users[who[j]] = {}
                                                                 config[i].users[who[j]][channel] = {} 
@@ -111,7 +114,7 @@ module.exports = (client, config, i) ->
                                         if msg.indexOf(cs + 'voice') is 0
                                                 who = msg.split(' ')
                                                 j = 1
-                                                while j < who.length
+                                                while j < who.length-1
                                                         client.whois who[j], (info) ->
                                                                 config[i].users[who[j]] = {}
                                                                 config[i].users[who[j]][channel] = {}
@@ -124,7 +127,7 @@ module.exports = (client, config, i) ->
                                         if msg.indexOf(cs + 'devoice') is 0
                                                 who = msg.split(' ')
                                                 j = 1
-                                                while j < who.length
+                                                while j < who.length-1
                                                         client.whois who[j], (info) ->
                                                                 config[i].users[who[j]] = {}
                                                                 config[i].users[who[j]][channel] = {}
