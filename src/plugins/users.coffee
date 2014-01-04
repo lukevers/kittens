@@ -61,44 +61,46 @@ module.exports = (client, config, i) ->
                 # Check if the user is op or not
                 isop = (config[i].users[from][channel].mode is '+o')
                 isop = isop and (config[i].users[from][channel].host is host)
-                
-                if !isop
-                        client.say message.args[0], from + ': you don\'t have permission to do this!'
+        
+                if msg.indexOf(cs + 'op') is 0 or msg.indexOf(cs + 'deop') is 0 or msg.indexOf(cs + 'voice') is 0 or msg.indexOf(cs + 'devoice') is 0
+                                                
+                        if !isop
+                                client.say message.args[0], from + ': you don\'t have permission to do this!'
 
-                # Now we let the real op do stuff.
-                else
-                        if message.args[1].replace(/\ /g, '') is (cs + 'op')
-                                client.say message.args[0], from + ': you can\'t op the ghosts in here!'
-        
-                        else if message.args[1].replace(/\ /g, '') is (cs + 'deop')
-                                client.say message.args[0], from + ': you can\'t deop the ghosts in here!'
-                
-                        else if message.args[1].replace(/\ /g, '') is (cs + 'voice')
-                                client.say message.args[0], from + ': you can\'t voice the ghosts in here!'
-                        
-                        else if message.args[1].replace(/\ /g, '') is (cs + 'devoice')
-                                client.say message.args[0], from + ': you can\'t devoice the ghosts in here!'
-        
+                        # Now we let the real op do stuff.
                         else
-                                if msg.indexOf(cs + 'op') is 0
-                                        config[i].users[from][channel].mode = '+o'
-                                        updateConfig config
-                                        client.send ':'+from+'!'+host, 'MODE', channel, '+o', from
+                                if message.args[1].replace(/\ /g, '') is (cs + 'op')
+                                        client.say message.args[0], from + ': you can\'t op the ghosts in here!'
+        
+                                else if message.args[1].replace(/\ /g, '') is (cs + 'deop')
+                                        client.say message.args[0], from + ': you can\'t deop the ghosts in here!'
                 
-                                if msg.indexOf(cs + 'deop') is 0
-                                        config[i].users[from][channel].mode = ''
-                                        updateConfig config
-                                        client.send ':'+from+'!'+host, 'MODE', channel, '-o', from
+                                else if message.args[1].replace(/\ /g, '') is (cs + 'voice')
+                                        client.say message.args[0], from + ': you can\'t voice the ghosts in here!'
+                        
+                                else if message.args[1].replace(/\ /g, '') is (cs + 'devoice')
+                                        client.say message.args[0], from + ': you can\'t devoice the ghosts in here!'
+        
+                                else
+                                        if msg.indexOf(cs + 'op') is 0
+                                                config[i].users[from][channel].mode = '+o'
+                                                updateConfig config
+                                                client.send ':'+from+'!'+host, 'MODE', channel, '+o', from
+                
+                                        if msg.indexOf(cs + 'deop') is 0
+                                                config[i].users[from][channel].mode = ''
+                                                updateConfig config
+                                                client.send ':'+from+'!'+host, 'MODE', channel, '-o', from
                                 
-                                if msg.indexOf(cs + 'voice') is 0
-                                        config[i].users[from][channel].mode = '+v'
-                                        updateConfig config
-                                        client.send ':'+from+'!'+host, 'MODE', channel, '+v', from
+                                        if msg.indexOf(cs + 'voice') is 0
+                                                config[i].users[from][channel].mode = '+v'
+                                                updateConfig config
+                                                client.send ':'+from+'!'+host, 'MODE', channel, '+v', from
                 
-                                if msg.indexOf(cs + 'devoice') is 0
-                                        config[i].users[from][channel].mode = ''
-                                        updateConfig config
-                                        client.send ':'+from+'!'+host, 'MODE', channel, '-v', from
+                                        if msg.indexOf(cs + 'devoice') is 0
+                                                config[i].users[from][channel].mode = ''
+                                                updateConfig config
+                                                client.send ':'+from+'!'+host, 'MODE', channel, '-v', from
 
         # Listen for joins 
         client.addListener 'join', (channel, nick, message) ->
