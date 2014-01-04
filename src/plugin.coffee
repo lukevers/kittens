@@ -22,4 +22,17 @@ module.exports = (client, config, n) ->
         # Add listener for `help` command
         client.addListener 'message', (from, to, text, message) ->
                 if message.args[1].split(' ')[0] == server.commandSymbol + 'help'
-                        client.say message.args[0], from + ':' + cmds.join(' ' + server.commandSymbol).replace(/,|  /g, ' ' + server.commandSymbol)
+                        client.say message.args[0], from + ':' + cmds.unique().join(' ' + server.commandSymbol).replace(/,|  /g, ' ' + server.commandSymbol)
+
+Array::unique = ->
+        o = {}
+        i = undefined
+        l = @length
+        r = []
+        i = 0
+        while i < l
+                o[this[i]] = this[i]
+                i += 1
+        for i of o
+                r.push o[i]
+        r
