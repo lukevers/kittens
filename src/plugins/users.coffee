@@ -110,7 +110,7 @@ op = (client, config, nick, message) ->
                 client.say message.args[0], nick + ': you can\'t op the ghosts in here!'
 
 # deop command
-deop = (client, config, nick, msg) ->
+deop = (client, config, nick, message) ->
         if !isop
                 client.say message.args[0], nick + ': you don\'t have permission to do this!'
                 return
@@ -120,7 +120,7 @@ deop = (client, config, nick, msg) ->
                 client.say message.args[0], nick + ': you can\'t deop the ghosts in here!'
 
 # voice command
-voice = (client, config, nick, msg) ->
+voice = (client, config, nick, message) ->
         if !isop
                 client.say message.args[0], nick + ': you don\'t have permission to do this!'
                 return
@@ -130,7 +130,7 @@ voice = (client, config, nick, msg) ->
                 client.say message.args[0], nick + ': you can\'t voice the ghosts in here!'
 
 # devoice command
-devoice = (client, config, nick, msg) ->
+devoice = (client, config, nick, message) ->
         if !isop
                 client.say message.args[0], nick + ': you don\'t have permission to do this!'
                 return
