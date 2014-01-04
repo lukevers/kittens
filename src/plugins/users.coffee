@@ -87,13 +87,13 @@ module.exports = (client, config, i) ->
 
                 # Check if the user is op or not
                 isop = (config[i].users[nick][channel].mode is '+o')
-                isop = isop and (config[i].users[from][channel].host is host)
+                isop = isop and (config[i].users[nick][channel].host is host)
 
                 if isop
                         client.send ':'+nick+'!'+host, 'MODE', channel, '+o', nick
                         
-                else if config[i].users[from][channel].mode is '+v'
-                        if config[i].users[from][channel].host is host
+                else if config[i].users[nick][channel].mode is '+v'
+                        if config[i].users[nick][channel].host is host
                                 client.send ':'+nick+'!'+host, 'MODE', channel, '+v', nick
 
         # Return commands
