@@ -87,8 +87,8 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {} if !config[i].users[who[j]]?
-                                                                config[i].users[who[j]][channel] = {} if !config[i].users[who[j]][channel]?
+                                                                config[i].users[who[j]] = {} 
+                                                                config[i].users[who[j]][channel] = {} 
                                                                 config[i].users[who[j]][channel].mode = '+o'
                                                                 config[i].users[who[j]][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
@@ -100,8 +100,8 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {} if !config[i].users[who[j]]?
-                                                                config[i].users[who[j]][channel] = {} if !config[i].users[who[j]][channel]?
+                                                                config[i].users[who[j]] = {}
+                                                                config[i].users[who[j]][channel] = {} 
                                                                 config[i].users[who[j]][channel].mode = ''
                                                                 config[i].users[who[j]][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
@@ -113,8 +113,8 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {} if !config[i].users[who[j]]?
-                                                                config[i].users[who[j]][channel] = {} if !config[i].users[who[j]][channel]?
+                                                                config[i].users[who[j]] = {}
+                                                                config[i].users[who[j]][channel] = {}
                                                                 config[i].users[who[j]][channel].mode = '+v'
                                                                 config[i].users[who[j]][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
@@ -126,8 +126,8 @@ module.exports = (client, config, i) ->
                                                 j = 1
                                                 while j < who.length
                                                         client.whois who[j], (info) ->
-                                                                config[i].users[who[j]] = {} if !config[i].users[who[j]]?
-                                                                config[i].users[who[j]][channel] = {} if !config[i].users[who[j]][channel]?
+                                                                config[i].users[who[j]] = {}
+                                                                config[i].users[who[j]][channel] = {}
                                                                 config[i].users[who[j]][channel].mode = '-v'
                                                                 config[i].users[who[j]][channel].host = info.user + '@' + info.host
                                                                 updateConfig config
