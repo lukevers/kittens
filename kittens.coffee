@@ -102,7 +102,7 @@ serverName = (a) ->
 server = (a) ->
         config[i].server = a if a != ''
         config[i].server = 'irc.hypeirc.net' if a is ''
-        ask 'ID', serverName
+        ask 'ServerName', serverName
 
 # Get realname, go to server
 realname = (a) ->
