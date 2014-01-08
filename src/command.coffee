@@ -104,13 +104,13 @@ module.exports = (clients, config) ->
         disconnect = (args) ->
                 if args[1] is 'all'
                         for i in [0..clients.length-1] by 1
-                                console.log 'Disconnecting from ' + config[i].server
+                                console.log 'Disconnecting from ' + config[i].server + ' (' + config[i].serverName + ')'
                                 clients[i].disconnect 'disconnecting'
                         process.exit 0 if args[0] is 'quit'
                 else
                         for i in [0..clients.length-1] by 1
                                 if args[1] is config[i].serverName
-                                        console.log 'Disconnecting from ' + config[i].server + '(' + config[i].serverName + ')'
+                                        console.log 'Disconnecting from ' + config[i].server + ' (' + config[i].serverName + ')'
                                         clients[i].disconnect 'disconnecting'
                                         return
                         console.log red + 'Server does not exist' + reset
@@ -119,12 +119,12 @@ module.exports = (clients, config) ->
         connect = (args) ->
                 if args[1] is 'all'
                         for i in [0..clients.length-1] by 1
-                                console.log 'Connecting to ' + config[i].server + '(' + config[i].serverName + ')'
+                                console.log 'Connecting to ' + config[i].server + ' (' + config[i].serverName + ')'
                                 clients[i].connect
                 else
                         for i in [0..clients.length-1] by 1
                                 if args[1] is config[i].serverName
-                                        console.log 'Connecting to ' + config[i].server + '(' + config[i].serverName + ')'
+                                        console.log 'Connecting to ' + config[i].server + ' (' + config[i].serverName + ')'
                                         clients[i].connect
                                         return
                         console.log red + 'Server does not exist' + reset
