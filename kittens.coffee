@@ -41,6 +41,7 @@ if !fs.existsSync './config.json'
                 'userName': 'kittens'
                 'realName': 'kittens'
                 'server': 'irc.hypeirc.net'
+                'serverName': 'server'
                 'port': 6667
                 'autoConnect': true
                 'commandSymbol': '!'
@@ -91,11 +92,17 @@ port = (a) ->
         config[i].port = 6667 if a is ''
         ask 'Command Symbol', commandsymbol
 
-# Get server, go to port
+# Get servername, go to port
+serverName = (a) ->
+        config[i].serverName = a if a != ''
+        config[i].serverName = 'server'+i if a is ''
+        ask 'Port', port
+
+# Get server, go to servername
 server = (a) ->
         config[i].server = a if a != ''
         config[i].server = 'irc.hypeirc.net' if a is ''
-        ask 'Port', port
+        ask 'ServerName', serverName
 
 # Get realname, go to server
 realname = (a) ->

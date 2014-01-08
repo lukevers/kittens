@@ -43,6 +43,7 @@ Bot Name: kittens
 Username: kittens
 Real Name: kittens
 Server: irc.hypeirc.net
+ServerName: server
 Port: 6667
 Command Symbol: !
 Channels:
@@ -72,25 +73,25 @@ This is a list of commands that you can run from stdin after starting up Kittens
 
 `disconnect all` disconnects from all servers.
 
-`disconnect [server]` disconnects from a certain server, assuming it is a connected server.
+`disconnect [serverName]` disconnects from a certain server, assuming it is a connected server.
 
 #### connect
 
 `connect all` connects all servers.
 
-`connect [server]` connects a certain server, assuming it is in the configuration file.
+`connect [serverName]` connects a certain server, assuming it is in the configuration file.
 
 #### join
 
-`join [server] [channel]` joins the channel specified on the server specified.
+`join [serverName] [channel]` joins the channel specified on the server specified.
 
 #### part
 
-`part [server] [channel]` parts the channel specified on the server specified.
+`part [serverName] [channel]` parts the channel specified on the server specified.
 
 #### whois
 
-`whois [server] [nick]` runs a whois query on the nick specified on the server specified.
+`whois [serverName] [nick]` runs a whois query on the nick specified on the server specified.
 
 #### say
 
@@ -98,17 +99,19 @@ This is a list of commands that you can run from stdin after starting up Kittens
 
 #### set
 
-`set [server] server [newserver]` sets a new server domain on the server specified.
+`set [serverName] server [newserver]` sets a new server domain on the server specified.
 
-`set [server] port [port]` sets a new port on the server specified.
+`set [serverName] serverName [newname]` sets a new server name on the server specified
 
-`set [server] commandSymbol [symbol]` sets a new command symbol on the server specified.
+`set [serverName] port [port]` sets a new port on the server specified.
 
-`set [server] nick [nick]` sets a new nickname on the server specified.
+`set [serverName] commandSymbol [symbol]` sets a new command symbol on the server specified.
 
-`set [server] user [user]` sets a new username on the server specified.
+`set [serverName] nick [nick]` sets a new nickname on the server specified.
 
-`set [server] name [name]` sets a new real name on the server specified.
+`set [serverName] user [user]` sets a new username on the server specified.
+
+`set [serverName] name [name]` sets a new real name on the server specified.
 
 ## Contributing
 
