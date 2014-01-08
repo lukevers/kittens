@@ -12,7 +12,7 @@ cmds = ['  help']
 
 module.exports = (client, config, n) ->
         server = config[n]
-        console.log 'Loading plugins for ' + server.server
+        console.log 'Loading plugins for ' + server.serverName
         fs.readdir './lib/plugins', (err, files) ->
                 for i in [0..files.length-1] by 1
                         console.log 'Loading plugin: ' + files[i].substring 0, files[i].length - 3

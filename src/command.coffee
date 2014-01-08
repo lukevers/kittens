@@ -37,23 +37,23 @@ module.exports = (clients, config) ->
         # - quit
         #
         # - disconnect all
-        # - disconnect [server]
+        # - disconnect [serverName]
         #
         # - connect all
-        # - connect [server]
+        # - connect [serverName]
         #
-        # - join [server] [channel]
-        # - part [server] [channel]
-        # - whois [server] [nick]
+        # - join [serverName] [channel]
+        # - part [serverName] [channel]
+        # - whois [serverName] [nick]
         #
-        # - say [server] [channel] [message]
+        # - say [serverName] [channel] [message]
         #
-        # - set [server] server [server]
-        # - set [server] port [port]
-        # - set [server] commandSymbol [symbol]
-        # - set [server] nick [nick]
-        # - set [server] user [user]
-        # - set [server] name [name]
+        # - set [serverName] server [server]
+        # - set [serverName] port [port]
+        # - set [serverName] commandSymbol [symbol]
+        # - set [serverName] nick [nick]
+        # - set [serverName] user [user]
+        # - set [serverName] name [name]
         #
 
         # Parse Command
@@ -79,19 +79,20 @@ module.exports = (clients, config) ->
                 console.log '\n- help'
                 console.log '- quit'
                 console.log '\n- disconnect all'
-                console.log '- disconnect [server]'
+                console.log '- disconnect [serverName]'
                 console.log '\n- connect all'
-                console.log '- connect [server]'
-                console.log '\n- join [server] [channel]'
-                console.log '- part [server] [channel]'
-                console.log '- whois [server] [nick]'
-                console.log '\n- say [server] [channel] [message]'
-                console.log '\n- set [server] server [server]'
-                console.log '- set [server] port [port]'
-                console.log '- set [server] commandSymbol [symbol]'
-                console.log '- set [server] nick [nick]'
-                console.log '- set [server] user [user]'
-                console.log '- set [server] name [name]'
+                console.log '- connect [serverName]'
+                console.log '\n- join [serverName] [channel]'
+                console.log '- part [serverName] [channel]'
+                console.log '- whois [serverName] [nick]'
+                console.log '\n- say [serverName] [channel] [message]'
+                console.log '\n- set [serverName] server [server]'
+                console.log '- set [serverName] serverName [serverName]'
+                console.log '- set [serverName] port [port]'
+                console.log '- set [serverName] commandSymbol [symbol]'
+                console.log '- set [serverName] nick [nick]'
+                console.log '- set [serverName] user [user]'
+                console.log '- set [serverName] name [name]'
 
         # Quit
         quit = (args) ->
@@ -107,8 +108,8 @@ module.exports = (clients, config) ->
                         process.exit 0 if args[0] is 'quit'
                 else
                         for i in [0..clients.length-1] by 1
-                                if args[1] is config[i].server
-                                        console.log 'Disconnecting from ' + config[i].server
+                                if args[1] is config[i].serverName
+                                        console.log 'Disconnecting from ' + config[i].server + '(' + config[i].serverName + ')'
                                         clients[i].disconnect 'disconnecting'
                                         return
                         console.log red + 'Server does not exist' + reset
@@ -117,12 +118,12 @@ module.exports = (clients, config) ->
         connect = (args) ->
                 if args[1] is 'all'
                         for i in [0..clients.length-1] by 1
-                                console.log 'Connecting to ' + config[i].server
+                                console.log 'Connecting to ' + config[i].server + '(' + config[i].serverName + ')'
                                 clients[i].connect
                 else
                         for i in [0..clients.length-1] by 1
-                                if args[1] is config[i].server
-                                        console.log 'Connecting to ' + config[i].server
+                                if args[1] is config[i].serverName
+                                        console.log 'Connecting to ' + config[i].server + '(' + config[i].serverName + ')'
                                         clients[i].connect
                                         return
                         console.log red + 'Server does not exist' + reset
@@ -130,7 +131,7 @@ module.exports = (clients, config) ->
         # Join
         join = (args) ->
                 for i in [0..clients.length-1] by 1
-                        if args[1] is config[i].server
+                        if args[1] is config[i].serverName
                                 args[2] = '#' + args[2] if !args[2].startsWith '#'
                                 console.log 'Joining ' + args[1] + ' ' + args[2]
                                 clients[i].join args[2], ->
@@ -143,7 +144,7 @@ module.exports = (clients, config) ->
         # Part
         part = (args) ->
                 for i in [0..clients.length-1] by 1
-                        if args[1] is config[i].server
+                        if args[1] is config[i].serverName
                                 args[2] = '#' + args[2] if !args[2].startsWith '#'
                                 console.log 'Parting ' + args[1] + ' ' + args[2]
                                 clients[i].part args[2], ->
@@ -157,7 +158,7 @@ module.exports = (clients, config) ->
         # Whois
         whois = (args) ->
                 for i in [0..clients.length-1] by 1
-                        if args[1] is config[i].server
+                        if args[1] is config[i].serverName
                                 clients[i].whois args[2], (info) ->
                                         console.log JSON.stringify info
                                         return
@@ -167,7 +168,7 @@ module.exports = (clients, config) ->
         # Say
         say = (args) ->
                 for i in [0..clients.length-1] by 1
-                        if args[1] is config[i].server
+                        if args[1] is config[i].serverName
                                 msg = ''
                                 for j in [3..args.length-1] by 1
                                         msg += args[j] + ' '
@@ -178,9 +179,10 @@ module.exports = (clients, config) ->
         # Set
         set = (args) ->
                 for i in [0..clients.length-1] by 1
-                        if args[1] is config[i].server
+                        if args[1] is config[i].serverName
                                 switch args[2]
                                         when 'server' then setServer(args, i); return
+                                        when 'serverName' then setServerName(args, i); return
                                         when 'port' then setPort(args, i); return
                                         when 'commandsymbol' then setCS(args, i); return
                                         when 'nick' then setNick(args, i); return
@@ -197,6 +199,14 @@ module.exports = (clients, config) ->
                         console.log green + 'The server ' + args[3] + ' will be used on restart' + reset
                         updateConfig(config)
                 else console.log red + 'A new server can\'t be empty' + reset
+
+        # Set servername
+        setServerName = (args, i) ->
+                if args[3]
+                        config[i].serverName = args[3]
+                        console.log green + 'Servername updated to ' + args[3] + reset
+                        updateConfig(config)
+                else console.log red + 'A new server name can\'t be empty' + reset
 
         # Set port
         setPort = (args, i) ->
@@ -247,3 +257,4 @@ String::startsWith = (it) ->
 updateConfig = (config) ->
         fs.writeFileSync './config.json', JSON.stringify config
         console.log green + 'Config file updated' + reset
+        
