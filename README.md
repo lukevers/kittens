@@ -23,6 +23,7 @@ cd kittens
 
 ```bash
 npm install
+npm install -g coffee-script
 ```
 
 ### 3. Build
