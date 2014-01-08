@@ -183,7 +183,7 @@ module.exports = (clients, config) ->
                         if args[1] is config[i].serverName
                                 switch args[2]
                                         when 'server' then setServer(args, i); return
-                                        when 'serverName' then setServerName(args, i); return
+                                        when 'servername' then setServerName(args, i); return
                                         when 'port' then setPort(args, i); return
                                         when 'commandsymbol' then setCS(args, i); return
                                         when 'nick' then setNick(args, i); return
