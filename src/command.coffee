@@ -49,6 +49,7 @@ module.exports = (clients, config) ->
         # - say [serverName] [channel] [message]
         #
         # - set [serverName] server [server]
+        # - set [serverName] serverName [serverName]
         # - set [serverName] port [port]
         # - set [serverName] commandSymbol [symbol]
         # - set [serverName] nick [nick]

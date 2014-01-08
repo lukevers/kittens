@@ -21,13 +21,13 @@ module.exports = (config) ->
 
         for i in [0..config.length-1] by 1
                 client = new irc.Client config[i].server, config[i].botName, config[i]
-                console.log 'Connecting to ' + config[i].server + '(' + config[i].serverName + ')'
+                console.log 'Connecting to ' + config[i].server + ' (' + config[i].serverName + ')'
 
                 client.addListener 'registered', (message) ->
-                        console.log 'Connected to ' + message.server
+                        console.log 'Connected to ' + message.server + ' (' + config[i].serverName + ')'
 
                 client.addListener 'error', (message) ->
-                        console.log red + 'error from ' + message.server + ': ' + JSON.stringify(message) + reset
+                        console.log red + 'error from ' + message.serverName + ': ' + JSON.stringify(message) + reset
 
                 require('./logging') client, config[i].serverName
                 require('./plugin') client, config, i
