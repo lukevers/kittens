@@ -24,10 +24,10 @@ module.exports = (config) ->
                 console.log 'Connecting to ' + config[i].server + ' (' + config[i].serverName + ')'
 
                 client.addListener 'registered', (message) ->
-                        console.log 'Connected to ' + message.server + ' (' + config[i].serverName + ')'
+                        console.log 'Connected to ' + message.server
 
                 client.addListener 'error', (message) ->
-                        console.log red + 'error from ' + message.serverName + ': ' + JSON.stringify(message) + reset
+                        console.log red + 'error from ' + message.server + ': ' + JSON.stringify(message) + reset
 
                 require('./logging') client, config[i].serverName
                 require('./plugin') client, config, i
