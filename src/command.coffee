@@ -273,7 +273,7 @@ module.exports = (clients, config) ->
 
         # Set mode
         setMode = (args, i) ->
-                #
+                
 
         # Set host
         setHost = (args, i) ->
@@ -281,12 +281,15 @@ module.exports = (clients, config) ->
 
         # Get mode
         getMode = (args, i) ->
-                console.log 'The mode for ' + args[4] + ' in ' + args[3] + ' is ' + green + config[i].users[args[4]][args[3]].mode + reset
-
+                if args.length > 4
+                        console.log 'The mode for ' + args[4] + ' in ' + args[3] + ' is ' + green + config[i].users[args[4]][args[3]].mode + reset
+                else console.log red + 'Use help for a list of commands' + reset
         # Get host
         getHost = (args, i) ->
-                console.log 'The host for ' + args[4] + ' in ' + args[3] + ' is ' + green + config[i].users[args[4]][args[3]].host + reset
-
+                if args.length > 4
+                        console.log 'The host for ' + args[4] + ' in ' + args[3] + ' is ' + green + config[i].users[args[4]][args[3]].host + reset
+                else console.log red + 'Use help for a list of commands' + reset
+                
 # Starts with
 String::startsWith = (it) ->
         @slice(0, it.length) is it
