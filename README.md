@@ -113,6 +113,16 @@ This is a list of commands that you can run from stdin after starting up Kittens
 
 `set [serverName] name [name]` sets a new real name on the server specified.
 
+`set [serverName] mode [channel] [nick] [mode]` sets the mode for a user in a channel on the server specified.
+
+`set [serverName] host [channel] [nick] [host]` sets the host for a user in a channel on the server specified.
+
+#### get
+
+`get [serverName] mode [channel] [user]` gets the mode for a user in a channel on the server specified.
+
+`get [serverName] host [channel] [user]` gets the host for a user in a channel on the server specified.
+
 ## Contributing
 
 If you see something that bothers you, or have an idea that would make Kittens better, feel free to open an issue or submit a pull request! All are welcome, and I encourage them! See [CONTRIBUTING.md](./CONTRIBUTING.md) for full details.
