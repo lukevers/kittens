@@ -273,11 +273,17 @@ module.exports = (clients, config) ->
 
         # Set mode
         setMode = (args, i) ->
-                
+                if args.length > 5
+                        config[i].users[args[4]][args[3]].mode = args[5]
+                        updateConfig(config)
+                else console.log red + 'Use help for a list of commands' + reset
 
         # Set host
         setHost = (args, i) ->
-                #
+                if args.length > 5
+                        config[i].users[args[4]][args[3]].host = args[5]
+                        updateConfig(config)
+                else console.log red + 'Use help for a list of commands' + reset
 
         # Get mode
         getMode = (args, i) ->
