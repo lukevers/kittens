@@ -1,77 +1,62 @@
 package main
 
 import (
-	"github.com/lukevers/goirc/client"
 	"github.com/fluffle/goevent/event"
+	irc "github.com/fluffle/goirc/client"
+	"strconv"
 )
 
-var (
-	r event.EventRegistry
-)
+func (s Server) CreateAndConnect() {
+	verbf("Creating bot from server struct: %s", s)
 
-// CreateBot is a func that creates the physical bot that will connect
-// to the server.
-func CreateBot(config *Config) *client.Conn {
-	l.Infof("Creating %s the bot", config.Nick)
+	r := event.NewRegistry()
+	conn := irc.Client(s.Nick, s.Host, s.RealName, r)
 
-	conf := client.NewConfig(config.Nick, []string{config.Host, config.Name}...)
-	
-	// Check for SSL
-	if config.Server.SSL {
-		conf.SSL = true
-	}
+	// Set our SSL setting
+	conn.SSL = s.SSL
 
-	// Get the server/port we are going to connect to
-	if config.Server.Port != 6667 {
-		conf.Server = config.Server.Network + ":" + string(config.Server.Port)
-	} else {
-		conf.Server = config.Server.Network
-	}
+	verbf("Finished creating bot for server %s", s.Network)
+	verbf("Beginning to connect to %s", s.Network)
 
-	// Create the new client with the configurations we added to
-	// *client.Config from our *Config.
-	bot := client.Client(conf)
-	
-	// Enable state tracking
-	bot.EnableStateTracking()
-	
-	l.Infof("Created %s the bot", config.Nick)
-	return bot
-}
-
-// Connect is a func that connects to the server and stays connected
-// until being disconnected.
-func Connect(bot *client.Conn, config *Config) {
-
-	// Join channels on connect
-	bot.HandleFunc("connected",
-		func (conn *client.Conn, line *client.Line) {
-			JoinChannels(bot, config)
+	// Register connect handler
+	conn.AddHandler(irc.CONNECTED,
+		func(conn *irc.Conn, line *irc.Line) {
+			infof("Connected to %s", s.Network)
+			s.JoinChannels(conn)
 		})
-	
-	// Handler for disconnect events
+
 	quit := make(chan bool)
-	bot.HandleFunc("disconnected",
-		func(conn *client.Conn, line *client.Line) { 
-			quit <- true 
+
+	// Register disconnect handler
+	conn.AddHandler(irc.DISCONNECTED,
+		func(conn *irc.Conn, line *irc.Line) {
+			infof("Disconnected from %s", s.Network)
+			quit <- true
 		})
-	
-	// Connect to server
-	l.Infof("Connecting to %s", config.Server.Name)
-	
-	if err := bot.Connect(); err != nil {
-		l.Emergf("Connection error: %s", err)
+
+	// Register plugin handlers
+	s.AddPlugins(conn)
+
+	// Now we connect
+	if err := conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
+		warnf("Error connecting: %s", err)
 	}
-	
-	// Wait for quit
+
+	// Wait for disconnect
 	<-quit
 }
 
-// JoinChannels is a func that is called before connecting to the
-// server so it knows what channels to connect to.
-func JoinChannels(bot *client.Conn, config *Config) {
-	for i := range config.Server.Channels {
-		l.Infof("Joining channel %s", config.Server.Channels[i])
-		bot.Join(config.Server.Channels[i])
+// JoinChannels is a func that is called when a bot connects
+// to a server. The func loops over the channels that are in
+// the slice of channels in our Server struct.
+func (s Server) JoinChannels(conn *irc.Conn) {
+	for i := range s.Channels {
+		verbf("Joining channel: %s", s.Channels[i])
+		conn.Join(s.Channels[i])
 	}
+}
+
+// 
+func (s Server) AddPlugins (conn *irc.Conn) {
+	
 }

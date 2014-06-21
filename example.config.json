@@ -1,14 +1,33 @@
 {
-	"Nick": "meow",
-	"Name": "Kittens IRC Bot",
-	"Host": "kittens",
-	"Server": {
-		  "Name": "hypeirc",
-		  "Network": "irc.appno.de",
-		  "Port": 6667,
-		  "SSL": false,
-		  "Channels": [
-	  	      "#go-nuts"
-		      ]
-	}
+	"Debug": true,
+	"Servers": [
+		{
+			"Nick": "kittens",
+			"RealName": "Kittens IRC Bot",
+			"Host": "kittens",
+			"ServerName": "hypeirc",
+			"Network": "irc.appno.de",
+			"Port": 6667,
+			"SSL": false,
+			"Password": "",
+			"Enabled": true,
+			"Channels": [
+				"#lukevers"
+			]
+		},
+		{
+			"Nick": "kittens",
+			"RealName": "Kittens IRC Bot",
+			"Host": "kittens",
+			"ServerName": "efnet",
+			"Network": "irc.arcti.ca",
+			"Port": 6667,
+			"SSL": false,
+			"Password": "",
+			"Enabled": false,
+			"Channels": [
+				"#lukevers"
+			]
+		}
+	]
 }

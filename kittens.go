@@ -1,41 +1,41 @@
 package main
 
 import (
-	"github.com/inhies/go-log"
-	"fmt"
 	"os"
+	"sync"
 )
 
 var (
-	l *log.Logger
-	LogLevel = log.LogLevel(log.INFO)
-	LogFlags = log.Ldate | log.Ltime
-	LogFile  = os.Stdout
+	config *Config
+	err    error
+	wg     sync.WaitGroup
 )
 
 func main() {
-	
+
 	// Load the configuration file
-	config, err := ReadConfig("example.config.json")
+	config, err = ReadConfig("example.config.json")
+
 	if err != nil {
-		fmt.Printf("Could not read configuration file: %s", err)
-		os.Exit(1)
-	}
-	
-	// Start the logger
-	l, err = log.NewLevel(LogLevel, true, LogFile, "", LogFlags)
-	if err != nil {
-		fmt.Printf("Could not start logger: %s", err)
+		warn("Could not load configuration file.")
+		warnf("Error: %s", err)
+		warn("Exiting with exit status 1")
 		os.Exit(1)
 	}
 
-	// Create the bot
-	bot := CreateBot(config)
+	verb("Loaded configuration file")
+	info("Beginning to create bots")
 
-	// Add plugins
-	bot = AddPlugins(bot)
-	
-	// Connect to server
-	Connect(bot, config)
+	for _, s := range config.Servers {
+		if s.Enabled {
+			wg.Add(1)
+			go s.CreateAndConnect()
+			infof("Connecting to %s", s.Network)
+		} else {
+			infof("Not connecting to %s because Enabled is false", s.Network)
+		}
+	}
 
+	wg.Wait()
 }
+
