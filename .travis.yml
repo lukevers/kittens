@@ -12,6 +12,6 @@ before_install:
   - gulp less
   - gulp
 
-install:
+script:
   - go build
 
