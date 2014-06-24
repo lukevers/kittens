@@ -53,6 +53,10 @@ type Server struct {
 	// and set to false if it is not enabled.
 	Enabled bool
 
+	// Connected is set to true when the bot connects to the
+	// server and set to false when it disconnects.
+	Connected bool
+
 	// Channels is a slice of strings that define what channels
 	// the bot connects to.
 	Channels []string

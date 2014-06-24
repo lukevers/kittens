@@ -11,8 +11,10 @@
 			"SSL": false,
 			"Password": "",
 			"Enabled": true,
+			"Connected": false,
 			"Channels": [
-				"#lukevers"
+				"#lukevers",
+				"#go-nuts"
 			]
 		},
 		{
@@ -24,7 +26,8 @@
 			"Port": 6667,
 			"SSL": false,
 			"Password": "",
-			"Enabled": false,
+			"Enabled": true,
+			"Connected": false,
 			"Channels": [
 				"#lukevers"
 			]

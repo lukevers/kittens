@@ -4,9 +4,11 @@ import (
 	"github.com/fluffle/goevent/event"
 	irc "github.com/fluffle/goirc/client"
 	"strconv"
+	"time"
 )
 
 func (s Server) CreateAndConnect() {
+	cli = append(cli, &s)
 	verbf("Creating bot from server struct: %s", s)
 
 	r := event.NewRegistry()
@@ -21,6 +23,7 @@ func (s Server) CreateAndConnect() {
 	// Register connect handler
 	conn.AddHandler(irc.CONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
+			s.Connected = true
 			infof("Connected to %s", s.Network)
 			s.JoinChannels(conn)
 		})
@@ -30,6 +33,7 @@ func (s Server) CreateAndConnect() {
 	// Register disconnect handler
 	conn.AddHandler(irc.DISCONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
+			s.Connected = false
 			infof("Disconnected from %s", s.Network)
 			quit <- true
 		})
@@ -40,6 +44,9 @@ func (s Server) CreateAndConnect() {
 	// Now we connect
 	if err := conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
 		warnf("Error connecting: %s", err)
+		info("Retrying in 30 seconds")
+		time.Sleep(30 * time.Second)
+		go s.CreateAndConnect()
 	}
 
 	// Wait for disconnect

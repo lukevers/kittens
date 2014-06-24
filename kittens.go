@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
+	"html/template"
+	"net/http"
 	"os"
 	"sync"
 )
@@ -9,6 +12,11 @@ var (
 	config *Config
 	err    error
 	wg     sync.WaitGroup
+	cli    []*Server
+)
+
+var (
+	templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 )
 
 func main() {
@@ -24,6 +32,16 @@ func main() {
 	}
 
 	verb("Loaded configuration file")
+	info("Starting webserver")
+
+	// Web server
+	r := mux.NewRouter()
+	r.HandleFunc("/", HandleRoot)
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
+
+	// Template functions
+
+	// Back to bots
 	info("Beginning to create bots")
 
 	for _, s := range config.Servers {
@@ -36,6 +54,8 @@ func main() {
 		}
 	}
 
+	http.Handle("/", r)
+	http.ListenAndServe(":3000", nil)
+
 	wg.Wait()
 }
-

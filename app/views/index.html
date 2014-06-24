@@ -1,0 +1,68 @@
+{{ define "index" }}
+	{{ template "header" }}
+
+	{{ template "navigation" }}
+
+	<div class="content">
+		<div class="container-fluid max">
+			<div class="row">
+				<div class="col-md-4 col-xs-12">
+					<div class="server">
+						<div class="stat-icon">
+							<i class="fa fa-database"></i>
+						</div>
+						{{ TotalServers . }} 
+					</div>
+				</div>
+				<div class="col-md-4 col-xs-12">
+					<div class="server base1">
+						<div class="stat-icon base1">
+							<i class="fa fa-ellipsis-h"></i>
+						</div>
+						{{ EnabledServers . }}
+					</div>
+				</div>
+				<div class="col-md-4 col-xs-12">
+					<div class="server base2">
+						<div class="stat-icon base2">
+							<i class="fa fa-link"></i>
+						</div>
+						{{ ConnectedServers . }}
+					</div>
+				</div>
+			</div>
+
+			<!-- Servers -->
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Servers</h1>
+				</div>
+			</div>
+			{{ range . }}
+
+			{{ . }}
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="server {{if .Enabled}}base2{{else}}base1{{end}}">
+						<div class="stat-icon {{if .Enabled}}base2{{else}}base1{{end}}">
+							{{ if .Enabled }}
+								{{ if .Connected }}
+									<i class="fa fa-check"></i>
+								{{ else }}
+									<i class="fa fa-ellipsis-h"></i>
+								{{ end }}
+							{{ else }}
+								<i class="fa fa-times"></i>
+							{{ end }}
+						</div>
+						{{ .ServerName }}
+					</div>
+				</div>
+			</div>
+			{{ end }}
+		</div>
+	</div>
+
+	{{ template "footer" }}
+{{ end }}

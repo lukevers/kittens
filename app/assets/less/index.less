@@ -1,0 +1,43 @@
+/*
+|--------------------------------------------------------------------------
+| Servers
+|--------------------------------------------------------------------------
+*/
+
+.server {
+	background-color: lighten(@white, 100%);
+	padding: 15px;
+	margin: 10px 0;
+	text-align: right;
+	border-bottom: 1px solid @base0;
+	overflow: auto;
+	font-size: 20px;
+	line-height: 40px;
+
+	&.base1 {
+		border-color: @base1;
+	}
+
+	&.base2 {
+		border-color: @base2;
+	}
+
+	.stat-icon {
+		width: 40px;
+		height: 40px;
+		text-align: center;
+		background-color: @base0;
+		display: inline-block;
+		.rounded(100%);
+		float: left;
+		color: @white;
+
+		&.base1 {
+			background-color: @base1;
+		}
+
+		&.base2 {
+			background-color: @base2;
+		}
+	}
+}

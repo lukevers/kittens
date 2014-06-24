@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+/*
+|--------------------------------------------------------------------------
+| Imports
+|--------------------------------------------------------------------------
+*/
+
+// Global Imports
+
+@import "elements.less";
+@import "variables.less";
+@import "navigation.less";
+
+// Page Specific Imports
+
+@import "index.less";
+
+/*
+|--------------------------------------------------------------------------
+| Basic Attributes
+|--------------------------------------------------------------------------
+*/
+
+html, body {
+	height: 100%;
+	width: 100%;
+	font-family: Lato;
+}
+
+body {
+	background-color: @white;
+}
+
+* {
+	outline: none !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Content
+|--------------------------------------------------------------------------
+*/
+
+.content {
+	padding-left: 50px;
+	padding-top: 10px;
+
+	@media(max-width: @mobile) {
+		padding-top: 65px;
+		padding-left: 0;
+	}
+
+	.max {
+		max-width: 1200px;
+	}
+}
+
