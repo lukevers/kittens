@@ -14,4 +14,3 @@ before_install:
 
 script:
   - go build
-
