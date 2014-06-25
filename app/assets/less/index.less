@@ -9,35 +9,44 @@
 	padding: 15px;
 	margin: 10px 0;
 	text-align: right;
-	border-bottom: 1px solid @base0;
+	border-bottom: 1px solid @blue;
 	overflow: auto;
 	font-size: 20px;
 	line-height: 40px;
 
-	&.base1 {
-		border-color: @base1;
+	&.red {
+		border-color: @red;
 	}
 
-	&.base2 {
-		border-color: @base2;
+	&.green {
+		border-color: @green;
+	}
+
+	&.yellow {
+		border-color: @yellow;
 	}
 
 	.stat-icon {
 		width: 40px;
 		height: 40px;
 		text-align: center;
-		background-color: @base0;
+		background-color: @blue;
 		display: inline-block;
 		.rounded(100%);
 		float: left;
 		color: @white;
 
-		&.base1 {
-			background-color: @base1;
+		&.red {
+			background-color: @red;
 		}
 
-		&.base2 {
-			background-color: @base2;
+		&.green {
+			background-color: @green;
 		}
+
+		&.yellow {
+			background-color: @yellow;
+		}
+
 	}
 }

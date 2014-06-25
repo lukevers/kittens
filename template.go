@@ -38,6 +38,22 @@ func EnabledServers() string {
 	}
 }
 
+// Template func that counts disabled servers
+func DisabledServers() string {
+	i := 0
+	for _, s := range clients {
+		if !s.Enabled {
+			i++
+		}
+	}
+
+	if i == 1 {
+		return "1 Disabled Server"
+	} else {
+		return strconv.Itoa(i) + " Disabled Servers"
+	}
+}
+
 // Template func that counts total servers
 func TotalServers() string {
 	if (len(clients) > 1) {
@@ -53,6 +69,7 @@ func AddTemplateFunctions() (template.FuncMap) {
 		"EnabledServers": EnabledServers,
 		"TotalServers": TotalServers,
 		"ConnectedServers": ConnectedServers,
+		"DisabledServers": DisabledServers,
 	}
 }
 
@@ -63,5 +80,5 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 	}
 
-	templates.ExecuteTemplate(w, "index", cli)
+	templates.ExecuteTemplate(w, "index", clients)
 }

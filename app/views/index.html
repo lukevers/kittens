@@ -6,7 +6,7 @@
 	<div class="content">
 		<div class="container-fluid max">
 			<div class="row">
-				<div class="col-md-4 col-xs-12">
+				<div class="col-lg-3 col-md-6 col-xs-12">
 					<div class="server">
 						<div class="stat-icon">
 							<i class="fa fa-database"></i>
@@ -14,17 +14,25 @@
 						{{ TotalServers }} 
 					</div>
 				</div>
-				<div class="col-md-4 col-xs-12">
-					<div class="server base1">
-						<div class="stat-icon base1">
+				<div class="col-lg-3 col-md-6 col-xs-12">
+					<div class="server red">
+						<div class="stat-icon red">
+							<i class="fa fa-times"></i>
+						</div>
+						{{ DisabledServers }} 
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-xs-12">
+					<div class="server yellow">
+						<div class="stat-icon yellow">
 							<i class="fa fa-ellipsis-h"></i>
 						</div>
 						{{ EnabledServers }}
 					</div>
 				</div>
-				<div class="col-md-4 col-xs-12">
-					<div class="server base2">
-						<div class="stat-icon base2">
+				<div class="col-lg-3 col-md-6 col-xs-12">
+					<div class="server green">
+						<div class="stat-icon green">
 							<i class="fa fa-link"></i>
 						</div>
 						{{ ConnectedServers }}
@@ -44,16 +52,16 @@
 				<div class="col-xs-12">
 					{{ if .Enabled }}
 						{{ if .Connected }}
-							<div class="server base2">
-								<div class="stat-icon base2">
+							<div class="server green">
+								<div class="stat-icon green">
 									<i class="fa fa-check"></i>
 								</div>
 
 								{{ .ServerName }}
 							</div>
 						{{ else }}
-							<div class="server">
-								<div class="stat-icon">
+							<div class="server yellow">
+								<div class="stat-icon yellow">
 									<i class="fa fa-ellipsis-h"></i>
 								</div>
 
@@ -61,8 +69,8 @@
 							</div>
 						{{ end }}
 					{{ else }}
-						<div class="server base1">
-							<div class="stat-icon base1">
+						<div class="server red">
+							<div class="stat-icon red">
 								<i class="fa fa-times"></i>
 							</div>
 

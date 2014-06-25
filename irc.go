@@ -10,14 +10,14 @@ import (
 
 func (s Server) CreateAndConnect(new bool) {
 	if !new {
-		for i, v := range cli {
+		for i, v := range clients {
 			if reflect.DeepEqual(&s, v) {
 				clients[i] = nil
 				clients[i] = &s
 			}
 		}
 	} else {
-		clients = append(cli, &s)
+		clients = append(clients, &s)
 	}
 
 	verbf("Creating bot from server struct: %s", s)
