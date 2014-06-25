@@ -47,6 +47,16 @@
 		&.yellow {
 			background-color: @yellow;
 		}
+	}
 
+	&.new {
+		background-color: @white;
+		border: 1px dashed fade(darken(@white, 40%), 40%);
+		color: fade(darken(@white, 40%), 40%);
+		cursor: pointer;
+
+		.stat-icon {
+			background-color: fade(darken(@white, 40%), 20%);
+		}
 	}
 }

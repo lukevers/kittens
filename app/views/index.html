@@ -47,39 +47,49 @@
 					<h1>Servers</h1>
 				</div>
 			</div>
+			
 			{{ range . }}
-			<div class="row">
-				<div class="col-xs-12">
-					{{ if .Enabled }}
-						{{ if .Connected }}
-							<div class="server green">
-								<div class="stat-icon green">
-									<i class="fa fa-check"></i>
+				<div class="row">
+					<div class="col-xs-12">
+						{{ if .Enabled }}
+							{{ if .Connected }}
+								<div class="server green">
+									<div class="stat-icon green">
+										<i class="fa fa-check"></i>
+									</div>
+									{{ .ServerName }}
 								</div>
-
-								{{ .ServerName }}
-							</div>
+							{{ else }}
+								<div class="server yellow">
+									<div class="stat-icon yellow">
+										<i class="fa fa-ellipsis-h"></i>
+									</div>
+									{{ .ServerName }}
+								</div>
+							{{ end }}
 						{{ else }}
-							<div class="server yellow">
-								<div class="stat-icon yellow">
-									<i class="fa fa-ellipsis-h"></i>
+							<div class="server red">
+								<div class="stat-icon red">
+									<i class="fa fa-times"></i>
 								</div>
-
 								{{ .ServerName }}
 							</div>
 						{{ end }}
-					{{ else }}
-						<div class="server red">
-							<div class="stat-icon red">
-								<i class="fa fa-times"></i>
-							</div>
-
-							{{ .ServerName }}
+					</div>
+				</div>
+			{{ end }}
+			
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="server new">
+						<div class="stat-icon">
+							<i class="fa fa-plus"></i>
 						</div>
-					{{ end }}
+						Add A New Server
+					</div>
 				</div>
 			</div>
-			{{ end }}
+
 		</div>
 	</div>
 
