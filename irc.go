@@ -46,6 +46,8 @@ func (s Server) CreateAndConnect(new bool) {
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Connected = false
 			infof("Disconnected from %s", s.Network)
+			infof("Reconnecting to %s", s.Network)
+			go s.CreateAndConnect(false)
 			quit <- true
 			close(quit)
 		})
