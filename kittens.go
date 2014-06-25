@@ -22,7 +22,7 @@ var (
 func main() {
 
 	// Load the configuration file
-	config, err = ReadConfig("example.config.json")
+	config, err = ReadConfig("config.json")
 
 	if err != nil {
 		warn("Could not load configuration file.")
