@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	config *Config
-	err    error
-	wg     sync.WaitGroup
-	cli    []*Server
+	config   *Config
+	err      error
+	wg       sync.WaitGroup
+	clients  []*Server
 )
 
 var (
@@ -39,19 +39,11 @@ func main() {
 	r.HandleFunc("/", HandleRoot)
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
 
-	// Template functions
-
-	// Back to bots
 	info("Beginning to create bots")
 
 	for _, s := range config.Servers {
-		if s.Enabled {
-			wg.Add(1)
-			go s.CreateAndConnect()
-			infof("Connecting to %s", s.Network)
-		} else {
-			infof("Not connecting to %s because Enabled is false", s.Network)
-		}
+		wg.Add(1)
+		go s.CreateAndConnect(true)
 	}
 
 	http.Handle("/", r)

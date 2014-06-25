@@ -7,9 +7,9 @@ import (
 )
 
 // Template func that counts connected servers
-func ConnectedServers(servers []*Server) string {
+func ConnectedServers() string {
 	i := 0
-	for _, s := range servers {
+	for _, s := range clients {
 		if s.Connected {
 			i++
 		}
@@ -23,9 +23,9 @@ func ConnectedServers(servers []*Server) string {
 }
 
 // Template func that counts enabled servers
-func EnabledServers(servers []*Server) string {
+func EnabledServers() string {
 	i := 0
-	for _, s := range servers {
+	for _, s := range clients {
 		if s.Enabled {
 			i++
 		}
@@ -39,9 +39,9 @@ func EnabledServers(servers []*Server) string {
 }
 
 // Template func that counts total servers
-func TotalServers(servers []*Server) string {
-	if (len(servers) > 1) {
-		return strconv.Itoa(len(servers)) + " Total Servers"
+func TotalServers() string {
+	if (len(clients) > 1) {
+		return strconv.Itoa(len(clients)) + " Total Servers"
 	} else {
 		return "1 Total Server"
 	}

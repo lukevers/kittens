@@ -3,12 +3,23 @@ package main
 import (
 	"github.com/fluffle/goevent/event"
 	irc "github.com/fluffle/goirc/client"
+	"reflect"
 	"strconv"
 	"time"
 )
 
-func (s Server) CreateAndConnect() {
-	cli = append(cli, &s)
+func (s Server) CreateAndConnect(new bool) {
+	if !new {
+		for i, v := range cli {
+			if reflect.DeepEqual(&s, v) {
+				clients[i] = nil
+				clients[i] = &s
+			}
+		}
+	} else {
+		clients = append(cli, &s)
+	}
+
 	verbf("Creating bot from server struct: %s", s)
 
 	r := event.NewRegistry()
@@ -17,7 +28,7 @@ func (s Server) CreateAndConnect() {
 	// Set our SSL setting
 	conn.SSL = s.SSL
 
-	verbf("Finished creating bot for server %s", s.Network)
+	verbf("Finished creating bot for server %s", s.ServerName)
 	verbf("Beginning to connect to %s", s.Network)
 
 	// Register connect handler
@@ -36,17 +47,24 @@ func (s Server) CreateAndConnect() {
 			s.Connected = false
 			infof("Disconnected from %s", s.Network)
 			quit <- true
+			close(quit)
 		})
 
 	// Register plugin handlers
 	s.AddPlugins(conn)
 
 	// Now we connect
-	if err := conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
-		warnf("Error connecting: %s", err)
-		info("Retrying in 30 seconds")
-		time.Sleep(30 * time.Second)
-		go s.CreateAndConnect()
+	if s.Enabled {
+		if err := conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
+			warnf("Error connecting: %s", err)
+			info("Retrying in 30 seconds")
+			time.Sleep(30 * time.Second)
+			go s.CreateAndConnect(false)
+			quit <- true
+			close(quit)
+		}
+	} else {
+		infof("Not connecting to %s because enabled is false", s.ServerName)
 	}
 
 	// Wait for disconnect

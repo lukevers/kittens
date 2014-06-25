@@ -11,7 +11,7 @@
 						<div class="stat-icon">
 							<i class="fa fa-database"></i>
 						</div>
-						{{ TotalServers . }} 
+						{{ TotalServers }} 
 					</div>
 				</div>
 				<div class="col-md-4 col-xs-12">
@@ -19,7 +19,7 @@
 						<div class="stat-icon base1">
 							<i class="fa fa-ellipsis-h"></i>
 						</div>
-						{{ EnabledServers . }}
+						{{ EnabledServers }}
 					</div>
 				</div>
 				<div class="col-md-4 col-xs-12">
@@ -27,7 +27,7 @@
 						<div class="stat-icon base2">
 							<i class="fa fa-link"></i>
 						</div>
-						{{ ConnectedServers . }}
+						{{ ConnectedServers }}
 					</div>
 				</div>
 			</div>
@@ -40,24 +40,35 @@
 				</div>
 			</div>
 			{{ range . }}
-
-			{{ . }}
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="server {{if .Enabled}}base2{{else}}base1{{end}}">
-						<div class="stat-icon {{if .Enabled}}base2{{else}}base1{{end}}">
-							{{ if .Enabled }}
-								{{ if .Connected }}
+					{{ if .Enabled }}
+						{{ if .Connected }}
+							<div class="server base2">
+								<div class="stat-icon base2">
 									<i class="fa fa-check"></i>
-								{{ else }}
+								</div>
+
+								{{ .ServerName }}
+							</div>
+						{{ else }}
+							<div class="server">
+								<div class="stat-icon">
 									<i class="fa fa-ellipsis-h"></i>
-								{{ end }}
-							{{ else }}
+								</div>
+
+								{{ .ServerName }}
+							</div>
+						{{ end }}
+					{{ else }}
+						<div class="server base1">
+							<div class="stat-icon base1">
 								<i class="fa fa-times"></i>
-							{{ end }}
+							</div>
+
+							{{ .ServerName }}
 						</div>
-						{{ .ServerName }}
-					</div>
+					{{ end }}
 				</div>
 			</div>
 			{{ end }}
