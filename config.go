@@ -23,6 +23,10 @@ type Server struct {
 	// POST requests from our webinterface.
 	ID uint16
 
+	// Timestamp is a unix timestamp which will be set to time.Now
+	// when the bot connects to the server.
+	Timestamp int64
+
 	// Nick is a string that defines the nick of the bot for this
 	// specific server.
 	Nick string

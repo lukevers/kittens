@@ -37,6 +37,7 @@ func (s Server) CreateAndConnect(new bool) {
 	// Register connect handler
 	conn.AddHandler(irc.CONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
+			s.Timestamp = time.Now().Unix()
 			s.Connected = true
 			infof("Connected to %s", s.Network)
 			s.JoinChannels(conn)
