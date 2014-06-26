@@ -28,6 +28,9 @@ func (s Server) CreateAndConnect(new bool) {
 	// Set our SSL setting
 	conn.SSL = s.SSL
 
+	// Set our PING Frequency to a lower time than default
+	conn.PingFreq = (30 * time.Second)
+
 	verbf("Finished creating bot for server %s", s.ServerName)
 	verbf("Beginning to connect to %s", s.Network)
 
