@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -75,10 +76,30 @@ func AddTemplateFunctions() (template.FuncMap) {
 
 // Handle "/" web
 func HandleRoot(w http.ResponseWriter, req *http.Request) {
-	
 	if config.Debug {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 	}
 
 	templates.ExecuteTemplate(w, "index", clients)
+}
+
+// Handle "/server/{id}" web
+func HandleServer(w http.ResponseWriter, req *http.Request) {
+	if config.Debug {
+		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+	}
+
+	id, err := strconv.ParseUint(mux.Vars(req)["id"], 10, 16)
+	if err != nil {
+		warnf("Error converting server id: %s", err)
+	}
+
+	var server *Server
+	for _, s := range clients {
+		if s.ID == uint16(id) {
+			server = s
+		}
+	}
+
+	templates.ExecuteTemplate(w, "server", server)
 }

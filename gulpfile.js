@@ -31,6 +31,7 @@ gulp.task('js', function() {
 		_js+'bootstrap.min.js',
 		_js+'moment.min.js',
 		_js+'livestamp.min.js',
+		_js+'index.js',
 		_js+'main.js'])
 		.pipe(concat('scripts.js'))
 		.pipe(gulp.dest(js_));

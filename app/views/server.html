@@ -1,0 +1,75 @@
+{{ define "server" }}
+	{{ template "header" }}
+
+	{{ template "navigation" }}
+
+	<div class="content">
+		<div class="container-fluid max">
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>{{ .ServerName }}</h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 col-xs-12">
+					{{ if .Enabled }}
+						<div class="server-info yellow">
+							<div class="stat-icon yellow">
+								<i class="fa fa-check"></i>
+							</div>
+							Enabled
+						</div>
+					{{ else }}
+						<div class="server-info red">
+							<div class="stat-icon red">
+								<i class="fa fa-times"></i>
+							</div>
+							Disabled
+						</div>
+					{{ end }}
+				</div>
+				<div class="col-md-6 col-xs-12">
+					{{ if .Connected }}
+						<div class="server-info green">
+							<div class="stat-icon green">
+								<i class="fa fa-link"></i>
+							</div>
+							Connected
+						</div>
+					{{ else }}
+						{{ if .Enabled }} 
+							<div class="server-info yellow">
+								<div class="stat-icon yellow">
+									<i class="fa fa-ellipsis-h"></i>
+								</div>
+								Connecting
+							</div>
+						{{ else }}
+							<div class="server-info red">
+								<div class="stat-icon red">
+									<i class="fa fa-unlink"></i>
+								</div>
+								Not Connected
+							</div>
+						{{ end }}
+					{{ end }}
+				</div>
+			</div>
+
+			{{ if .Connected }}
+				<div class="server-info">
+					<div class="stat-icon">
+						<i class="fa fa-clock-o"></i>
+					</div>
+					Online for <span data-livestamp="{{ .Timestamp }}" class="timestamp"></span>
+				</div>
+			{{ end }}
+
+		<!-- -->
+		</div>
+	</div>
+
+	{{ template "footer" }}
+{{ end }}

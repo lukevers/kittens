@@ -37,6 +37,12 @@ body {
 	outline: none !important;
 }
 
+a {
+	&:hover {
+		text-decoration: none;
+	}
+}
+
 /*
 |--------------------------------------------------------------------------
 | Content
@@ -46,6 +52,7 @@ body {
 .content {
 	padding-left: 50px;
 	padding-top: 10px;
+	padding-bottom: 10px;
 
 	@media(max-width: @mobile) {
 		padding-top: 65px;
