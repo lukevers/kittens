@@ -29,6 +29,8 @@ gulp.task('css', ['less'], function() {
 gulp.task('js', function() {
 	gulp.src([_js+'jquery.min.js',
 		_js+'bootstrap.min.js',
+		_js+'moment.min.js',
+		_js+'livestamp.min.js',
 		_js+'main.js'])
 		.pipe(concat('scripts.js'))
 		.pipe(gulp.dest(js_));
