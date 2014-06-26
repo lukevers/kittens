@@ -7,7 +7,7 @@
 		<div class="container-fluid max">
 			<div class="row">
 				<div class="col-lg-3 col-md-6 col-xs-12">
-					<div class="server">
+					<div class="server-info">
 						<div class="stat-icon">
 							<i class="fa fa-database"></i>
 						</div>
@@ -15,7 +15,7 @@
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6 col-xs-12">
-					<div class="server red">
+					<div class="server-info red">
 						<div class="stat-icon red">
 							<i class="fa fa-times"></i>
 						</div>
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6 col-xs-12">
-					<div class="server yellow">
+					<div class="server-info yellow">
 						<div class="stat-icon yellow">
 							<i class="fa fa-ellipsis-h"></i>
 						</div>
@@ -31,7 +31,7 @@
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6 col-xs-12">
-					<div class="server green">
+					<div class="server-info green">
 						<div class="stat-icon green">
 							<i class="fa fa-link"></i>
 						</div>
@@ -53,14 +53,14 @@
 					<div class="col-xs-12">
 						{{ if .Enabled }}
 							{{ if .Connected }}
-								<div class="server green">
+								<div class="server green" data-id="{{ .ID }}">
 									<div class="stat-icon green">
 										<i class="fa fa-check"></i>
 									</div>
 									{{ .ServerName }}
 								</div>
 							{{ else }}
-								<div class="server yellow">
+								<div class="server yellow" data-id="{{ .ID }}">
 									<div class="stat-icon yellow">
 										<i class="fa fa-ellipsis-h"></i>
 									</div>
@@ -68,7 +68,7 @@
 								</div>
 							{{ end }}
 						{{ else }}
-							<div class="server red">
+							<div class="server red" data-id="{{ .ID }}">
 								<div class="stat-icon red">
 									<i class="fa fa-times"></i>
 								</div>
