@@ -38,7 +38,9 @@ func main() {
 	// Web server
 	r := mux.NewRouter()
 	r.HandleFunc("/", HandleRoot)
-	r.HandleFunc("/server/{id}", HandleServer)
+
+	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
+	r.HandleFunc("/server/{id}", UpdateServer).Methods("POST")
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
 
 	info("Beginning to create bots")

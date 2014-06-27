@@ -59,13 +59,97 @@
 			</div>
 
 			{{ if .Connected }}
-				<div class="server-info">
-					<div class="stat-icon">
-						<i class="fa fa-clock-o"></i>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info">
+							<div class="stat-icon">
+								<i class="fa fa-clock-o"></i>
+							</div>
+							Online for <span data-livestamp="{{ .Timestamp }}" class="timestamp"></span>
+						</div>
 					</div>
-					Online for <span data-livestamp="{{ .Timestamp }}" class="timestamp"></span>
 				</div>
 			{{ end }}
+
+			<!-- Form -->
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Server Information</h1>
+				</div>
+			</div>
+
+			<form name="update" method="POST" action="/server/{{ .ID }}">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="nick">Nick</label>
+							<input name="nick" id="nick" type="text" value="{{ .Nick }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="realname">Real&nbsp;Name</label>
+							<input name="realname" id="realname" type="text" value="{{ .RealName }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="host">Host</label>
+							<input name="host" id="host" type="text" value="{{ .Host }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="servername">Server&nbsp;Name</label>
+							<input name="servername" id="servername" type="text" value="{{ .ServerName }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="network">Network</label>
+							<input name="network" id="network" type="text" value="{{ .Network }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="port">Port</label>
+							<input name="port" id="port" type="text" value="{{ .Port }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="password">Password</label>
+							<input name="password" id="password" type="text" value="{{ .Password }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<input type="submit" id="submit" value="Update Server Information"/>
+					</div>
+				</div>
+
+			</form>
 
 		<!-- -->
 		</div>
