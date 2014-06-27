@@ -6,4 +6,6 @@ An IRC bot written in Go. I just recently started rewritting kittens in Go, so i
 
 # Screenshots
 
-![Dashboard](http://i.imgur.com/YnIJErx.png)
+![Dashboard](http://i.imgur.com/1vRVYLH.png)
+
+![Update Server Information](http://i.imgur.com/5UCpHmu.png)
