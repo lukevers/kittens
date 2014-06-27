@@ -58,7 +58,11 @@ func UpdateServer(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Check if Port has been changed, and update it if it has
-	if req.Form["port"][0] != server.Port {
+	p, err := strconv.Atoi(req.Form["port"][0])
+	if err != nil {
+		warnf("Error converting Port from form to int: %s", err)
+	}
+	if p != server.Port {
 		verbf("Changing port to %s", req.Form["port"][0])
 	}
 
@@ -67,6 +71,6 @@ func UpdateServer(w http.ResponseWriter, req *http.Request) {
 		verbf("Changing password to %s", req.Form["password"][0])
 	}
 
-	// Redirect back to "/server/{id}" when we're done here
-	http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), 303)
+	// Redirect (303) back to "/server/{id}" when we're done here
+	http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
 }
