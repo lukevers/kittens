@@ -71,7 +71,35 @@
 				</div>
 			{{ end }}
 
+			<!-- Channels -->
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Channels</h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					{{ range .Channels }}
+						<div class="channel">
+							<i class="fa fa-times"></i>&nbsp; {{ . }}
+						</div>
+					{{ end }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="server-info form">
+						<label for="channel">Join</label>
+						<input name="channel" id="channel" type="text" placeholder="#channel"/>
+					</div>
+				</div>
+			</div>
+
 			<!-- Form -->
+
 			<div class="row">
 				<div class="col-xs-12">
 					<h1>Server Information</h1>
