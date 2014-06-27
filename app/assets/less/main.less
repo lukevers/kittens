@@ -9,12 +9,13 @@
 // Global Imports
 
 @import "elements.less";
+@import "fonts.less";
 @import "variables.less";
 @import "navigation.less";
 
 // Page Specific Imports
 
-@import "index.less";
+@import "servers.less";
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +26,7 @@
 html, body {
 	height: 100%;
 	width: 100%;
-	font-family: Lato;
-	font-weight: 300;
+	.lato_light()
 }
 
 body {
@@ -41,6 +41,16 @@ a {
 	&:hover {
 		text-decoration: none;
 	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: normal;
+	.lato()
 }
 
 /*
