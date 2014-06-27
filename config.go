@@ -1,6 +1,7 @@
 package main
 
 import (
+	irc "github.com/fluffle/goirc/client"
 	"encoding/json"
 	"os"
 )
@@ -17,6 +18,10 @@ type Config struct {
 }
 
 type Server struct {
+
+	// Conn is the connection that each bot is using to connect
+	// to the server. 
+	Conn *irc.Conn
 
 	// A unique ID will be given to each server when a goroutine
 	// commences for the first time. This is used to identify

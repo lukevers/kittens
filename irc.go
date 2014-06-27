@@ -23,19 +23,19 @@ func (s Server) CreateAndConnect(new bool) {
 	verbf("Creating bot from server struct: %s", s)
 
 	r := event.NewRegistry()
-	conn := irc.Client(s.Nick, s.Host, s.RealName, r)
+	s.Conn = irc.Client(s.Nick, s.Host, s.RealName, r)
 
 	// Set our SSL setting
-	conn.SSL = s.SSL
+	s.Conn.SSL = s.SSL
 
 	// Set our PING Frequency to a lower time than default
-	conn.PingFreq = (30 * time.Second)
+	s.Conn.PingFreq = (30 * time.Second)
 
 	verbf("Finished creating bot for server %s", s.ServerName)
 	verbf("Beginning to connect to %s", s.Network)
 
 	// Register connect handler
-	conn.AddHandler(irc.CONNECTED,
+	s.Conn.AddHandler(irc.CONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Timestamp = time.Now().Unix()
 			s.Connected = true
@@ -46,7 +46,7 @@ func (s Server) CreateAndConnect(new bool) {
 	quit := make(chan bool)
 
 	// Register disconnect handler
-	conn.AddHandler(irc.DISCONNECTED,
+	s.Conn.AddHandler(irc.DISCONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Connected = false
 			infof("Disconnected from %s", s.Network)
@@ -57,11 +57,11 @@ func (s Server) CreateAndConnect(new bool) {
 		})
 
 	// Register plugin handlers
-	s.AddPlugins(conn)
+	s.AddPlugins()
 
 	// Now we connect
 	if s.Enabled {
-		if err := conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
+		if err := s.Conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
 			warnf("Error connecting: %s", err)
 			info("Retrying in 30 seconds")
 			time.Sleep(30 * time.Second)
@@ -88,6 +88,6 @@ func (s Server) JoinChannels(conn *irc.Conn) {
 }
 
 // 
-func (s Server) AddPlugins (conn *irc.Conn) {
+func (s Server) AddPlugins () {
 	
 }
