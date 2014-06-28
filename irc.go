@@ -56,8 +56,11 @@ func (s Server) CreateAndConnect(new bool) {
 			close(quit)
 		})
 
-	// Register plugin handlers
-	s.AddPlugins()
+	s.Conn.AddHandler("PRIVMSG",
+		func(conn *irc.Conn, line *irc.Line) {
+			// Show output of line currently
+			verb(line)
+		})
 
 	// Now we connect
 	if s.Enabled {
@@ -85,9 +88,4 @@ func (s Server) JoinChannels(conn *irc.Conn) {
 		verbf("Joining channel: %s", s.Channels[i])
 		conn.Join(s.Channels[i])
 	}
-}
-
-// 
-func (s Server) AddPlugins () {
-	
 }
