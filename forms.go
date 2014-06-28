@@ -48,21 +48,26 @@ func UpdateServer(w http.ResponseWriter, req *http.Request) {
 	// Check if Real Name has been changed, and update it if it has
 	if req.Form["realname"][0] != server.RealName {
 		verbf("Changing real name to %s", req.Form["realname"][0])
+		server.RealName = req.Form["realname"][0]
+		server.Conn.Raw("SETNAME " + server.RealName)
 	}
 
 	// Check if Host has been changed, and update it if it has
 	if req.Form["host"][0] != server.Host {
 		verbf("Changing host to %s", req.Form["host"][0])
+		server.Host = req.Form["host"][0]
 	}
 
 	// Check if Server Name has been changed, and update it if it has
 	if req.Form["servername"][0] != server.ServerName {
 		verbf("Changing server name to %s", req.Form["servername"][0])
+		server.ServerName = req.Form["servername"][0]
 	}
 
 	// Check if Network has been changed, and update it if it has
 	if req.Form["network"][0] != server.Network {
 		verbf("Changing network to %s", req.Form["network"][0])
+		server.Network = req.Form["network"][0]
 	}
 
 	// Check if Port has been changed, and update it if it has
@@ -72,11 +77,13 @@ func UpdateServer(w http.ResponseWriter, req *http.Request) {
 	}
 	if p != server.Port {
 		verbf("Changing port to %s", req.Form["port"][0])
+		server.Port = p
 	}
 
 	// Check if Password has been changed, and update it if it has
 	if req.Form["password"][0] != server.Password {
 		verbf("Changing password to %s", req.Form["password"][0])
+		server.Password = req.Form["password"][0]
 	}
 
 	// Redirect (303) back to "/server/{id}" when we're done here
