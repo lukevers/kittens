@@ -8,4 +8,4 @@ An IRC bot written in Go. I just recently started rewritting kittens in Go, so i
 
 ![Dashboard](http://i.imgur.com/1vRVYLH.png)
 
-![Update Server Information](http://i.imgur.com/5UCpHmu.png)
+![Update Server](http://i.imgur.com/LOyuwyT.png)
