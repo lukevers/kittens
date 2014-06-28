@@ -39,8 +39,13 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HandleRoot)
 
+	// Handle /server/{id} 
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 	r.HandleFunc("/server/{id}", UpdateServer).Methods("POST")
+	r.HandleFunc("/server/{id}/channel/join", JoinChannel).Methods("POST")
+	r.HandleFunc("/server/{id}/channel/part", PartChannel).Methods("POST")
+
+	// Handle static
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
 
 	info("Beginning to create bots")
