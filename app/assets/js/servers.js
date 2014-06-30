@@ -1,6 +1,6 @@
 // Join Channel runs when the return key is hit on the server
 // page to add a new channel for the bot. Sends a POST request
-// to "/server/{id}/channel/join"
+// to "/server/{id}/channel/join" with the channel to join.
 function JoinChannel()
 {
 	$('#channel').bind('keypress', function(e) {
@@ -27,7 +27,7 @@ function JoinChannel()
 
 // Part Channel is called when the 'x' is clicked next to the
 // channel name on the server page. Sends a POST request to
-// "/server/{id}/channel/part"
+// "/server/{id}/channel/part" with the channel to part.
 function PartChannel()
 {
 	$('.channel > i').bind('click', function() {
@@ -42,4 +42,53 @@ function PartChannel()
 			});
 		});
 	});
+}
+
+// Enable/Disable is used to show an animation on hover of the 
+// "Enabled/Disabled" element. It also sends a POST request to
+// "/server/{id}/enable" with a true/false variable.
+function EnableDisable()
+{
+	// Enabled
+	$('#enabled .stat-icon').bind('mouseover', function() {
+		$(this).removeClass('green').addClass('red');
+		$(this).children().eq(0).removeClass('fa-check').addClass('fa-times');
+	});
+
+	$('#enabled .stat-icon').bind('mouseout', function() {
+		$(this).removeClass('red').addClass('green');
+		$(this).children().eq(0).removeClass('fa-times').addClass('fa-check');
+	});
+
+	$('#enabled .stat-icon').bind('click', function() {
+		$.ajax({
+			type: 'POST',
+			url: '/server/'+location.href.split('/')[4]+'/enable',
+			data: {enabled: false}
+		}).done(function() {
+			alert('done');
+		});
+	});
+
+	// Disabled
+	$('#disabled .stat-icon').bind('mouseover', function() {
+		$(this).removeClass('red').addClass('green');
+		$(this).children().eq(0).removeClass('fa-times').addClass('fa-check');
+	});
+
+	$('#disabled .stat-icon').bind('mouseout', function() {
+		$(this).removeClass('green').addClass('red');
+		$(this).children().eq(0).removeClass('fa-check').addClass('fa-times');
+	});
+
+	$('#disabled .stat-icon').bind('click', function() {
+		$.ajax({
+			type: 'POST',
+			url: '/server/'+location.href.split('/')[4]+'/enable',
+			data: {enabled: true}
+		}).done(function() {
+			alert('done');
+		});
+	});
+
 }

@@ -6,6 +6,7 @@ $(function() {
 		case 'server':
 			JoinChannel();
 			PartChannel();
+			EnableDisable();
 			break;
 		default:
 			break;
