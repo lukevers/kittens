@@ -66,7 +66,7 @@ function EnableDisable()
 			url: '/server/'+location.href.split('/')[4]+'/enable',
 			data: {enabled: false}
 		}).done(function() {
-			alert('done');
+			location.reload(true);
 		});
 	});
 
@@ -87,7 +87,7 @@ function EnableDisable()
 			url: '/server/'+location.href.split('/')[4]+'/enable',
 			data: {enabled: true}
 		}).done(function() {
-			alert('done');
+			location.reload(true);
 		});
 	});
 
