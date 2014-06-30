@@ -171,6 +171,7 @@ func EnableServer(w http.ResponseWriter, req *http.Request) {
 	} else {
 		// Disable and disconnect
 		server.Enabled = false
+		server.Conn.Quit()
 	}
 
 	// Redirect (303) back to "/server/{id}" when we're done here
