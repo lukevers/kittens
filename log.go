@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/mgutz/ansi"
+	irc "github.com/fluffle/goirc/client"
 	"log"
 	"os"
 )
@@ -52,4 +53,50 @@ func verbf(s string, i interface{}) {
 	if (config.Debug) {
 		VERB.Printf(s, i)
 	}
+}
+
+// The logging func logs chat information.
+//
+// For reference: 
+// *irc.Line
+//
+// type Line struct {
+//     Nick, Ident, Host, Src string
+//     Cmd, Raw string
+//     Args []string
+//     Time time.Time
+// }
+//
+func (s Server) Logging(line *irc.Line) {
+	// Our standard permissions
+	var perms os.FileMode = 0760
+
+	// Get some info for easier access
+	channel := line.Args[0]
+
+	// If we don't have our "logs" folder, create it
+	if _, err := os.Stat("./logs"); err != nil {
+		if os.IsNotExist(err) {
+			verb("Creating directory \"logs\"")
+			os.Mkdir("./logs", perms)
+		}
+	}
+
+	// If we don't have our "logs/{server}" folder, create it
+	if _, err := os.Stat("./logs/"+s.ServerName); err != nil {
+		if os.IsNotExist(err) {
+			verb("Creating directory \"logs/"+s.ServerName+"\"")
+			os.Mkdir("./logs/"+s.ServerName, perms)
+		}
+	}
+
+	// If we don't have our "logs/{server}/{channel}" folder,
+	// create it.
+	if _, err := os.Stat("./logs/"+s.ServerName+"/"+channel); err != nil {
+		if os.IsNotExist(err) {
+			verb("Creating directory \"logs/"+s.ServerName+"/"+channel+"\"")
+			os.Mkdir("./logs/"+s.ServerName+"/"+channel, perms)
+		}
+	}
+
 }

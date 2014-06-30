@@ -59,7 +59,7 @@ func (s Server) CreateAndConnect(new bool) {
 	s.Conn.AddHandler("PRIVMSG",
 		func(conn *irc.Conn, line *irc.Line) {
 			// Show output of line currently
-			verb(line)
+			s.Logging(line)
 		})
 
 	// Now we connect
