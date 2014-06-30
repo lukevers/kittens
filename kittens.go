@@ -42,7 +42,7 @@ func main() {
 	// Handle /server/{id} 
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 	r.HandleFunc("/server/{id}", UpdateServer).Methods("POST")
-	r.HandleFunc("/server/{id}/enabled", EnableServer).Methods("POST")
+	r.HandleFunc("/server/{id}/enable", EnableServer).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/join", JoinChannel).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/part", PartChannel).Methods("POST")
 
