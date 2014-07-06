@@ -2,9 +2,8 @@ package main
 
 import (
 	"html/template"
-	"net/http"
 	"strconv"
-)
+	)
 
 // Template func that counts connected servers
 func ConnectedServers() string {
@@ -71,37 +70,4 @@ func AddTemplateFunctions() template.FuncMap {
 		"ConnectedServers": ConnectedServers,
 		"DisabledServers":  DisabledServers,
 	}
-}
-
-// Handle "/" web
-func HandleRoot(w http.ResponseWriter, req *http.Request) {
-	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
-	}
-
-	templates.ExecuteTemplate(w, "index", clients)
-}
-
-// Handle "/server/{id}" web
-func HandleServer(w http.ResponseWriter, req *http.Request) {
-
-	server, _ := GetDefault(req)
-
-	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
-	}
-
-	templates.ExecuteTemplate(w, "server", server)
-}
-
-// Handle "/server/{id}/channel/{channel}" web
-func HandleChannel(w http.ResponseWriter, req *http.Request) {
-
-	server, _ := GetDefault(req)
-
-	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
-	}
-
-	templates.ExecuteTemplate(w, "channel", server)
 }
