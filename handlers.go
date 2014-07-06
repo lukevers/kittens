@@ -19,7 +19,7 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 // Handle "/server/{id}" web
 func HandleServer(w http.ResponseWriter, req *http.Request) {
 
-    server, _ := GetDefault(req)
+    server, _ := GetServerFromRequest(req)
 
     if config.Debug {
         templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
@@ -31,7 +31,7 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 // Handle "/server/{id}/channel/{channel}" web
 func HandleChannel(w http.ResponseWriter, req *http.Request) {
 
-    server, _ := GetDefault(req)
+    server, _ := GetServerFromRequest(req)
 
     if config.Debug {
         templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
@@ -45,7 +45,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 // the live bot.
 func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 
-    server, _ := GetDefault(req)
+    server, _ := GetServerFromRequest(req)
 
     // Parse our form so we can get values from req.Form
     err = req.ParseForm()
@@ -77,7 +77,7 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 // the live bot.
 func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 
-    server, _ := GetDefault(req)
+    server, _ := GetServerFromRequest(req)
 
     // Parse our form so we can get values from req.Form
     err = req.ParseForm()
@@ -103,7 +103,7 @@ func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 // requests. From here we also want to update the live bot.
 func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 
-    server, _ := GetDefault(req)
+    server, _ := GetServerFromRequest(req)
 
     // Parse our form so we can get values from req.Form
     err = req.ParseForm()
@@ -165,7 +165,7 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 
 func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 
-    server, _ := GetDefault(req)
+    server, _ := GetServerFromRequest(req)
 
     // Parse our form so we can get values from req.Form
     err = req.ParseForm()

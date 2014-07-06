@@ -7,7 +7,7 @@ import (
     )
 
 // Helper func so less code is duplicated here.
-func GetDefault(req *http.Request) (server *Server, id uint16) {
+func GetServerFromRequest(req *http.Request) (server *Server, id uint16) {
     // Figure out what {id} is in "/server/{id}"
     id_, err := strconv.ParseUint(mux.Vars(req)["id"], 10, 16)
     if err != nil {
