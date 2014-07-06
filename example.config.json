@@ -1,6 +1,7 @@
 {
 	"Debug": true,
-	"Port": ":3000",
+	"Interface": "0.0.0.0",
+	"Port": 3000,
 	"Servers": [
 		{
 			"Nick": "kittens",

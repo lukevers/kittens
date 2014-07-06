@@ -12,7 +12,11 @@ type Config struct {
 	Debug bool
 
 	// The port that the webserver should lisen to incomming connections on
-	Port string
+	Port int
+
+	// The interface that the webserver should listen to incomming
+	// connections on. The default in our example config file is 0.0.0.0
+	Interface string
 
 	// Servers is a slice of Server structs. Kittens can connect
 	// to multiple servers, and each server is defined in a new
