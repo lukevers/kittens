@@ -57,7 +57,8 @@ func main() {
 	}
 
 	http.Handle("/", r)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(config.Port, nil)
+	infof("Webserver running on port %s", config.Port)
 
 	wg.Wait()
 }
