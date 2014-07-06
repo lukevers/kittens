@@ -148,3 +148,32 @@ func PartChannel(w http.ResponseWriter, req *http.Request) {
 	// Redirect (303) back to "/server/{id}" when we're done here
 	http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
 }
+
+func EnableServer(w http.ResponseWriter, req *http.Request) {
+
+	server, _ := GetDefault(req)
+
+	// Parse our form so we can get values from req.Form
+	err = req.ParseForm()
+	if err != nil {
+		warnf("Error parsing form: %s", err)
+	}
+
+	enabled, err := strconv.ParseBool(req.Form["enabled"][0])
+	if err != nil {
+		warnf("Error parsing enabled from string to bool: %s", err)
+	}
+
+	if enabled {
+		// Enable and connect
+		server.Enabled = true
+		go server.CreateAndConnect(false)
+	} else {
+		// Disable and disconnect
+		server.Enabled = false
+		server.Conn.Quit()
+	}
+
+	// Redirect (303) back to "/server/{id}" when we're done here
+	http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
+}

@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 )
 
@@ -42,8 +43,10 @@ func main() {
 	// Handle /server/{id}
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 	r.HandleFunc("/server/{id}", UpdateServer).Methods("POST")
+	r.HandleFunc("/server/{id}/enable", EnableServer).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/join", JoinChannel).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/part", PartChannel).Methods("POST")
+	r.HandleFunc("/server/{id}/channel/{channel}", HandleChannel).Methods("GET")
 
 	// Handle static
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
@@ -57,8 +60,23 @@ func main() {
 		go s.CreateAndConnect(true)
 	}
 
+	verbf("port %s", config.Port)
+
+	// Check if config.Port exists
+	if config.Port == 0 {
+		// If it does not exist, let's just give it 3000
+		config.Port = 3000
+	}
+
+	// Check if config.Interface exists
+	if config.Interface == "" {
+		// If it does not exist let's give it 0.0.0.0
+		config.Interface = "0.0.0.0"
+	}
+
 	http.Handle("/", r)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(config.Interface+":"+strconv.Itoa(config.Port), nil)
+	infof("Webserver running on port %s", config.Port)
 
 	wg.Wait()
 }
