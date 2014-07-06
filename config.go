@@ -11,6 +11,9 @@ type Config struct {
 	// set to false if verbose messages are not wanted.
 	Debug bool
 
+	// The port that the webserver should lisen to incomming connections on
+	Port string
+
 	// Servers is a slice of Server structs. Kittens can connect
 	// to multiple servers, and each server is defined in a new
 	// Server struct.
@@ -20,7 +23,7 @@ type Config struct {
 type Server struct {
 
 	// Conn is the connection that each bot is using to connect
-	// to the server. 
+	// to the server.
 	Conn *irc.Conn
 
 	// A unique ID will be given to each server when a goroutine
@@ -56,7 +59,7 @@ type Server struct {
 	// to connect to.
 	Port int
 
-	// SSL is set to true if the bot is connecting via SSL, and 
+	// SSL is set to true if the bot is connecting via SSL, and
 	// set to false if the bot is not connecting via SSL.
 	SSL bool
 
