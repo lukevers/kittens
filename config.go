@@ -1,8 +1,8 @@
 package main
 
 import (
-	irc "github.com/fluffle/goirc/client"
 	"encoding/json"
+	irc "github.com/fluffle/goirc/client"
 	"os"
 )
 

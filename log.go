@@ -1,24 +1,24 @@
 package main
 
 import (
-	"github.com/mgutz/ansi"
 	irc "github.com/fluffle/goirc/client"
+	"github.com/mgutz/ansi"
 	"log"
 	"os"
 )
 
 var (
-	d     =  ansi.ColorCode("white+b:magenta")
-	i     =  ansi.ColorCode("white+b:blue")
-	w     =  ansi.ColorCode("white+b:red")
-	v     =  ansi.ColorCode("white+b:black")
-	r     =  ansi.ColorCode("reset")
+	d = ansi.ColorCode("white+b:magenta")
+	i = ansi.ColorCode("white+b:blue")
+	w = ansi.ColorCode("white+b:red")
+	v = ansi.ColorCode("white+b:black")
+	r = ansi.ColorCode("reset")
 )
 
 var (
-	INFO  =  log.New(os.Stdout, d+"[kittens]"+r+" "+i+"INFO"+r+" ", 0)
-	WARN  =  log.New(os.Stdout, d+"[kittens]"+r+" "+w+"WARN"+r+" ", 0)
-	VERB  =  log.New(os.Stdout, d+"[kittens]"+r+" "+v+"VERB"+r+" ", 0)
+	INFO = log.New(os.Stdout, d+"[kittens]"+r+" "+i+"INFO"+r+" ", 0)
+	WARN = log.New(os.Stdout, d+"[kittens]"+r+" "+w+"WARN"+r+" ", 0)
+	VERB = log.New(os.Stdout, d+"[kittens]"+r+" "+v+"VERB"+r+" ", 0)
 )
 
 // Print info statements
@@ -43,21 +43,21 @@ func warnf(s string, i interface{}) {
 
 // Print verbose statements if debug is true
 func verb(i interface{}) {
-	if (config.Debug) {
+	if config.Debug {
 		VERB.Print(i)
 	}
 }
 
 // Printf verbose statements if debug is true
 func verbf(s string, i interface{}) {
-	if (config.Debug) {
+	if config.Debug {
 		VERB.Printf(s, i)
 	}
 }
 
 // The logging func logs chat information.
 //
-// For reference: 
+// For reference:
 // *irc.Line
 //
 // type Line struct {
@@ -83,18 +83,18 @@ func (s Server) Logging(line *irc.Line) {
 	}
 
 	// If we don't have our "logs/{server}" folder, create it
-	if _, err := os.Stat("./logs/"+s.ServerName); err != nil {
+	if _, err := os.Stat("./logs/" + s.ServerName); err != nil {
 		if os.IsNotExist(err) {
-			verb("Creating directory \"logs/"+s.ServerName+"\"")
+			verb("Creating directory \"logs/" + s.ServerName + "\"")
 			os.Mkdir("./logs/"+s.ServerName, perms)
 		}
 	}
 
 	// If we don't have our "logs/{server}/{channel}" folder,
 	// create it.
-	if _, err := os.Stat("./logs/"+s.ServerName+"/"+channel); err != nil {
+	if _, err := os.Stat("./logs/" + s.ServerName + "/" + channel); err != nil {
 		if os.IsNotExist(err) {
-			verb("Creating directory \"logs/"+s.ServerName+"/"+channel+"\"")
+			verb("Creating directory \"logs/" + s.ServerName + "/" + channel + "\"")
 			os.Mkdir("./logs/"+s.ServerName+"/"+channel, perms)
 		}
 	}
