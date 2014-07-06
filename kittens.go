@@ -57,6 +57,11 @@ func main() {
 		go s.CreateAndConnect(true)
 	}
 
+	// Check if config.Port exists
+	if config.Port == "" {
+		config.Port = ":3000"
+	}
+
 	http.Handle("/", r)
 	http.ListenAndServe(config.Port, nil)
 	infof("Webserver running on port %s", config.Port)
