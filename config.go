@@ -1,8 +1,8 @@
 package main
 
 import (
-	irc "github.com/fluffle/goirc/client"
 	"encoding/json"
+	irc "github.com/fluffle/goirc/client"
 	"os"
 )
 
@@ -20,7 +20,7 @@ type Config struct {
 type Server struct {
 
 	// Conn is the connection that each bot is using to connect
-	// to the server. 
+	// to the server.
 	Conn *irc.Conn
 
 	// A unique ID will be given to each server when a goroutine
@@ -56,7 +56,7 @@ type Server struct {
 	// to connect to.
 	Port int
 
-	// SSL is set to true if the bot is connecting via SSL, and 
+	// SSL is set to true if the bot is connecting via SSL, and
 	// set to false if the bot is not connecting via SSL.
 	SSL bool
 

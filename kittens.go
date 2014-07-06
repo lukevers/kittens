@@ -9,15 +9,15 @@ import (
 )
 
 var (
-	config   *Config
-	err      error
-	wg       sync.WaitGroup
-	clients  []*Server
+	config  *Config
+	err     error
+	wg      sync.WaitGroup
+	clients []*Server
 )
 
 var (
-	templates     = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
-	nextID uint16 = 0
+	templates        = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+	nextID    uint16 = 0
 )
 
 func main() {
@@ -39,7 +39,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HandleRoot)
 
-	// Handle /server/{id} 
+	// Handle /server/{id}
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 	r.HandleFunc("/server/{id}", UpdateServer).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/join", JoinChannel).Methods("POST")
@@ -52,7 +52,8 @@ func main() {
 
 	for _, s := range config.Servers {
 		wg.Add(1)
-		s.ID = nextID; nextID++
+		s.ID = nextID
+		nextID++
 		go s.CreateAndConnect(true)
 	}
 

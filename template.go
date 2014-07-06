@@ -57,7 +57,7 @@ func DisabledServers() string {
 
 // Template func that counts total servers
 func TotalServers() string {
-	if (len(clients) > 1) {
+	if len(clients) > 1 {
 		return strconv.Itoa(len(clients)) + " Total Servers"
 	} else {
 		return "1 Total Server"
@@ -65,12 +65,12 @@ func TotalServers() string {
 }
 
 // Add func to templates
-func AddTemplateFunctions() (template.FuncMap) {
+func AddTemplateFunctions() template.FuncMap {
 	return template.FuncMap{
-		"EnabledServers": EnabledServers,
-		"TotalServers": TotalServers,
+		"EnabledServers":   EnabledServers,
+		"TotalServers":     TotalServers,
 		"ConnectedServers": ConnectedServers,
-		"DisabledServers": DisabledServers,
+		"DisabledServers":  DisabledServers,
 	}
 }
 
@@ -104,4 +104,3 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 
 	templates.ExecuteTemplate(w, "server", server)
 }
-
