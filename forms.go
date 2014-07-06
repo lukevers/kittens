@@ -148,4 +148,3 @@ func PartChannel(w http.ResponseWriter, req *http.Request) {
 	// Redirect (303) back to "/server/{id}" when we're done here
 	http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
 }
-
