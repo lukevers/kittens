@@ -14,6 +14,7 @@ Make sure you have [Go](http://golang.org/) installed. In order to compile the L
 npm install -g gulp
 ```
 
+Once everything is installed make sure you have set your [$GOPATH](http://golang.org/doc/code.html#GOPATH) properly, or it will prove difficult to build.
 
 #### 1. Get the Code
 
