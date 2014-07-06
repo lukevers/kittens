@@ -46,6 +46,7 @@ func main() {
 	r.HandleFunc("/server/{id}/enable", EnableServer).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/join", JoinChannel).Methods("POST")
 	r.HandleFunc("/server/{id}/channel/part", PartChannel).Methods("POST")
+	r.HandleFunc("/server/{id}/channel/{channel}", HandleChannel).Methods("GET")
 
 	// Handle static
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))

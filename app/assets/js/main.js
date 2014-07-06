@@ -7,6 +7,7 @@ $(function() {
 			JoinChannel();
 			PartChannel();
 			EnableDisable();
+			ViewChannelOptions();
 			break;
 		default:
 			break;

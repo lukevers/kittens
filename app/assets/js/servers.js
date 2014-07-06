@@ -90,5 +90,14 @@ function EnableDisable()
 			location.reload(true);
 		});
 	});
+}
 
+// View Channel Options is called when the text next to the 'x'
+// for a channel is clicked. It takes you to view the channel
+// options at "/server/{id}/channel/{channel}".
+function ViewChannelOptions()
+{
+	$('.channel > .chan').bind('click', function() {
+		// TODO
+	});
 }
