@@ -3,7 +3,7 @@ package main
 import (
 	"html/template"
 	"strconv"
-	)
+)
 
 // Template func that counts connected servers
 func ConnectedServers() string {
