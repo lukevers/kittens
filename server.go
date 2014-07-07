@@ -99,7 +99,7 @@ func (s Server) CreateAndConnect(new bool) {
 			s.Timestamp = time.Now().Unix()
 			s.Connected = true
 			infof("Connected to %s", s.Network)
-			s.JoinChannels(conn)
+			s.JoinChannels()
 		})
 
 	quit := make(chan bool)
@@ -142,9 +142,9 @@ func (s Server) CreateAndConnect(new bool) {
 // JoinChannels is a func that is called when a bot connects
 // to a server. The func loops over the channels that are in
 // the slice of channels in our Server struct.
-func (s Server) JoinChannels(conn *irc.Conn) {
+func (s Server) JoinChannels() {
 	for i := range s.Channels {
 		verbf("Joining channel: %s", s.Channels[i])
-		conn.Join(s.Channels[i])
+		s.Conn.Join(s.Channels[i])
 	}
 }
