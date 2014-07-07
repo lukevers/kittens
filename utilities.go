@@ -7,13 +7,11 @@ import (
 )
 
 // Helper func so less code is duplicated here.
-func GetServerFromRequest(req *http.Request) (server *Server, id uint16) {
+func GetServerFromRequest(req *http.Request) (server *Server) {
 	// Figure out what {id} is in "/server/{id}"
-	id_, err := strconv.ParseUint(mux.Vars(req)["id"], 10, 16)
+	id, err := strconv.ParseUint(mux.Vars(req)["id"], 10, 16)
 	if err != nil {
 		warnf("Error converting server id: %s", err)
-	} else {
-		id = uint16(id_)
 	}
 
 	// Get our server from our slice of servers
