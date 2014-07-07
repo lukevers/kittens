@@ -9,7 +9,6 @@ import (
 )
 
 type Server struct {
-
 	// Conn is the connection that each bot is using to connect
 	// to the server.
 	Conn *irc.Conn

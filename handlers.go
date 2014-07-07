@@ -17,7 +17,6 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/server/{id}" web
 func HandleServer(w http.ResponseWriter, req *http.Request) {
-
 	server := GetServerFromRequest(req)
 
 	if config.Debug {
@@ -29,7 +28,6 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/server/{id}/channel/{channel}" web
 func HandleChannel(w http.ResponseWriter, req *http.Request) {
-
 	server := GetServerFromRequest(req)
 
 	if config.Debug {
@@ -43,7 +41,6 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 // server join channel requests. From here we also want to update
 // the live bot.
 func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
-
 	server := GetServerFromRequest(req)
 
 	// Parse our form so we can get values from req.Form
@@ -75,7 +72,6 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 // server part channel requests. From here we also want to update
 // the live bot.
 func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
-
 	server := GetServerFromRequest(req)
 
 	// Parse our form so we can get values from req.Form
@@ -101,7 +97,6 @@ func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 // Handle POST requests to "/server/{id}" which are server update
 // requests. From here we also want to update the live bot.
 func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
-
 	server := GetServerFromRequest(req)
 
 	// Parse our form so we can get values from req.Form
@@ -163,7 +158,6 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 }
 
 func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
-
 	server := GetServerFromRequest(req)
 
 	// Parse our form so we can get values from req.Form

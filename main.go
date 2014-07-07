@@ -22,7 +22,6 @@ var (
 )
 
 func main() {
-
 	// Load the configuration file
 	config, err = ReadConfig("config.json")
 

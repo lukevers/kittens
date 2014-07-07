@@ -98,5 +98,4 @@ func (s Server) Logging(line *irc.Line) {
 			os.Mkdir("./logs/"+s.ServerName+"/"+channel, perms)
 		}
 	}
-
 }
