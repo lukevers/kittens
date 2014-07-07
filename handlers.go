@@ -17,7 +17,10 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/server/{id}" web
 func HandleServer(w http.ResponseWriter, req *http.Request) {
-	server := GetServerFromRequest(req)
+	server, err := GetServerFromRequest(req)
+	if err != nil {
+		warnf("Error parsing server request: %s", err)
+	}
 
 	if config.Debug {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
@@ -28,7 +31,10 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/server/{id}/channel/{channel}" web
 func HandleChannel(w http.ResponseWriter, req *http.Request) {
-	server := GetServerFromRequest(req)
+	server, err := GetServerFromRequest(req)
+	if err != nil {
+		warnf("Error parsing server request: %s", err)
+	}
 
 	if config.Debug {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
@@ -41,7 +47,10 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 // server join channel requests. From here we also want to update
 // the live bot.
 func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
-	server := GetServerFromRequest(req)
+	server, err := GetServerFromRequest(req)
+	if err != nil {
+		warnf("Error parsing server request: %s", err)
+	}
 
 	// Parse our form so we can get values from req.Form
 	err = req.ParseForm()
@@ -72,7 +81,10 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 // server part channel requests. From here we also want to update
 // the live bot.
 func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
-	server := GetServerFromRequest(req)
+	server, err := GetServerFromRequest(req)
+	if err != nil {
+		warnf("Error parsing server request: %s", err)
+	}
 
 	// Parse our form so we can get values from req.Form
 	err = req.ParseForm()
@@ -97,7 +109,10 @@ func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 // Handle POST requests to "/server/{id}" which are server update
 // requests. From here we also want to update the live bot.
 func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
-	server := GetServerFromRequest(req)
+	server, err := GetServerFromRequest(req)
+	if err != nil {
+		warnf("Error parsing server request: %s", err)
+	}
 
 	// Parse our form so we can get values from req.Form
 	err = req.ParseForm()
@@ -158,7 +173,10 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 }
 
 func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
-	server := GetServerFromRequest(req)
+	server, err := GetServerFromRequest(req)
+	if err != nil {
+		warnf("Error parsing server request: %s", err)
+	}
 
 	// Parse our form so we can get values from req.Form
 	err = req.ParseForm()
