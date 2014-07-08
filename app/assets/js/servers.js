@@ -13,6 +13,7 @@ function JoinChannel()
 				c = (chans[i].substring(0,1) == '#') ? chans[i] : '#' + chans[i];
 				ch = '<div class="channel"><i class="fa fa-times"></i>&nbsp; '+c+'</div>\n\r';
 				$('#channels').append(ch);
+				// Send a POST request
 				$.ajax({
 					type: 'POST',
 					url: '/server/'+location.href.split('/')[4]+'/channel/join',
@@ -32,7 +33,7 @@ function PartChannel()
 {
 	$('.channel > i').bind('click', function() {
 		$(this).parent().fadeOut(500, function() {
-			c = $(this)[0].childNodes[2].data.trim();
+			c = $(this)[0].children[1].innerHTML;
 			$(this).remove();
 			// Send a POST request
 			$.ajax({

@@ -15,8 +15,12 @@
 			"Enabled": true,
 			"Connected": false,
 			"Channels": [
-				"#lukevers",
-				"#go-nuts"
+				{
+					"Name": "#lukevers"
+				},
+				{
+					"Name": "#go-nuts"
+				}
 			]
 		},
 		{
@@ -31,7 +35,9 @@
 			"Enabled": false,
 			"Connected": false,
 			"Channels": [
-				"#lukevers"
+				{
+					"Name": "#lukevers"
+				}
 			]
 		}
 	]
