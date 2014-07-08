@@ -142,7 +142,7 @@ func (s Server) CreateAndConnect(new bool) {
 // Join Channels is a func that is called when a bot connects
 // to a server. The func loops over the channels that are in
 // the slice of channels in our Server struct.
-func (s Server) JoinChannels() {
+func (s *Server) JoinChannels() {
 	for i := range s.Channels {
 		verbf("Joining channel: %s", s.Channels[i].Name)
 		s.Conn.Join(s.Channels[i].Name)
@@ -151,7 +151,7 @@ func (s Server) JoinChannels() {
 
 // Join New Channel is a func that is called when the bot is 
 // joining one specific channel for the first time.
-func (s Server) JoinNewChannel(channel string) {
+func (s *Server) JoinNewChannel(channel string) {
 	s.Channels = append(s.Channels, &Channel{
 		Name: channel,
 	})
