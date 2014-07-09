@@ -62,7 +62,7 @@ func main() {
 	r.HandleFunc("/server/{id}/channel/join", HandleJoinChannel).Methods("POST")
 
 	// Handles POST requests for "/server/{id}/channel/part" which takes
-	// a specific channel and parts it. 
+	// a specific channel and parts it.
 	r.HandleFunc("/server/{id}/channel/part", HandlePartChannel).Methods("POST")
 
 	// Handle all other static files and folders (eg. CSS/JS).
