@@ -3,10 +3,18 @@
 
 	{{ template "navigation" }}
 
+	{{ range .Channels }}
+		<div id="{{.Name}}" data-name="{{.Name}}"></div>
+	{{ end }}
+
 	<div class="content">
 		<div class="container-fluid max">
 
-			COMING SOON
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>{{ .ServerName}} <span id="name"></span>
+				</div>
+			</div>
 
 		</div>
 	</div>

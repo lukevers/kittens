@@ -37,17 +37,35 @@ func main() {
 
 	// Web server
 	r := mux.NewRouter()
+
+	// Handles GET requests for "/" which is our root page.
 	r.HandleFunc("/", HandleRoot)
 
-	// Handle /server/{id}
+	// Handles GET requests for "/server/{id}" which is a server page
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
-	r.HandleFunc("/server/{id}", HandleUpdateServer).Methods("POST")
-	r.HandleFunc("/server/{id}/enable", HandleEnableServer).Methods("POST")
-	r.HandleFunc("/server/{id}/channel/join", HandleJoinChannel).Methods("POST")
-	r.HandleFunc("/server/{id}/channel/part", HandlePartChannel).Methods("POST")
-	r.HandleFunc("/server/{id}/channel/{channel}", HandleChannel).Methods("GET")
 
-	// Handle static
+	// Handles POST requests for "/server/{id}" which is an endpoint where
+	// server information can be updated.
+	r.HandleFunc("/server/{id}", HandleUpdateServer).Methods("POST")
+
+	// Handles GET requests for "/server/{id}/channel/" which is a page
+	// for specific channels for a specific server.
+	r.HandleFunc("/server/{id}/channel/", HandleChannel).Methods("GET")
+
+	// Handles POST requests for "/server/{id}/enable" which takes a bool
+	// and enables--if it is disabled--the server if the bool is true, and
+	// disables--if it is enabled--the server if the bool is false.
+	r.HandleFunc("/server/{id}/enable", HandleEnableServer).Methods("POST")
+
+	// Handles POST requests for "/server/{id}/channel/join" which takes
+	// a specific channel and joins it.
+	r.HandleFunc("/server/{id}/channel/join", HandleJoinChannel).Methods("POST")
+
+	// Handles POST requests for "/server/{id}/channel/part" which takes
+	// a specific channel and parts it. 
+	r.HandleFunc("/server/{id}/channel/part", HandlePartChannel).Methods("POST")
+
+	// Handle all other static files and folders (eg. CSS/JS).
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
 
 	info("Beginning to create bots")

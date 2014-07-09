@@ -4,10 +4,18 @@ $(function() {
 	switch (loc) 
 	{
 		case 'server':
-			JoinChannel();
-			PartChannel();
-			EnableDisable();
-			ViewChannelOptions();
+			switch (location.href.split('/')[5])
+			{
+				case 'channel':
+					FixChannelData();
+					break;
+				default:
+					JoinChannel();
+					PartChannel();
+					EnableDisable();
+					ViewChannelOptions();
+					break;
+			}
 			break;
 		default:
 			break;

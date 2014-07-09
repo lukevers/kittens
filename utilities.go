@@ -7,8 +7,10 @@ import (
 	"strconv"
 )
 
-// Helper func so less code is duplicated here.
-func GetServerFromRequest(req *http.Request) (server *Server, err error) {
+// Get Server From Request takes a *http.Request in and returns
+// the server ID that is being looked at. It returns an error if
+// it can't find it somehow.
+func GetServerFromRequest(req *http.Request) (*Server, error) {
 	// Figure out what {id} is in "/server/{id}"
 	id, err := strconv.ParseUint(mux.Vars(req)["id"], 10, 16)
 	if err != nil {

@@ -99,6 +99,6 @@ function EnableDisable()
 function ViewChannelOptions()
 {
 	$('.channel > .chan').bind('click', function() {
-		// TODO
+		window.location += '/channel/' + $(this)[0].firstChild.data;
 	});
 }
