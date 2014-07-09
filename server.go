@@ -62,7 +62,7 @@ type Server struct {
 	// server and set to false when it disconnects.
 	Connected bool
 
-	// Channels is a slice of strings that define what channels
+	// Channels is a slice of Channel Structs that define what channels
 	// the bot connects to.
 	Channels []*Channel
 }
@@ -149,7 +149,7 @@ func (s *Server) JoinChannels() {
 	}
 }
 
-// Join New Channel is a func that is called when the bot is 
+// Join New Channel is a func that is called when the bot is
 // joining one specific channel for the first time.
 func (s *Server) JoinNewChannel(channel string) {
 	s.Channels = append(s.Channels, &Channel{
