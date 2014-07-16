@@ -48,9 +48,9 @@ func main() {
 	// server information can be updated.
 	r.HandleFunc("/server/{id}", HandleUpdateServer).Methods("POST")
 
-	// Handles GET requests for "/server/{id}/channel/" which is a page
-	// for specific channels for a specific server.
-	r.HandleFunc("/server/{id}/channel/", HandleChannel).Methods("GET")
+	// Handles GET requests for "/server/{id}/channel/{channel}" which 
+	// is a page for a specific channel for a specific server.
+	r.HandleFunc("/server/{id}/channel/{channel}", HandleChannel).Methods("GET")
 
 	// Handles POST requests for "/server/{id}/enable" which takes a bool
 	// and enables--if it is disabled--the server if the bool is true, and

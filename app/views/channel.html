@@ -3,16 +3,15 @@
 
 	{{ template "navigation" }}
 
-	{{ range .Channels }}
-		<div id="{{.Name}}" data-name="{{.Name}}"></div>
-	{{ end }}
-
 	<div class="content">
 		<div class="container-fluid max">
 
 			<div class="row">
 				<div class="col-xs-12">
-					<h1>{{ .ServerName}} <span id="name"></span>
+					<h1>
+						{{ .Server.ServerName }}
+						{{ .Channel.Name }}
+					</h1>
 				</div>
 			</div>
 
@@ -21,4 +20,3 @@
 
 	{{ template "footer" }}
 {{ end }}
-

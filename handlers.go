@@ -36,11 +36,30 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 		warnf("Error parsing server request: %s", err)
 	}
 
+	channel, err := GetChannelFromRequest(server, req)
+	if err != nil {
+		warnf("Error parsing channel request: %s", err)
+	}
+
+	verb(channel)
+
 	if config.Debug {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 	}
 
-	templates.ExecuteTemplate(w, "channel", server)
+	// Template data. We want to pass both the *Server for server
+	// information, and the *Channel so we don't have to loop
+	// through the slice of *Channels each time we want to access
+	// our *Channel. We're passing an anonymous struct to do this.
+	data := struct {
+		Server *Server
+		Channel *Channel
+	}{
+		server,
+		channel,
+	}
+
+	templates.ExecuteTemplate(w, "channel", data)
 }
 
 // Handle POST requests to "/server/{id}/channel/join" which are
