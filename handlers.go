@@ -41,8 +41,6 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 		warnf("Error parsing channel request: %s", err)
 	}
 
-	verb(channel)
-
 	if config.Debug {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 	}
@@ -60,6 +58,15 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 	}
 
 	templates.ExecuteTemplate(w, "channel", data)
+}
+
+// Handle "/server/{id}/channel/" web
+func HandleChannelRedirect(w http.ResponseWriter, req *http.Request) {
+	if config.Debug {
+		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+	}
+
+	templates.ExecuteTemplate(w, "redirect", nil)
 }
 
 // Handle POST requests to "/server/{id}/channel/join" which are

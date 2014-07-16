@@ -7,7 +7,7 @@ $(function() {
 			switch (location.href.split('/')[5])
 			{
 				case 'channel':
-					FixChannelData();
+					RedirectIfFragmented();
 					break;
 				default:
 					JoinChannel();

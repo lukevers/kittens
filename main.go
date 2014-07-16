@@ -48,6 +48,12 @@ func main() {
 	// server information can be updated.
 	r.HandleFunc("/server/{id}", HandleUpdateServer).Methods("POST")
 
+	// Handles GET requests for "/server/{id}/channel/" which is a page
+	// that looks for a URL fragment at the end of the url. JavaScript
+	// then takes that URL fragment and URL encodes the fragment. After
+	// URL encoding the fragment we're redirected the correct channel page.
+	r.HandleFunc("/server/{id}/channel/", HandleChannelRedirect).Methods("GET")
+
 	// Handles GET requests for "/server/{id}/channel/{channel}" which 
 	// is a page for a specific channel for a specific server.
 	r.HandleFunc("/server/{id}/channel/{channel}", HandleChannel).Methods("GET")
