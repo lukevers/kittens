@@ -50,7 +50,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 	// through the slice of *Channels each time we want to access
 	// our *Channel. We're passing an anonymous struct to do this.
 	data := struct {
-		Server *Server
+		Server  *Server
 		Channel *Channel
 	}{
 		server,

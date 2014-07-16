@@ -54,7 +54,7 @@ func main() {
 	// URL encoding the fragment we're redirected the correct channel page.
 	r.HandleFunc("/server/{id}/channel/", HandleChannelRedirect).Methods("GET")
 
-	// Handles GET requests for "/server/{id}/channel/{channel}" which 
+	// Handles GET requests for "/server/{id}/channel/{channel}" which
 	// is a page for a specific channel for a specific server.
 	r.HandleFunc("/server/{id}/channel/{channel}", HandleChannel).Methods("GET")
 
