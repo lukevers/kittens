@@ -1,8 +1,8 @@
 # kittens
 
-An IRC bot written in Go. I just recently started rewritting kittens in Go, so it lacks a lot of features currently. If you want a working version of my IRC bot checkout my CoffeScript bot on the master branch in this repository. This branch will be merged into master and takeover the master branch when it is ready. It is currently still in early development.
+Kittens is an IRC bot written in Go. I just recently started rewritting kittens in Go, so it lacks a lot of features currently. If you think you can help, please feel free to contribute! Currently I have an old version of kittens on the branch [coffee-depreciated](https://github.com/lukevers/kittens/tree/coffee-depreciated) written in CoffeeScript. If you want to check it out go ahead, but when the Go version has more features I'll be deleting that branch.
 
-[![Build Status](https://travis-ci.org/lukevers/kittens.png?branch=go_new)](https://travis-ci.org/lukevers/kittens)
+[![Build Status](https://travis-ci.org/lukevers/kittens.png?branch=master)](https://travis-ci.org/lukevers/kittens)
 
 # Building
 
