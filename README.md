@@ -30,7 +30,7 @@ go get
 Building our webserver CSS/JS files is easy with Gulp.
 
 ```bash
-gulp less && gulp
+gulp
 ```
 
 If you'd rather use your own way of compiling LESS to CSS and concating all the CSS files into one file and JS files into one file, feel free. You can checkout `gulpfile.js` in the root of the directory to find out where these files are located and where they end up.
