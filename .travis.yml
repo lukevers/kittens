@@ -8,8 +8,7 @@ go:
 
 before_install:
   - npm install -g gulp
-  - npm install
-  - gulp less
+  - npm update
   - gulp
 
 script:
