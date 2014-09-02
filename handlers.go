@@ -40,7 +40,7 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 	pass := req.Form["password"][0]
 
 	if user == config.Username && pass == config.Password {
-		session, err := store.New(req, "admin")
+		session, err := store.New(req, config.Username)
 		if err != nil {
 			warnf("Error creating new session: %s", err)
 		}

@@ -46,7 +46,7 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 
 func IsLoggedIn(req *http.Request) bool {
 	// Check for session
-	session, err := store.Get(req, "admin")
+	session, err := store.Get(req, config.Username)
 	if err != nil {
 		warnf("Error checking for session: %s", err)
 	}
