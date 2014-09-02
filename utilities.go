@@ -44,6 +44,9 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 	return nil, errors.New("Could not find channel")
 }
 
+// Is Logged In checks if the user has a session or not.
+// If the user does not have a session that matches with
+// what we have, then the user is not logged in.
 func IsLoggedIn(req *http.Request) bool {
 	// Check for session
 	session, err := store.Get(req, config.Username)
