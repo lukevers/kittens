@@ -41,6 +41,14 @@ func main() {
 	// Handles GET requests for "/" which is our root page.
 	r.HandleFunc("/", HandleRoot)
 
+	// Handles GET requests to "/login" which displays a form that a user
+	// can use to try and login.
+	r.HandleFunc("/login", HandleLogin).Methods("GET")
+
+	// Handles POST requests for "/login" which tests if a user is 
+	// logging in with correct details or not.
+	r.HandleFunc("/login", HandleLoginForm).Methods("POST")
+
 	// Handles GET requests for "/server/{id}" which is a server page
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 

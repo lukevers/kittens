@@ -43,3 +43,13 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 
 	return nil, errors.New("Could not find channel")
 }
+
+func IsLoggedIn(req *http.Request) bool {
+	// Check for session
+	session, err := store.Get(req, "admin")
+	if err != nil {
+		warnf("Error checking for session: %s", err)
+	}
+
+	return !session.IsNew
+}

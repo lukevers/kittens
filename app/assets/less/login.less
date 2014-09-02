@@ -1,0 +1,40 @@
+/*
+|--------------------------------------------------------------------------
+| Login
+|--------------------------------------------------------------------------
+*/
+
+.login-container {
+	display: table;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: @blue;
+
+	.login-holder {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+
+		.login {
+			background-color: @white;
+			padding: 25px;
+			width: 300px;
+			margin: auto;
+
+			form {
+				input {
+					border: none;
+					padding: 10px;
+					width: 100%;
+					margin: 5px 0;
+					background-color: @white;
+				}
+
+				input[type="submit"] {
+					background-color: @blue;
+				}
+			}
+		}
+	}
+}

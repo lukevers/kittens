@@ -18,6 +18,14 @@ type Config struct {
 	// connections on. The default in our example config file is 0.0.0.0
 	Interface string
 
+	// Username is a string that contains the username for the user
+	// to login and use the web interface.
+	Username string
+
+	// Password is a string that contains the password for the user
+	// to login and use the web interface.
+	Password string
+
 	// Servers is a slice of Server structs. Kittens can connect
 	// to multiple servers, and each server is defined in a new
 	// Server struct.
