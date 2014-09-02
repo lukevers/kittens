@@ -52,7 +52,6 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-
 // Handle "/server/{id}" web
 func HandleServer(w http.ResponseWriter, req *http.Request) {
 	server, err := GetServerFromRequest(req)
