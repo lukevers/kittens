@@ -45,7 +45,7 @@ func main() {
 	// can use to try and login.
 	r.HandleFunc("/login", HandleLogin).Methods("GET")
 
-	// Handles POST requests for "/login" which tests if a user is 
+	// Handles POST requests for "/login" which tests if a user is
 	// logging in with correct details or not.
 	r.HandleFunc("/login", HandleLoginForm).Methods("POST")
 

@@ -23,9 +23,9 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 func HandleLogout(w http.ResponseWriter, req *http.Request) {
 	// Remove cookie
 	http.SetCookie(w, &http.Cookie{
-		Name: GetSessionName(),
-		Value: "",
-		Path: "/",
+		Name:   GetSessionName(),
+		Value:  "",
+		Path:   "/",
 		MaxAge: -1,
 	})
 
