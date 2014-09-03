@@ -50,7 +50,7 @@ go build
 
 # Configuring
 
-An example configuration file is included in the repo ([example.config.json](example.config.json)) if you'd rather jump right into it instead of reading the documentation.
+An example configuration file is included in the repo ([example.config.json](example.config.json)) if you'd rather jump right into it instead of reading the documentation. Reading the source is also a really good way to find out what's going on.
 
 #### "Debug"
 
