@@ -5,6 +5,10 @@ import (
 	"os"
 )
 
+var (
+	config  *Config
+)
+
 type Config struct {
 	// Debug is set to true if verbose messages are wanted, and
 	// set to false if verbose messages are not wanted.

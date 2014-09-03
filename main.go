@@ -10,7 +10,6 @@ import (
 )
 
 var (
-	config  *Config
 	err     error
 	wg      sync.WaitGroup
 	clients []*Server
