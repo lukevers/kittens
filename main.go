@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
@@ -21,15 +22,20 @@ var (
 )
 
 func main() {
-	// Load the configuration file
-	config, err = ReadConfig("config.json")
+	// Parse flags
+	flag.Parse()
 
+	// Load the configuration file
+	config, err = ReadConfig(*configPathFlag)
 	if err != nil {
 		warn("Could not load configuration file.")
 		warnf("Error: %s", err)
 		warn("Exiting with exit status 1")
 		os.Exit(1)
 	}
+
+	// Update config values from flags
+	UpdateConfigFromFlags()
 
 	verb("Loaded configuration file")
 	info("Starting webserver")

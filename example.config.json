@@ -1,7 +1,4 @@
 {
-	"Debug": true,
-	"Interface": "0.0.0.0",
-	"Port": 3000,
 	"Username": "admin",
 	"Password": "admin",
 	"Servers": [
