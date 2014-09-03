@@ -17,4 +17,4 @@ node_modules
 logs
 
 # Sessions
-sessions/session_*
+app/sessions/session_*

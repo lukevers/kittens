@@ -8,7 +8,7 @@ import (
 // Session store for users
 var store = sessions.NewFilesystemStore(
 	// Path
-	"sessions",
+	"app/sessions",
 	// Secret key with strength set to 64
 	[]byte(securecookie.GenerateRandomKey(64)),
 )
