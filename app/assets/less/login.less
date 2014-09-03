@@ -23,12 +23,21 @@
 			margin: auto;
 
 			form {
+
+				label {
+					font-weight: normal;
+					.lato();
+					width: 100%;
+					text-align: left;
+					margin: 0;
+				}
+
 				input {
 					border: none;
 					padding: 10px;
 					width: 100%;
 					margin: 5px 0;
-					background-color: @white;
+					background-color: darken(@white, 3%);
 				}
 
 				input[type="submit"] {

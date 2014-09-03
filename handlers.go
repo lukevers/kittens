@@ -19,6 +19,20 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// Handle "/logout" web
+func HandleLogout(w http.ResponseWriter, req *http.Request) {
+	// Remove cookie
+	http.SetCookie(w, &http.Cookie{
+		Name: GetSessionName(),
+		Value: "",
+		Path: "/",
+		MaxAge: -1,
+	})
+
+	// Redirect to "/"
+	http.Redirect(w, req, "/", http.StatusSeeOther)
+}
+
 // Handle "/login" web
 func HandleLogin(w http.ResponseWriter, req *http.Request) {
 	if config.Debug {

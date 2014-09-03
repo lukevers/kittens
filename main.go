@@ -49,6 +49,10 @@ func main() {
 	// logging in with correct details or not.
 	r.HandleFunc("/login", HandleLoginForm).Methods("POST")
 
+	// Handle logout requests which removes the session and logs the user
+	// out.
+	r.HandleFunc("/logout", HandleLogout)
+
 	// Handles GET requests for "/server/{id}" which is a server page
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 
