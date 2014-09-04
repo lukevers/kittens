@@ -1,7 +1,7 @@
 {
 	"Username": "admin",
 	"Password": "admin",
-	"Database": {
+	"DB": {
 		"Driver": "mysql",
 		"Host": "localhost",
 		"Port": "3306",

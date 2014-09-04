@@ -31,7 +31,7 @@ type Config struct {
 	Password string
 
 	// DB is
-	Database Database
+	DB Database
 
 	// Servers is a slice of Server structs. Kittens can connect
 	// to multiple servers, and each server is defined in a new

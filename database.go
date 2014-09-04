@@ -1,12 +1,12 @@
 package main
 
 import (
-	"database/sql"
+	"github.com/jinzhu/gorm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
-	db *sql.DB
+	db gorm.DB
 )
 
 type Database struct {
@@ -44,23 +44,22 @@ type Database struct {
 func InitDatabase() {
 	// Connect database
 	//
+	// mysql:
 	// "username:password@tcp(host:port)/database
 	//
-	db, err = sql.Open(config.Database.Driver,
-		config.Database.Username+":"+
-			config.Database.Password+"@tcp("+
-			config.Database.Host+":"+
-			config.Database.Port+")/"+
-			config.Database.Name)
+	db, err = gorm.Open(config.DB.Driver,
+		config.DB.Username+":"+
+			config.DB.Password+"@tcp("+
+			config.DB.Host+":"+
+			config.DB.Port+")/"+
+			config.DB.Name)
 	if err != nil {
 		warnf("Error connecting to database: %s", err)
-		defer db.Close()
 	}
 
 	// Test connection
-	err = db.Ping()
+	err = db.DB().Ping()
 	if err != nil {
 		warnf("Error pinging database: %s", err)
-		defer db.Close()
 	}
 }
