@@ -9,6 +9,11 @@ type Bot struct {
 	// number.
 	Id int64
 
+	// DisplayName is a string with max-size set to
+	// 255 and is the identifier/display name for the
+	// web interface.
+	DisplayName string `sql:"size:255"`
+
 	// Nick is a string with max-size set to 32 and
 	// is the nickname that the bot will use on the
 	// server it is connected to.
