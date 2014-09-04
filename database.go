@@ -3,6 +3,7 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"os"
 	"time"
 )
 
@@ -56,12 +57,16 @@ func InitDatabase() {
 			config.DB.Name+"?parseTime=true")
 	if err != nil {
 		warnf("Error connecting to database: %s", err)
+		warn("Exiting with exit status 1")
+		os.Exit(1)
 	}
 
 	// Test connection
 	err = db.DB().Ping()
 	if err != nil {
 		warnf("Error pinging database: %s", err)
+		warn("Exiting with exit status 1")
+		os.Exit(1)
 	}
 
 	// Migrate/create tables
@@ -73,8 +78,8 @@ func InitDatabase() {
 	// need to make a default user.
 	verb("Checking if any users exist")
 	db.FirstOrCreate(&User{
-		Username: "admin",
-		Password: "admin",
+		Username:  "admin",
+		Password:  "admin",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}, &User{})
