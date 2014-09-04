@@ -22,7 +22,7 @@ type User struct {
 	// Username is a string with max-size set to 255
 	// and is the username that a user will use when
 	// logging in to the web interface.
-	Username string `sql:"size:255"`
+	Username string `sql:"size:255;unique"`
 
 	// Password is a string with max-size set to 255
 	// and is the password that a user will use when
