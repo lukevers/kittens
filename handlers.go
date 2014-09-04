@@ -184,7 +184,7 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Redirect (303) back to "/server/{id}" when we're done here
-		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
+		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
@@ -218,7 +218,7 @@ func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 		server.Conn.Part(ch)
 
 		// Redirect (303) back to "/server/{id}" when we're done here
-		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
+		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
@@ -288,7 +288,7 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Redirect (303) back to "/server/{id}" when we're done here
-		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
+		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
@@ -326,7 +326,7 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Redirect (303) back to "/server/{id}" when we're done here
-		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.ID)), http.StatusSeeOther)
+		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}

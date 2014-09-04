@@ -20,7 +20,7 @@ func GetServerFromRequest(req *http.Request) (*Server, error) {
 
 	// Get our server from our slice of servers
 	for _, s := range clients {
-		if s.ID == uint16(id) {
+		if s.Id == uint16(id) {
 			return s, nil
 		}
 	}

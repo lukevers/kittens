@@ -9,26 +9,19 @@ import (
 )
 
 type Server struct {
-	// Conn is the connection that each bot is using to connect
-	// to the server.
-	Conn *irc.Conn
 
 	// A unique ID will be given to each server when a goroutine
 	// commences for the first time. This is used to identify
 	// POST requests from our webinterface.
-	ID uint16
-
-	// Timestamp is a unix timestamp which will be set to time.Now
-	// when the bot connects to the server.
-	Timestamp int64
+	Id uint16
 
 	// Nick is a string that defines the nick of the bot for this
 	// specific server.
-	Nick string
+	Nick string `sql:"size:32"`
 
 	// RealName is a string that defines the real name of the bot
 	// for this specific server.
-	RealName string
+	RealName string `sql:"size:255"`
 
 	// Host is a string that defines the host of the bot for this
 	// specific server.
@@ -58,13 +51,21 @@ type Server struct {
 	// and set to false if it is not enabled.
 	Enabled bool
 
-	// Connected is set to true when the bot connects to the
-	// server and set to false when it disconnects.
-	Connected bool
-
 	// Channels is a slice of Channel Structs that define what channels
 	// the bot connects to.
 	Channels []*Channel
+
+	// Conn is the connection that each bot is using to connect
+	// to the server.
+	Conn *irc.Conn `sql:"-"`
+
+	// Timestamp is a unix timestamp which will be set to time.Now
+	// when the bot connects to the server.
+	Timestamp int64 `sql:"-"`
+
+	// Connected is set to true when the bot connects to the
+	// server and set to false when it disconnects.
+	Connected bool `sql:"-"`
 }
 
 func (s Server) CreateAndConnect(new bool) {

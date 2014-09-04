@@ -18,7 +18,7 @@ var (
 
 var (
 	templates        = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
-	nextID    uint16 = 0
+	nextId    uint16 = 0
 )
 
 func main() {
@@ -98,8 +98,8 @@ func main() {
 
 	for _, s := range config.Servers {
 		wg.Add(1)
-		s.ID = nextID
-		nextID++
+		s.Id = nextId
+		nextId++
 		go s.CreateAndConnect(true)
 	}
 

@@ -7,7 +7,7 @@ import (
 type Bot struct {
 	// ID is an int64 that is a bots identification
 	// number.
-	Id int64
+	Id uint64
 
 	// DisplayName is a string with max-size set to
 	// 255 and is the identifier/display name for the
@@ -44,7 +44,7 @@ type Bot struct {
 
 	// UserID is a foreign key that references the
 	// user that owns this bot.
-	UserId int64
+	UserId uint64
 
 	// CreatedAt is a timestamp of when the specific
 	// bot was created at.

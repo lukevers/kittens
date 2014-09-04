@@ -7,7 +7,7 @@ import (
 type Channel struct {
 	// ID is an int64 that is a channels identification
 	// number.
-	Id int64
+	Id uint64
 
 	// Name is the name of the physical channel that
 	// the bot on a specific server connects to.
@@ -15,7 +15,7 @@ type Channel struct {
 
 	// BotID is a foreign key that references the bot
 	// that owns this channel.
-	BotId int64
+	BotId uint64
 
 	// CreatedAt is a timestamp of when the specific channel
 	// was created at.
