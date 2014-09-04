@@ -68,11 +68,22 @@ func GetSessionName() string {
 // and returns it as a string. It handles errors that are
 // returned from bcrypt.GenerateFromPassword, and is a
 // wrapper around having to use []byte everywhere.
-func HashPassword(password string) (string) {
+func HashPassword(password string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		warnf("Error hashing password: %s", err)
 	}
 
 	return string(hash)
+}
+
+// Password Matches Hash takes a plaintext password and uses
+// bcrypt.CompareHashAndPassword to check against the hashed
+// password we're checking against from the database. The
+// func from bcrypt returns nil if the passwords match, and
+// an error otherwise, so we're checking if bcrypt's func
+// returns nil or not and that's how we're determining if the
+// hashes match or not.
+func PasswordMatchesHash(password string, hash string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) == nil
 }

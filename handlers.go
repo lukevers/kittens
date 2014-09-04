@@ -50,20 +50,33 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 		warnf("Error parsing form: %s", err)
 	}
 
-	user := req.Form["username"][0]
-	pass := req.Form["password"][0]
+	// Get username/password from input
+	username := req.Form["username"][0]
+	password := req.Form["password"][0]
 
-	if user == config.Username && pass == config.Password {
-		session, err := store.New(req, GetSessionName())
-		if err != nil {
-			warnf("Error creating new session: %s", err)
+	// Query database for user
+	var user User
+	db.Table("users").Where("username = ?", username).First(&user)
+
+	// Check if usernames match up
+	if user.Username == username {
+		// Check if passwords match up
+		if PasswordMatchesHash(password, user.Password) {
+			// Create new session
+			session, err := store.New(req, GetSessionName())
+			if err != nil {
+				warnf("Error creating new session: %s", err)
+			}
+
+			// Save session and redirect
+			session.Save(req, w)
+			http.Redirect(w, req, "/", http.StatusSeeOther)
 		}
-
-		session.Save(req, w)
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	} else {
-		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
+
+	// If you have gotten this far then you have not been
+	// authenticated. Sorry.
+	http.Redirect(w, req, "/login", http.StatusSeeOther)
 }
 
 // Handle "/server/{id}" web
