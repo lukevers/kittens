@@ -39,7 +39,11 @@ func HandleLogin(w http.ResponseWriter, req *http.Request) {
 		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 	}
 
-	templates.ExecuteTemplate(w, "login", nil)
+	if IsLoggedIn(req) {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	} else {
+		templates.ExecuteTemplate(w, "login", nil)
+	}
 }
 
 // Handle POSTS to "/login" web.
