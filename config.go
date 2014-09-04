@@ -54,3 +54,14 @@ func ReadConfig(path string) (config *Config, err error) {
 
 	return
 }
+
+// Update From Flags is a func that takes all of
+// the flags and updates our config struct accordingly.
+func (config *Config) UpdateFromFlags() {
+	verb("Updating config from flags")
+
+	// Set variables accordingly
+	config.Debug = *debugFlag
+	config.Port = *portFlag
+	config.Interface = *interfaceFlag
+}

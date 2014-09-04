@@ -13,14 +13,3 @@ var (
 	portFlag      = flag.Int("port", 3000, "Port for webserver to bind to")
 	interfaceFlag = flag.String("interface", "0.0.0.0", "Interface for webserver to bind to")
 )
-
-// Update Config From Flags is a func that takes
-// all of the flags and updates our config struct.
-func UpdateConfigFromFlags() {
-	verb("Parsing flags")
-
-	// Set variables accordingly
-	config.Debug = *debugFlag
-	config.Port = *portFlag
-	config.Interface = *interfaceFlag
-}

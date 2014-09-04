@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// Update config values from flags
-	UpdateConfigFromFlags()
+	config.UpdateFromFlags()
 
 	// Initialize database
 	InitDatabase()
