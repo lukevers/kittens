@@ -71,6 +71,7 @@ func InitDatabase() {
 	// Check to see if we have any users created.
 	// If we don't have any users at all then we
 	// need to make a default user.
+	verb("Checking if any users exist")
 	db.FirstOrCreate(&User{
 		Username: "admin",
 		Password: "admin",
