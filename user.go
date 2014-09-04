@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	"time"
 )
 
 // Session store for users
@@ -14,13 +15,25 @@ var store = sessions.NewFilesystemStore(
 )
 
 type User struct {
-	// ID is a uint32 that is a users identification number.
-	ID uint32
+	// ID is an int64 that is a users identification
+	// number.
+	ID int64
 
-	// Username is the name that a user uses in order to sign in.
-	Username string
+	// Username is a string with max-size set to 255
+	// and is the username that a user will use when
+	// logging in to the web interface.
+	Username string `sql:"size:255"`
 
-	// Password is the secret key that a user types in along
-	// with a matching username in order to sign in.
-	Password string
+	// Password is a string with max-size set to 255
+	// and is the password that a user will use when
+	// logging in to the web interface.
+	Password string `sql:"size:255"`
+
+	// CreatedAt is a timestamp of when the specific
+	// user was created at.
+	CreatedAt time.Time
+
+	// UpdatedAt is a timestamp of when the specific
+	// user was last updated at.
+	UpdatedAt time.Time
 }
