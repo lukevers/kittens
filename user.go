@@ -17,7 +17,7 @@ var store = sessions.NewFilesystemStore(
 type User struct {
 	// ID is an int64 that is a users identification
 	// number.
-	ID int64
+	Id int64
 
 	// Username is a string with max-size set to 255
 	// and is the username that a user will use when

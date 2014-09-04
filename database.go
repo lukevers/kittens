@@ -62,4 +62,8 @@ func InitDatabase() {
 	if err != nil {
 		warnf("Error pinging database: %s", err)
 	}
+
+	// Migrate/create tables
+	verb("Running database auto migrate")
+	db.AutoMigrate(User{}, Bot{}, Channel{})
 }
