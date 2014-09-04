@@ -43,12 +43,15 @@ type Database struct {
 //
 func InitDatabase() {
 	// Connect database
+	//
+	// "username:password@tcp(host:port)/database
+	//
 	db, err = sql.Open(config.Database.Driver,
 		config.Database.Username+":"+
-		config.Database.Password+"@tcp("+
-		config.Database.Host+":"+
-		config.Database.Port+")/"+
-		config.Database.Name)
+			config.Database.Password+"@tcp("+
+			config.Database.Host+":"+
+			config.Database.Port+")/"+
+			config.Database.Name)
 	if err != nil {
 		warnf("Error connecting to database: %s", err)
 		defer db.Close()
