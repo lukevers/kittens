@@ -1,6 +1,7 @@
 package main
 
 import (
+	"code.google.com/p/go.crypto/bcrypt"
 	"errors"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -61,4 +62,17 @@ func IsLoggedIn(req *http.Request) bool {
 // that is to be used.
 func GetSessionName() string {
 	return "user"
+}
+
+// Hash Password takes a string and hashes that password
+// and returns it as a string. It handles errors that are
+// returned from bcrypt.GenerateFromPassword, and is a
+// wrapper around having to use []byte everywhere.
+func HashPassword(password string) (string) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		warnf("Error hashing password: %s", err)
+	}
+
+	return string(hash)
 }

@@ -79,9 +79,8 @@ func InitDatabase() {
 	verb("Checking if any users exist")
 	db.FirstOrCreate(&User{
 		Username:  "admin",
-		Password:  "admin",
+		Password:  HashPassword("admin"),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}, &User{})
-
 }
