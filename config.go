@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	config  *Config
+	config *Config
 )
 
 type Config struct {
@@ -29,6 +29,9 @@ type Config struct {
 	// Password is a string that contains the password for the user
 	// to login and use the web interface.
 	Password string
+
+	// DB is
+	Database Database
 
 	// Servers is a slice of Server structs. Kittens can connect
 	// to multiple servers, and each server is defined in a new

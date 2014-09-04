@@ -4,8 +4,8 @@
 	"Database": {
 		"Driver": "mysql",
 		"Host": "localhost",
-		"Port": 3306,
-		"Database": "kittens",
+		"Port": "3306",
+		"Name": "kittens",
 		"Username": "root",
 		"Password": "password"
 	},

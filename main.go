@@ -37,6 +37,9 @@ func main() {
 	// Update config values from flags
 	UpdateConfigFromFlags()
 
+	// Initialize database
+	InitDatabase()
+
 	verb("Loaded configuration file")
 	info("Starting webserver")
 
