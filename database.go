@@ -3,6 +3,7 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 var (
@@ -45,14 +46,14 @@ func InitDatabase() {
 	// Connect database
 	//
 	// mysql:
-	// "username:password@tcp(host:port)/database
+	// "username:password@tcp(host:port)/database?parseTime=true
 	//
 	db, err = gorm.Open(config.DB.Driver,
 		config.DB.Username+":"+
 			config.DB.Password+"@tcp("+
 			config.DB.Host+":"+
 			config.DB.Port+")/"+
-			config.DB.Name)
+			config.DB.Name+"?parseTime=true")
 	if err != nil {
 		warnf("Error connecting to database: %s", err)
 	}
@@ -66,4 +67,15 @@ func InitDatabase() {
 	// Migrate/create tables
 	verb("Running database auto migrate")
 	db.AutoMigrate(User{}, Bot{}, Channel{})
+
+	// Check to see if we have any users created.
+	// If we don't have any users at all then we
+	// need to make a default user.
+	db.FirstOrCreate(&User{
+		Username: "admin",
+		Password: "admin",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}, &User{})
+
 }
