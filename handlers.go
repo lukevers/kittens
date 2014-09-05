@@ -102,7 +102,7 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 		} else {
 			// Refresh the templates
 			if config.Debug {
-				RefreshTemplates(req)
+				templates = RefreshTemplates(req)
 			}
 
 			// Execute template
@@ -135,7 +135,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 
 			// Refresh the templates
 			if config.Debug {
-				RefreshTemplates(req)
+				templates = RefreshTemplates(req)
 			}
 
 			// Template data. We want to pass both the *Server for server
@@ -174,7 +174,7 @@ func HandleChannelRedirect(w http.ResponseWriter, req *http.Request) {
 		} else {
 			// Refresh the templates
 			if config.Debug {
-				RefreshTemplates(req)
+				templates = RefreshTemplates(req)
 			}
 
 			// Execute Template
