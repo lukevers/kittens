@@ -96,13 +96,14 @@ func main() {
 
 	info("Beginning to create bots")
 
-	for _, s := range config.Servers {
-		wg.Add(1)
-		s.Id = nextId
-		nextId++
-		go s.CreateAndConnect(true)
-	}
-
+	/*
+		for _, s := range config.Servers {
+			wg.Add(1)
+			s.Id = nextId
+			nextId++
+			go s.CreateAndConnect(true)
+		}
+	*/
 	http.Handle("/", r)
 	http.ListenAndServe(config.Interface+":"+strconv.Itoa(config.Port), nil)
 	infof("Webserver running on port %s", config.Port)

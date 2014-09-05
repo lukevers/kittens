@@ -13,7 +13,7 @@ type Channel struct {
 	// the bot on a specific server connects to.
 	Name string
 
-	// ServerID is a foreign key that references the bot
+	// ServerID is a foreign key that references the server
 	// that owns this channel.
 	ServerId uint64
 

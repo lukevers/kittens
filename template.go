@@ -55,7 +55,7 @@ func DisabledServers() string {
 
 // Template func that counts total servers
 func TotalServers() string {
-	if len(clients) > 1 {
+	if len(clients) != 1 {
 		return strconv.Itoa(len(clients)) + " Total Servers"
 	} else {
 		return "1 Total Server"

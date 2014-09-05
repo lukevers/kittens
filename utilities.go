@@ -50,18 +50,8 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 // what we have, then the user is not logged in.
 func IsLoggedIn(req *http.Request) bool {
 	// Check for session
-	session, err := store.Get(req, GetSessionName())
-	if err != nil {
-		warnf("Error checking for session: %s", err)
-	}
-
+	session, _ := store.Get(req, "user")
 	return !session.IsNew
-}
-
-// Get Session Name returns a string of the session name
-// that is to be used.
-func GetSessionName() string {
-	return "user"
 }
 
 // Hash Password takes a string and hashes that password

@@ -23,7 +23,7 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 func HandleLogout(w http.ResponseWriter, req *http.Request) {
 	// Remove cookie
 	http.SetCookie(w, &http.Cookie{
-		Name:   GetSessionName(),
+		Name:   "user",
 		Value:  "",
 		Path:   "/",
 		MaxAge: -1,
@@ -67,7 +67,7 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 		// Check if passwords match up
 		if PasswordMatchesHash(password, user.Password) {
 			// Create new session
-			session, err := store.New(req, GetSessionName())
+			session, err := store.New(req, "user")
 			if err != nil {
 				warnf("Error creating new session: %s", err)
 			}
