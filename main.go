@@ -18,7 +18,6 @@ var (
 
 var (
 	templates        = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
-	nextId    uint16 = 0
 )
 
 func main() {
@@ -94,16 +93,22 @@ func main() {
 	// Handle all other static files and folders (eg. CSS/JS).
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
 
-	info("Beginning to create bots")
+	// Get all servers
+	var servers []Server
+	db.Find(&servers, &Server{})
 
-	/*
-		for _, s := range config.Servers {
-			wg.Add(1)
-			s.Id = nextId
-			nextId++
-			go s.CreateAndConnect(true)
-		}
-	*/
+	// Create servers
+	for _, s := range servers {
+		// Get all of the channels for each server
+		db.Table("channels").Where("server_id = ?", s.Id).Find(&s.Channels)
+
+		// Wait group
+		wg.Add(1)
+
+		// Start our goroutine
+		go s.CreateAndConnect(true)
+	}
+
 	http.Handle("/", r)
 	http.ListenAndServe(config.Interface+":"+strconv.Itoa(config.Port), nil)
 	infof("Webserver running on port %s", config.Port)

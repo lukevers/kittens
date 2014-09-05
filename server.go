@@ -12,7 +12,7 @@ type Server struct {
 	// A unique ID will be given to each server when a goroutine
 	// commences for the first time. This is used to identify
 	// POST requests from our webinterface.
-	Id uint16
+	Id uint64
 
 	// Nick is a string that defines the nick of the bot for this
 	// specific server.
