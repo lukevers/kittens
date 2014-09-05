@@ -1,0 +1,47 @@
+{{ define "settings" }}
+	{{ template "header" }}
+
+	{{ template "navigation" }}
+
+	<div class="content">
+		<div class="container-fluid max">
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Hello, {{ .Username }}!</h1>
+				</div>
+			</div>
+
+			<!-- Form -->
+
+			<form name="update" method="POST" action="/settings">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="username">Username</label>
+							<input name="username" id="username" type="text" value="{{ .Username }}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="password">Password</label>
+							<input name="password" id="password" type="password"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<input type="submit" id="submit" value="Update Settings"/>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+
+	{{ template "footer" }}
+{{ end }}

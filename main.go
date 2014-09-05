@@ -57,9 +57,16 @@ func main() {
 	// logging in with correct details or not.
 	r.HandleFunc("/login", HandleLoginForm).Methods("POST")
 
-	// Handle logout requests which removes the session and logs the user
-	// out.
+	// Handle logout requests which removes the session and logs the user out
 	r.HandleFunc("/logout", HandleLogout)
+
+	// Handles GET requests for "/settings" which is a page where users
+	// can update their settings.
+	r.HandleFunc("/settings", HandleSettings).Methods("GET")
+
+	// Handles POST requests for "/settings" which is a page where users
+	// can update their settings. POSTing here will update settings.
+	r.HandleFunc("/settings", HandleUpdateSettings).Methods("POST")
 
 	// Handles GET requests for "/server/new" which is a page where a
 	// user can add a new server.

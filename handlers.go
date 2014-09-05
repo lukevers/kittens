@@ -521,7 +521,64 @@ func HandleAddNew(w http.ResponseWriter, req *http.Request) {
 		user.Servers = nil
 		db.Table("servers").Where("user_id = ?", user.Id).Find(&user.Servers)
 
-		// Redirect to "/" when we're done here
+		// Redirect to new server when we're done here
 		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
+	}
+}
+
+// Handle "/settings" web
+func HandleSettings(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Refresh the templates
+		if config.Debug {
+			templates = RefreshTemplates(req)
+		}
+
+		// Execute template
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "settings", WhoAmI(req))
+	}
+}
+
+// Handles POST requests to "/settings" which is a page that
+// users update their settings at.
+func HandleUpdateSettings(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Parse our form so we can get values from req.Form
+		err = req.ParseForm()
+		if err != nil {
+			warnf("Error parsing form: %s", err)
+		}
+
+		username := req.Form["username"][0]
+		password := req.Form["password"][0]
+
+		// Figure out who the user is
+		u := WhoAmI(req)
+		var user User
+		db.Table("users").Where("id = ?", u.Id).Find(&user)
+
+		// Update user in database if not empty
+		if username != "" {
+			user.Username = username
+		}
+
+		// Update password in database if not empty
+		if password != "" {
+			user.Password = HashPassword(password)
+		}
+
+		// Update user in memory
+		u.Username = user.Username
+		u.Password = user.Password
+
+		// Save user
+		db.Save(&user)
+
+		// Redirect back to "/settings" when we're done here.
+		http.Redirect(w, req, "/settings", http.StatusSeeOther)
 	}
 }
