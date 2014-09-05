@@ -109,7 +109,6 @@ func main() {
 	}
 
 	// Get all servers
-	var servers []Server
 	db.Find(&servers, &Server{})
 
 	// Create servers

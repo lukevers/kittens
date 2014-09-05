@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // Handle "/" web
@@ -445,7 +446,7 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-//
+// Handle "/server/new" web
 func HandleNew(w http.ResponseWriter, req *http.Request) {
 	if !IsLoggedIn(req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
@@ -460,7 +461,67 @@ func HandleNew(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-//
+// Handle POSTs to "/server/new" which occurs when a user adds
+// a new server.
 func HandleAddNew(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Parse our form so we can get values from req.Form
+		err = req.ParseForm()
+		if err != nil {
+			warnf("Error parsing form: %s", err)
+		}
 
+		// Parse port from string to int
+		port, err := strconv.Atoi(req.Form["port"][0])
+		if err != nil {
+			// If for some reason we have an error, we're going to
+			// just default to 6667 for port. Most irc networks use
+			// 6667 as a default port.
+			warnf("Error converting Port from form to int: %s", err)
+		}
+
+		// Parse ssl from string to bool
+		ssl, err := strconv.ParseBool(req.Form["ssl"][0])
+		if err != nil {
+			// If for some reason we have an error, we're going to
+			// just default to false for ssl. Most irc networks
+			// don't use ssl by default.
+			warnf("Error parsing ssl from string to bool: %s", err)
+			ssl = false
+		}
+
+		// Get our user User
+		user := WhoAmI(req)
+
+		// Create server
+		server := Server{
+			Nick:       req.Form["nick"][0],
+			RealName:   req.Form["realname"][0],
+			Host:       req.Form["host"][0],
+			ServerName: req.Form["servername"][0],
+			Network:    req.Form["network"][0],
+			Password:   req.Form["password"][0],
+			Port:       port,
+			Ssl:        ssl,
+			Enabled:    false,
+			UserId:     user.Id,
+			CreatedAt:  time.Now(),
+			UpdatedAt:  time.Now(),
+		}
+
+		// Insert channel into database
+		db.Create(&server)
+
+		// Add server to struct
+		servers = append(servers, &server)
+
+		// Update this users servers
+		user.Servers = nil
+		db.Table("servers").Where("user_id = ?", user.Id).Find(&user.Servers)
+
+		// Redirect to "/" when we're done here
+		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
+	}
 }
