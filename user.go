@@ -36,4 +36,8 @@ type User struct {
 	// UpdatedAt is a timestamp of when the specific
 	// user was last updated at.
 	UpdatedAt time.Time
+
+	// Servers is a slice of Server structs that define
+	// what servers the user owns
+	Servers []*Server `sql:"-"`
 }

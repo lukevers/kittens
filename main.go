@@ -17,7 +17,7 @@ var (
 )
 
 var (
-	templates        = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+	templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
 )
 
 func main() {

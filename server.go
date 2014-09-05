@@ -54,8 +54,8 @@ type Server struct {
 	// this server.
 	UserId uint64
 
-	// Channels is a slice of Channel Structs that define what channels
-	// the bot connects to.
+	// Channels is a slice of Channel structs that define what channels
+	// the bot connects to/owns.
 	Channels []*Channel `sql:"-"`
 
 	// Conn is the connection that each bot is using to connect

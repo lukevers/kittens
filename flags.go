@@ -9,7 +9,7 @@ var (
 	configPathFlag = flag.String("config", "config.json", "Path to configuration file")
 
 	// General flags
-	debugFlag     = flag.Bool("debug", false, "Use during development, not production")
+	debugFlag = flag.Bool("debug", false, "Use during development, not production")
 
 	// Webserver flags
 	portFlag      = flag.Int("port", 3000, "Port for webserver to bind to")
