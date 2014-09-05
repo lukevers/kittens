@@ -54,6 +54,14 @@ type Server struct {
 	// this server.
 	UserId uint64
 
+	// CreatedAt is a timestamp of when the specific
+	// user was created at.
+	CreatedAt time.Time
+
+	// UpdatedAt is a timestamp of when the specific
+	// user was last updated at.
+	UpdatedAt time.Time
+
 	// Channels is a slice of Channel structs that define what channels
 	// the bot connects to/owns.
 	Channels []*Channel `sql:"-"`
