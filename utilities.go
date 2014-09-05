@@ -20,7 +20,7 @@ func GetServerFromRequest(req *http.Request) (*Server, error) {
 
 	// Get our server from our slice of servers
 	for _, s := range clients {
-		if s.Id == uint16(id) {
+		if s.Id == uint64(id) {
 			return s, nil
 		}
 	}
@@ -51,7 +51,7 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 func IsLoggedIn(req *http.Request) bool {
 	// Check for session
 	session, _ := store.Get(req, "user")
-	return !session.IsNew
+	return noAuthFlag || !session.IsNew
 }
 
 // Hash Password takes a string and hashes that password
