@@ -348,10 +348,15 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 				db.Table("servers").Where("id = ?", server.Id).Update("network", server.Network)
 			}
 
+			// Parse ssl from string to bool
+			ssl, err := strconv.ParseBool(req.Form["ssl"][0])
+			if err != nil {
+				warnf("Error parsing ssl from string to bool: %s", err)
+			}
 			// Check if Ssl has been changed, and update it if it has
-			if req.Form["ssl"][0] != server.Ssl {
-				verbf("Changing Ssl settings to %s", req.Form["ssl"][0])
-				server.Ssl = req.Form["ssl"][0]
+			if ssl != server.Ssl {
+				verbf("Changing Ssl settings to %s", ssl)
+				server.Ssl = ssl
 
 				// Update in database
 				db.Table("servers").Where("id = ?", server.Id).Update("ssl", server.Ssl)
