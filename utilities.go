@@ -19,7 +19,7 @@ func GetServerFromRequest(req *http.Request) (*Server, error) {
 	}
 
 	// Get our server from our slice of servers
-	for _, s := range clients {
+	for _, s := range servers {
 		if s.Id == uint64(id) {
 			return s, nil
 		}
@@ -52,6 +52,20 @@ func IsLoggedIn(req *http.Request) bool {
 	// Check for session
 	session, _ := store.Get(req, "user")
 	return *noAuthFlag || !session.IsNew
+}
+
+// WhoAmI figures out who exactly is using the current
+// session (what user is), and it returns the *User from
+// the slice of Users that we have.
+func WhoAmI(req *http.Request) *User {
+	session, _ := store.Get(req, "user")
+	for _, user := range users {
+		if session.Values["username"] == user.Username {
+			return user
+		}
+	}
+
+	return nil
 }
 
 // Hash Password takes a string and hashes that password

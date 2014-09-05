@@ -81,14 +81,14 @@ type Server struct {
 
 func (s Server) CreateAndConnect(new bool) {
 	if !new {
-		for i, v := range clients {
+		for i, v := range servers {
 			if reflect.DeepEqual(&s, v) {
-				clients[i] = nil
-				clients[i] = &s
+				servers[i] = nil
+				servers[i] = &s
 			}
 		}
 	} else {
-		clients = append(clients, &s)
+		servers = append(servers, &s)
 	}
 
 	verbf("Creating bot from server struct: %s", s)

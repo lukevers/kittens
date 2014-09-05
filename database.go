@@ -42,7 +42,9 @@ type Database struct {
 	Password string
 }
 
-//
+// Init Database initializes the database, runs any migrations needed
+// to be ran (with automigrate), and creates a default user if none
+// exist.
 func InitDatabase() {
 	// Connect database
 	//
@@ -84,3 +86,5 @@ func InitDatabase() {
 		UpdatedAt: time.Now(),
 	}, &User{})
 }
+
+

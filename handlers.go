@@ -9,11 +9,11 @@ import (
 // Handle "/" web
 func HandleRoot(w http.ResponseWriter, req *http.Request) {
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+		templates = template.Must(template.New("").ParseGlob("app/views/*"))
 	}
 
 	if IsLoggedIn(req) {
-		templates.ExecuteTemplate(w, "index", clients)
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "index", WhoAmI(req))
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
@@ -36,13 +36,13 @@ func HandleLogout(w http.ResponseWriter, req *http.Request) {
 // Handle "/login" web
 func HandleLogin(w http.ResponseWriter, req *http.Request) {
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+		templates = template.Must(template.New("").ParseGlob("app/views/*"))
 	}
 
 	if IsLoggedIn(req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	} else {
-		templates.ExecuteTemplate(w, "login", nil)
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "login", nil)
 	}
 }
 
@@ -68,6 +68,7 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 		if PasswordMatchesHash(password, user.Password) {
 			// Create new session
 			session, err := store.New(req, "user")
+			session.Values["username"] = username
 			if err != nil {
 				warnf("Error creating new session: %s", err)
 			}
@@ -91,11 +92,11 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+		templates = template.Must(template.New("").ParseGlob("app/views/*"))
 	}
 
 	if IsLoggedIn(req) {
-		templates.ExecuteTemplate(w, "server", server)
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "server", server)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
@@ -114,7 +115,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+		templates = template.Must(template.New("").ParseGlob("app/views/*"))
 	}
 
 	// Template data. We want to pass both the *Server for server
@@ -130,7 +131,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if IsLoggedIn(req) {
-		templates.ExecuteTemplate(w, "channel", data)
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "channel", data)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}
@@ -139,11 +140,11 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 // Handle "/server/{id}/channel/" web
 func HandleChannelRedirect(w http.ResponseWriter, req *http.Request) {
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+		templates = template.Must(template.New("").ParseGlob("app/views/*"))
 	}
 
 	if IsLoggedIn(req) {
-		templates.ExecuteTemplate(w, "redirect", nil)
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "redirect", nil)
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	}

@@ -13,11 +13,12 @@ import (
 var (
 	err     error
 	wg      sync.WaitGroup
-	clients []*Server
+	users   []*User
+	servers []*Server
 )
 
 var (
-	templates = template.Must(template.New("").Funcs(AddTemplateFunctions()).ParseGlob("app/views/*"))
+	templates = template.Must(template.New("").Funcs(AddTemplateFunctions(nil)).ParseGlob("app/views/*"))
 )
 
 func main() {
@@ -92,6 +93,13 @@ func main() {
 
 	// Handle all other static files and folders (eg. CSS/JS).
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
+
+	// Get all users
+	db.Find(&users, &User{})
+	for _, user := range users {
+		// Get all of the servers for each user
+		db.Table("servers").Where("user_id = ?", user.Id).Find(&user.Servers)
+	}
 
 	// Get all servers
 	var servers []Server
