@@ -9,7 +9,7 @@ import (
 // Handle "/" web
 func HandleRoot(w http.ResponseWriter, req *http.Request) {
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions(req)).ParseGlob("app/views/*"))
+		templates = RefreshTemplates(req)
 	}
 
 	if IsLoggedIn(req) {
@@ -36,7 +36,7 @@ func HandleLogout(w http.ResponseWriter, req *http.Request) {
 // Handle "/login" web
 func HandleLogin(w http.ResponseWriter, req *http.Request) {
 	if config.Debug {
-		templates = template.Must(template.New("").Funcs(AddTemplateFunctions(req)).ParseGlob("app/views/*"))
+		templates = RefreshTemplates(req)
 	}
 
 	if IsLoggedIn(req) {
