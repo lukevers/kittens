@@ -71,7 +71,7 @@ func InitDatabase() {
 
 	// Migrate/create tables
 	verb("Running database auto migrate")
-	db.AutoMigrate(User{}, Bot{}, Channel{})
+	db.AutoMigrate(User{}, Server{}, Channel{})
 
 	// Check to see if we have any users created.
 	// If we don't have any users at all then we

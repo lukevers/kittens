@@ -1,6 +1,4 @@
 {
-	"Username": "admin",
-	"Password": "admin",
 	"DB": {
 		"Driver": "mysql",
 		"Host": "localhost",
@@ -8,44 +6,5 @@
 		"Name": "kittens",
 		"Username": "root",
 		"Password": "password"
-	},
-	"Servers": [
-		{
-			"Nick": "kittens",
-			"RealName": "Kittens IRC Bot",
-			"Host": "kittens",
-			"ServerName": "hypeirc",
-			"Network": "irc.appno.de",
-			"Port": 6667,
-			"SSL": false,
-			"Password": "",
-			"Enabled": true,
-			"Connected": false,
-			"Channels": [
-				{
-					"Name": "#lukevers"
-				},
-				{
-					"Name": "#go-nuts"
-				}
-			]
-		},
-		{
-			"Nick": "kittens",
-			"RealName": "Kittens IRC Bot",
-			"Host": "kittens",
-			"ServerName": "efnet",
-			"Network": "irc.arcti.ca",
-			"Port": 6667,
-			"SSL": false,
-			"Password": "",
-			"Enabled": false,
-			"Connected": false,
-			"Channels": [
-				{
-					"Name": "#lukevers"
-				}
-			]
-		}
-	]
+	}
 }

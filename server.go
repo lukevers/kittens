@@ -9,7 +9,6 @@ import (
 )
 
 type Server struct {
-
 	// A unique ID will be given to each server when a goroutine
 	// commences for the first time. This is used to identify
 	// POST requests from our webinterface.
@@ -41,7 +40,7 @@ type Server struct {
 
 	// SSL is set to true if the bot is connecting via SSL, and
 	// set to false if the bot is not connecting via SSL.
-	SSL bool
+	Ssl bool
 
 	// Password is a string that is only used if connecting to
 	// the network requires a password.
@@ -53,7 +52,7 @@ type Server struct {
 
 	// Channels is a slice of Channel Structs that define what channels
 	// the bot connects to.
-	Channels []*Channel
+	Channels []*Channel `sql:"-"`
 
 	// Conn is the connection that each bot is using to connect
 	// to the server.
@@ -86,7 +85,7 @@ func (s Server) CreateAndConnect(new bool) {
 	s.Conn = irc.Client(s.Nick, s.Host, s.RealName, r)
 
 	// Set our SSL setting
-	s.Conn.SSL = s.SSL
+	s.Conn.SSL = s.Ssl
 
 	// Set our PING Frequency to a lower time than default
 	s.Conn.PingFreq = (30 * time.Second)

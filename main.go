@@ -103,20 +103,6 @@ func main() {
 		go s.CreateAndConnect(true)
 	}
 
-	verbf("port %s", config.Port)
-
-	// Check if config.Port exists
-	if config.Port == 0 {
-		// If it does not exist, let's just give it 3000
-		config.Port = 3000
-	}
-
-	// Check if config.Interface exists
-	if config.Interface == "" {
-		// If it does not exist let's give it 0.0.0.0
-		config.Interface = "0.0.0.0"
-	}
-
 	http.Handle("/", r)
 	http.ListenAndServe(config.Interface+":"+strconv.Itoa(config.Port), nil)
 	infof("Webserver running on port %s", config.Port)
