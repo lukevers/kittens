@@ -41,3 +41,23 @@ type User struct {
 	// what servers the user owns
 	Servers []*Server `sql:"-"`
 }
+
+// Owns Server checks if the given *Server is owned by
+// the current user given.
+func (user *User) OwnsServer(server *Server) bool {
+	// If we go to a server that doesn't exist, we
+	// automatically know we don't own that server
+	if server == nil || user == nil {
+		return false
+	}
+
+	// Check
+	for _, s := range user.Servers {
+		if s.Id == server.Id {
+			return true
+		}
+	}
+
+	// Return false if we never found it
+	return false
+}

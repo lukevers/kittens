@@ -86,5 +86,3 @@ func InitDatabase() {
 		UpdatedAt: time.Now(),
 	}, &User{})
 }
-
-

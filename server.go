@@ -164,9 +164,19 @@ func (s *Server) JoinChannels() {
 // Join New Channel is a func that is called when the bot is
 // joining one specific channel for the first time.
 func (s *Server) JoinNewChannel(channel string) {
-	s.Channels = append(s.Channels, &Channel{
+	// Create channel
+	ch := Channel{
 		Name: channel,
-	})
+		ServerId: s.Id,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	// Insert channel into database
+	db.Create(&ch)
+
+	// Add channel to struct
+	s.Channels = append(s.Channels, &ch)
 
 	verbf("Joining channel: %s", channel)
 	s.Conn.Join(channel)

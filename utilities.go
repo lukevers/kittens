@@ -4,6 +4,7 @@ import (
 	"code.google.com/p/go.crypto/bcrypt"
 	"errors"
 	"github.com/gorilla/mux"
+	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -90,4 +91,10 @@ func HashPassword(password string) string {
 // hashes match or not.
 func PasswordMatchesHash(password string, hash string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) == nil
+}
+
+// Refresh Templates recompiles the templates. We use this a lot,
+// so it's better to have it in once place than in 20 places.
+func RefreshTemplates(req *http.Request) *template.Template {
+	return template.Must(template.New("").Funcs(AddTemplateFunctions(req)).ParseGlob("app/views/*"))
 }
