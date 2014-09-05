@@ -50,6 +50,10 @@ type Server struct {
 	// and set to false if it is not enabled.
 	Enabled bool
 
+	// UserId is a foreign key that references the user that owns
+	// this server.
+	UserId uint64
+
 	// Channels is a slice of Channel Structs that define what channels
 	// the bot connects to.
 	Channels []*Channel `sql:"-"`

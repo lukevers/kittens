@@ -13,9 +13,9 @@ type Channel struct {
 	// the bot on a specific server connects to.
 	Name string
 
-	// BotID is a foreign key that references the bot
+	// ServerID is a foreign key that references the bot
 	// that owns this channel.
-	BotId uint64
+	ServerId uint64
 
 	// CreatedAt is a timestamp of when the specific channel
 	// was created at.
