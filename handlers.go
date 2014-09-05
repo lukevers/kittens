@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -349,6 +348,15 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 				db.Table("servers").Where("id = ?", server.Id).Update("network", server.Network)
 			}
 
+			// Check if Ssl has been changed, and update it if it has
+			if req.Form["ssl"][0] != server.Ssl {
+				verbf("Changing Ssl settings to %s", req.Form["ssl"][0])
+				server.Ssl = req.Form["ssl"][0]
+
+				// Update in database
+				db.Table("servers").Where("id = ?", server.Id).Update("ssl", server.Ssl)
+			}
+
 			// Check if Port has been changed, and update it if it has
 			p, err := strconv.Atoi(req.Form["port"][0])
 			if err != nil {
@@ -430,4 +438,24 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 			http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)
 		}
 	}
+}
+
+//
+func HandleNew(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Refresh the templates
+		if config.Debug {
+			templates = RefreshTemplates(req)
+		}
+
+		// Execute template
+		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "new_server", nil)
+	}
+}
+
+//
+func HandleAddNew(w http.ResponseWriter, req *http.Request) {
+
 }

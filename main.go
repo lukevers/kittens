@@ -61,6 +61,13 @@ func main() {
 	// out.
 	r.HandleFunc("/logout", HandleLogout)
 
+	// Handles GET requests for "/server/new" which is a page where a
+	// user can add a new server.
+	r.HandleFunc("/server/new", HandleNew).Methods("GET")
+
+	// Handles POST requests for "/server/new" which adds a new server
+	r.HandleFunc("/server/new", HandleAddNew).Methods("POST")
+
 	// Handles GET requests for "/server/{id}" which is a server page
 	r.HandleFunc("/server/{id}", HandleServer).Methods("GET")
 
