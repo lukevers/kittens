@@ -14,5 +14,4 @@ var (
 	// Webserver flags
 	portFlag      = flag.Int("port", 3000, "Port for webserver to bind to")
 	interfaceFlag = flag.String("interface", "0.0.0.0", "Interface for webserver to bind to")
-	noAuthFlag    = flag.Bool("no-auth", false, "Turn off login system. For development purposes mainly")
 )

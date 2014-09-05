@@ -52,7 +52,7 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 func IsLoggedIn(req *http.Request) bool {
 	// Check for session
 	session, _ := store.Get(req, "user")
-	return *noAuthFlag || !session.IsNew
+	return !session.IsNew
 }
 
 // WhoAmI figures out who exactly is using the current
