@@ -14,21 +14,8 @@ type Config struct {
 	// set to false if verbose messages are not wanted.
 	Debug bool
 
-	// The port that the webserver should lisen to incomming connections on
-	// the default is 3000
-	Port int
-
-	// The interface that the webserver should listen to incomming
-	// connections on. The default in our example config file is 0.0.0.0
-	Interface string
-
 	// DB is
 	DB Database
-
-	// Servers is a slice of Server structs. Kittens can connect
-	// to multiple servers, and each server is defined in a new
-	// Server struct.
-	Servers []Server
 }
 
 // ReadConfig reads the configuration file from JSON and returns it in
@@ -45,15 +32,4 @@ func ReadConfig(path string) (config *Config, err error) {
 	err = json.NewDecoder(file).Decode(config)
 
 	return
-}
-
-// Update From Flags is a func that takes all of
-// the flags and updates our config struct accordingly.
-func (config *Config) UpdateFromFlags() {
-	verb("Updating config from flags")
-
-	// Set variables accordingly
-	config.Debug = *debugFlag
-	config.Port = *portFlag
-	config.Interface = *interfaceFlag
 }

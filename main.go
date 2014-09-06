@@ -34,9 +34,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Update config values from flags
-	config.UpdateFromFlags()
-
 	// Initialize database
 	InitDatabase()
 
@@ -131,8 +128,8 @@ func main() {
 	}
 
 	http.Handle("/", r)
-	http.ListenAndServe(config.Interface+":"+strconv.Itoa(config.Port), nil)
-	infof("Webserver running on port %s", config.Port)
+	http.ListenAndServe(*interfaceFlag+":"+strconv.Itoa(*portFlag), nil)
+	infof("Webserver running on port %s", *portFlag)
 
 	wg.Wait()
 }
