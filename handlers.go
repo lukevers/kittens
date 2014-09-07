@@ -8,7 +8,7 @@ import (
 
 // Handle "/" web
 func HandleRoot(w http.ResponseWriter, req *http.Request) {
-	if config.Debug {
+	if *debugFlag {
 		templates = RefreshTemplates(req)
 	}
 
@@ -35,7 +35,7 @@ func HandleLogout(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/login" web
 func HandleLogin(w http.ResponseWriter, req *http.Request) {
-	if config.Debug {
+	if *debugFlag {
 		templates = RefreshTemplates(req)
 	}
 
@@ -101,7 +101,7 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 			http.Redirect(w, req, "/", http.StatusSeeOther)
 		} else {
 			// Refresh the templates
-			if config.Debug {
+			if *debugFlag {
 				templates = RefreshTemplates(req)
 			}
 
@@ -134,7 +134,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 			}
 
 			// Refresh the templates
-			if config.Debug {
+			if *debugFlag {
 				templates = RefreshTemplates(req)
 			}
 
@@ -173,7 +173,7 @@ func HandleChannelRedirect(w http.ResponseWriter, req *http.Request) {
 			http.Redirect(w, req, "/", http.StatusSeeOther)
 		} else {
 			// Refresh the templates
-			if config.Debug {
+			if *debugFlag {
 				templates = RefreshTemplates(req)
 			}
 
@@ -429,7 +429,7 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 			if enabled {
 				// Enable and connect
 				server.Enabled = true
-				go server.CreateAndConnect(false)
+				go server.CreateAndConnect()
 			} else {
 				// Disable and disconnect
 				server.Enabled = false
@@ -452,7 +452,7 @@ func HandleNew(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Refresh the templates
-		if config.Debug {
+		if *debugFlag {
 			templates = RefreshTemplates(req)
 		}
 
@@ -514,9 +514,6 @@ func HandleAddNew(w http.ResponseWriter, req *http.Request) {
 		// Insert channel into database
 		db.Create(&server)
 
-		// Add server to struct
-		servers = append(servers, &server)
-
 		// Update this users servers
 		user.Servers = nil
 		db.Table("servers").Where("user_id = ?", user.Id).Find(&user.Servers)
@@ -532,7 +529,7 @@ func HandleSettings(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Refresh the templates
-		if config.Debug {
+		if *debugFlag {
 			templates = RefreshTemplates(req)
 		}
 

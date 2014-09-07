@@ -14,7 +14,6 @@ var (
 	err     error
 	wg      sync.WaitGroup
 	users   []*User
-	servers []*Server
 )
 
 var (
@@ -110,21 +109,18 @@ func main() {
 	for _, user := range users {
 		// Get all of the servers for each user
 		db.Table("servers").Where("user_id = ?", user.Id).Find(&user.Servers)
-	}
 
-	// Get all servers
-	db.Find(&servers, &Server{})
+		// Create servers
+		for _, server := range user.Servers {
+			// Get all of the channels for each server
+			db.Table("channels").Where("server_id = ?", server.Id).Find(&server.Channels)
 
-	// Create servers
-	for _, s := range servers {
-		// Get all of the channels for each server
-		db.Table("channels").Where("server_id = ?", s.Id).Find(&s.Channels)
+			// Add to wait group
+			wg.Add(1)
 
-		// Wait group
-		wg.Add(1)
-
-		// Start our goroutine
-		go s.CreateAndConnect(true)
+			// Start our goroutine
+			go server.CreateAndConnect()
+		}
 	}
 
 	http.Handle("/", r)

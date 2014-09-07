@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/fluffle/goevent/event"
 	irc "github.com/fluffle/goirc/client"
-	"reflect"
 	"strconv"
 	"time"
 )
@@ -79,18 +78,7 @@ type Server struct {
 	Connected bool `sql:"-"`
 }
 
-func (s Server) CreateAndConnect(new bool) {
-	if !new {
-		for i, v := range servers {
-			if reflect.DeepEqual(&s, v) {
-				servers[i] = nil
-				servers[i] = &s
-			}
-		}
-	} else {
-		servers = append(servers, &s)
-	}
-
+func (s *Server) CreateAndConnect() {
 	verbf("Creating bot from server struct: %s", s)
 
 	r := event.NewRegistry()
@@ -122,7 +110,7 @@ func (s Server) CreateAndConnect(new bool) {
 			s.Connected = false
 			infof("Disconnected from %s", s.Network)
 			infof("Reconnecting to %s", s.Network)
-			go s.CreateAndConnect(false)
+			go s.CreateAndConnect()
 			quit <- true
 			close(quit)
 		})
@@ -139,7 +127,7 @@ func (s Server) CreateAndConnect(new bool) {
 			warnf("Error connecting: %s", err)
 			info("Retrying in 30 seconds")
 			time.Sleep(30 * time.Second)
-			go s.CreateAndConnect(false)
+			go s.CreateAndConnect()
 			quit <- true
 			close(quit)
 		}
@@ -168,8 +156,6 @@ func (s *Server) JoinNewChannel(channel string) {
 	ch := Channel{
 		Name:      channel,
 		ServerId:  s.Id,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
 	}
 
 	// Insert channel into database

@@ -20,7 +20,7 @@ func GetServerFromRequest(req *http.Request) (*Server, error) {
 	}
 
 	// Get our server from our slice of servers
-	for _, s := range servers {
+	for _, s := range WhoAmI(req).Servers {
 		if s.Id == uint64(id) {
 			return s, nil
 		}

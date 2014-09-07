@@ -43,14 +43,14 @@ func warnf(s string, i interface{}) {
 
 // Print verbose statements if debug is true
 func verb(i interface{}) {
-	if config.Debug {
+	if *debugFlag {
 		VERB.Print(i)
 	}
 }
 
 // Printf verbose statements if debug is true
 func verbf(s string, i interface{}) {
-	if config.Debug {
+	if *debugFlag {
 		VERB.Printf(s, i)
 	}
 }
