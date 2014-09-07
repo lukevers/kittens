@@ -102,17 +102,23 @@ input[type="submit"] {
 	}
 }
 
-.channel {
-	display: inline-block;
-	background-color: @blue;
-	color: @white;
-	padding: 5px 10px;
+.channels {
+	font-size: 0;
 
-	i {
-		cursor: pointer;
-
-		&:hover {
-			color: @black;
+	.channel {
+		display: inline-block;
+		background-color: @blue;
+		color: @white;
+		padding: 5px 10px;
+		margin: 2px;
+		font-size: 14px;
+	
+		i {
+			cursor: pointer;
+	
+			&:hover {
+				color: @black;
+			}
 		}
 	}
 }
