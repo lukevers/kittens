@@ -208,13 +208,13 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 			}
 
 			// Get our channel name
-			ch := req.Form["channel"][0]
+			channel := req.Form["channel"][0]
 
-			// Check to see if we're already in the channel we are trying
+			// Check to see if we're already in the channel we're trying
 			// to currently join.
 			copied := false
-			for _, v := range server.Channels {
-				if ch == v.Name {
+			for _, ch := range server.Channels {
+				if channel == ch.Name {
 					copied = true
 					break
 				}
@@ -223,7 +223,7 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 			// If we're not trying to join a channel we're already in
 			// let's join that channel.
 			if !copied {
-				server.JoinNewChannel(ch)
+				server.JoinNewChannel(channel)
 			}
 
 			// Redirect back to "/server/{id}" when we're done here
