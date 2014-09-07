@@ -67,11 +67,8 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 		// Check if passwords match up
 		if PasswordMatchesHash(password, user.Password) {
 			// Create new session
-			session, err := store.New(req, "user")
+			session, _ := store.New(req, "user")
 			session.Values["username"] = username
-			if err != nil {
-				warnf("Error creating new session: %s", err)
-			}
 
 			// Save session and redirect
 			session.Save(req, w)
@@ -429,7 +426,7 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 			if enabled {
 				// Enable and connect
 				server.Enabled = true
-				go server.CreateAndConnect()
+				server.Connect()
 			} else {
 				// Disable and disconnect
 				server.Enabled = false
@@ -514,9 +511,14 @@ func HandleAddNew(w http.ResponseWriter, req *http.Request) {
 		// Insert channel into database
 		db.Create(&server)
 
+		// Set connected to false
+		server.Connected = false
+
 		// Update this users servers
-		user.Servers = nil
-		db.Table("servers").Where("user_id = ?", user.Id).Find(&user.Servers)
+		user.Servers = append(user.Servers, &server)
+
+		// Create server
+		server.Create()
 
 		// Redirect to new server when we're done here
 		http.Redirect(w, req, "/server/"+strconv.Itoa(int(server.Id)), http.StatusSeeOther)

@@ -19,10 +19,12 @@ func GetServerFromRequest(req *http.Request) (*Server, error) {
 		warnf("Error converting server id: %s", err)
 	}
 
-	// Get our server from our slice of servers
-	for _, s := range WhoAmI(req).Servers {
-		if s.Id == uint64(id) {
-			return s, nil
+	// Get our server
+	for _, user := range users {
+		for _, server := range user.Servers {
+			if server.Id == uint64(id) {
+				return server, nil
+			}
 		}
 	}
 

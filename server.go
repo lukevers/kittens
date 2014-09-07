@@ -78,7 +78,8 @@ type Server struct {
 	Connected bool `sql:"-"`
 }
 
-func (s *Server) CreateAndConnect() {
+// Create
+func (s *Server) Create() {
 	verbf("Creating bot from server struct: %s", s)
 
 	r := event.NewRegistry()
@@ -90,10 +91,7 @@ func (s *Server) CreateAndConnect() {
 	// Set our PING Frequency to a lower time than default
 	s.Conn.PingFreq = (30 * time.Second)
 
-	verbf("Finished creating bot for server %s", s.ServerName)
-	verbf("Beginning to connect to %s", s.Network)
-
-	// Register connect handler
+	// Add connect handler
 	s.Conn.AddHandler(irc.CONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Timestamp = time.Now().Unix()
@@ -102,24 +100,33 @@ func (s *Server) CreateAndConnect() {
 			s.JoinChannels()
 		})
 
-	quit := make(chan bool)
-
-	// Register disconnect handler
+	// Add disconnect handler
 	s.Conn.AddHandler(irc.DISCONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Connected = false
 			infof("Disconnected from %s", s.Network)
 			infof("Reconnecting to %s", s.Network)
-			go s.CreateAndConnect()
-			quit <- true
-			close(quit)
+			s.Connect()
 		})
 
+	// Listen for messages
 	s.Conn.AddHandler("PRIVMSG",
 		func(conn *irc.Conn, line *irc.Line) {
 			// Show output of line currently
 			s.Logging(line)
 		})
+
+	verbf("Finished creating bot for server %s", s.ServerName)
+
+	// Connect server if enabled
+	if s.Enabled {
+		s.Connect()
+	}
+}
+
+// Connect
+func (s *Server) Connect() {
+	verbf("Beginning to connect to %s", s.Network)
 
 	// Now we connect
 	if s.Enabled {
@@ -127,16 +134,11 @@ func (s *Server) CreateAndConnect() {
 			warnf("Error connecting: %s", err)
 			info("Retrying in 30 seconds")
 			time.Sleep(30 * time.Second)
-			go s.CreateAndConnect()
-			quit <- true
-			close(quit)
+			s.Connect()
 		}
 	} else {
 		infof("Not connecting to %s because enabled is false", s.ServerName)
 	}
-
-	// Wait for disconnect
-	<-quit
 }
 
 // Join Channels is a func that is called when a bot connects
@@ -164,6 +166,9 @@ func (s *Server) JoinNewChannel(channel string) {
 	// Add channel to struct
 	s.Channels = append(s.Channels, &ch)
 
-	verbf("Joining channel: %s", channel)
-	s.Conn.Join(channel)
+	// Only join channels if connected
+	if s.Connected {
+		verbf("Joining channel: %s", channel)
+		s.Conn.Join(channel)
+	}
 }
