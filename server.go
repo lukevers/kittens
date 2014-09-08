@@ -156,8 +156,8 @@ func (s *Server) JoinChannels() {
 func (s *Server) JoinNewChannel(channel string) {
 	// Create channel
 	ch := Channel{
-		Name:      channel,
-		ServerId:  s.Id,
+		Name:     channel,
+		ServerId: s.Id,
 	}
 
 	// Insert channel into database
