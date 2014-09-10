@@ -75,7 +75,41 @@ func InitDatabase() {
 
 	// Migrate/create tables
 	verb("Running database auto migrate")
-	db.AutoMigrate(User{}, Server{}, Channel{})
+
+	//
+	// Each child is connected to the parent via a foreign key
+	// that relates to the parent's Id (which is a uint64).
+	//
+	// In this example below it's described as [Row of Table name]
+	// (example name) where the [Row of Table name] is a row in
+	// the table that is named, and (example name) is content that
+	// could potentially be a field in one of the main columns in
+	// that row. Here's an example of what it could look like:
+	//
+	// User (luke) 1:M
+	//  │
+	//  └─── Server (freenode) 1:M
+	//        │
+	//        ├─── Channel (#go-nuts) 1:1
+	//        │
+	//        ├─── Channel (#example) 1:1
+	//        │
+	//        ├─── Channel (#channel) 1:1
+	//        │
+	//        ├─── IrcUser (lukevers) 1:M
+	//        │     │
+	//        │     ├─── IrcUserChannel (#go-nuts) 1:1
+	//        │     │
+	//        │     └─── IrcUserChannel (#example) 1:1
+	//        │
+	//        └─── IrcUser (kittens) 1:M
+	//              │
+	//              ├─── IrcUserChannel (#example) 1:1
+	//              │
+	//              └─── IrcUserChannel (#channel) 1:1
+	//
+
+	db.AutoMigrate(User{}, Server{}, Channel{}, IrcUser{}, IrcUserChannel{})
 
 	// Check to see if we have any users created.
 	// If we don't have any users at all then we

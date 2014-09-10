@@ -5,7 +5,7 @@ import (
 )
 
 type Channel struct {
-	// ID is an int64 that is a channels identification
+	// Id is a uint64 that is a channels identification
 	// number.
 	Id uint64
 
