@@ -29,6 +29,10 @@ type User struct {
 	// logging in to the web interface.
 	Password string `sql:"size:255"`
 
+	// Admin is a bool that specifies if the current
+	// user is an administrator or not.
+	Admin bool
+
 	// CreatedAt is a timestamp of when the specific
 	// user was created at.
 	CreatedAt time.Time

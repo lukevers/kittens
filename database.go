@@ -7,7 +7,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"os"
 	"strings"
-	"time"
 )
 
 var (
@@ -108,7 +107,6 @@ func InitDatabase() {
 	db.FirstOrCreate(&User{
 		Username:  "admin",
 		Password:  HashPassword("admin"),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Admin:     true,
 	}, &User{})
 }
