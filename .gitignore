@@ -8,6 +8,9 @@ config.json
 # Binaries
 kittens
 
+# SQLite databases
+*.db
+
 # Editor temporary files
 *~
 \#*

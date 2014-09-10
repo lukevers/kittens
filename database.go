@@ -6,6 +6,7 @@ import (
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -13,52 +14,41 @@ var (
 	db gorm.DB
 )
 
-type Database struct {
-	// Driver is a string that defines what type of database
-	// we are using. As of right now we just support "mysql"
-	// as driver, but should support others in the future.
-	Driver string
-
-	// Host is a string that defines the host of what we're
-	// going to be connecting to. Generally it's "localhost"
-	// or similar.
-	Host string
-
-	// Port is an integer that defines the port that we're
-	// going to be connecting to. With MySQL it's generally
-	// 3306.
-	Port string
-
-	// Name is the physical name of the database that
-	// we're going to be connecting to. It really should be
-	// "kittens" because that's what Kittens is called, but
-	// it can be changed.
-	Name string
-
-	// Username is the username that's being used to connect
-	// to the database.
-	Username string
-
-	// Password is the password that's being used to connect
-	// to the database.
-	Password string
-}
-
 // Init Database initializes the database, runs any migrations needed
 // to be ran (with automigrate), and creates a default user if none
 // exist.
 func InitDatabase() {
-	// Connect database
-	//
-	// mysql:
-	// "username:password@tcp(host:port)/database?parseTime=true
-	//
-	db, err = gorm.Open(config.DB.Driver,
-		config.DB.Username+":"+
-			config.DB.Password+"@tcp("+
-			config.DB.Host+":"+
-			config.DB.Port+")/"+
-			config.DB.Name+"?parseTime=true")
+	// Lowercase our driver flag to make it easier to parse
+	*driverFlag = strings.ToLower(*driverFlag)
+
+	// Check if driver is mysql
+	if *driverFlag == "mysql" {
+		// Check if ?parseTime=true is not included
+		if !strings.Contains(*databaseFlag, "?parseTime=true") {
+			// If `?parseTime=true` was not included then we need to
+			// add it so MySQL works properly with Kittens.
+			*databaseFlag += "?parseTime=true"
+		}
+	}
+
+	// Check if driver flag is `sqlite`. It's a common typo to accidently
+	// type `sqlite` instead of `sqlite3` (which we support), so to avoid
+	// this completely, if we see `sqlite` anywhere in the driver string
+	// we're just going to set it to `sqlite3` since that's the only
+	// version of sqlite that we support.
+	if strings.Contains(*driverFlag, "sqlite") {
+		*driverFlag = "sqlite3"
+	}
+
+	// Check if driver flag contains `postgres`, and if it does then we just
+	// want to change it to only be `postgres`. We're trying to avoid errors
+	// in as many places as possible for the user.
+	if strings.Contains(*driverFlag, "postgres") {
+		*driverFlag = "postgres"
+	}
+
+	// Open connection
+	db, err = gorm.Open(*driverFlag, *databaseFlag)
 	if err != nil {
 		warnf("Error connecting to database: %s", err)
 		warn("Exiting with exit status 1")

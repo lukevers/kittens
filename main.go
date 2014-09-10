@@ -5,7 +5,6 @@ import (
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
-	"os"
 	"strconv"
 	"sync"
 )
@@ -24,15 +23,6 @@ var (
 func main() {
 	// Parse flags
 	flag.Parse()
-
-	// Load the configuration file
-	config, err = ReadConfig(*configPathFlag)
-	if err != nil {
-		warn("Could not load configuration file.")
-		warnf("Error: %s", err)
-		warn("Exiting with exit status 1")
-		os.Exit(1)
-	}
 
 	// Initialize database
 	InitDatabase()
