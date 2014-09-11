@@ -1,9 +1,8 @@
 package main
 
 import (
-	"github.com/fluffle/goevent/event"
 	irc "github.com/fluffle/goirc/client"
-	"strconv"
+	"github.com/fluffle/goirc/state"
 	"time"
 )
 
@@ -82,17 +81,27 @@ type Server struct {
 func (s *Server) Create() {
 	verbf("Creating bot from server struct: %s", s)
 
-	r := event.NewRegistry()
-	s.Conn = irc.Client(s.Nick, s.Host, s.RealName, r)
-
-	// Set our SSL setting
-	s.Conn.SSL = s.Ssl
-
-	// Set our PING Frequency to a lower time than default
-	s.Conn.PingFreq = (30 * time.Second)
+	// Create connection
+	s.Conn = irc.Client(&irc.Config{
+		Me: &state.Nick{
+			Nick: s.Nick,
+			Ident: s.Host,
+			Host: s.Host,
+			Name: s.RealName,
+		},
+		Server: s.Network,
+		Pass: s.Password,
+		SSL: s.Ssl,
+		PingFreq: 30 * time.Second,
+		NewNick: func(s string) string { return s + "_" },
+		Version: "Kittens IRC",
+		QuitMessage: "bye!",
+		SplitLen: 450,
+		Recover: (*irc.Conn).LogPanic,
+	})
 
 	// Add connect handler
-	s.Conn.AddHandler(irc.CONNECTED,
+	s.Conn.HandleFunc(irc.CONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Timestamp = time.Now().Unix()
 			s.Connected = true
@@ -101,7 +110,7 @@ func (s *Server) Create() {
 		})
 
 	// Add disconnect handler
-	s.Conn.AddHandler(irc.DISCONNECTED,
+	s.Conn.HandleFunc(irc.DISCONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
 			s.Connected = false
 			infof("Disconnected from %s", s.Network)
@@ -110,7 +119,7 @@ func (s *Server) Create() {
 		})
 
 	// Listen for messages
-	s.Conn.AddHandler("PRIVMSG",
+	s.Conn.HandleFunc("PRIVMSG",
 		func(conn *irc.Conn, line *irc.Line) {
 			// Show output of line currently
 			s.Logging(line)
@@ -130,7 +139,7 @@ func (s *Server) Connect() {
 
 	// Now we connect
 	if s.Enabled {
-		if err := s.Conn.Connect(s.Network+":"+strconv.Itoa(s.Port), s.Password); err != nil {
+		if err := s.Conn.Connect(); err != nil {
 			warnf("Error connecting: %s", err)
 			info("Retrying in 30 seconds")
 			time.Sleep(30 * time.Second)
