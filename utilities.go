@@ -54,7 +54,22 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 func IsLoggedIn(req *http.Request) bool {
 	// Check for session
 	session, _ := store.Get(req, "user")
-	return !session.IsNew
+	if session.IsNew {
+		return false
+	}
+
+	// Check if user has Twofa
+	user := WhoAmI(req)
+	if user.Twofa {
+		// Check if temporary session
+		if session.Values["temp"] == "true" {
+			return false
+		} else {
+			return true
+		}
+	} else {
+		return true
+	}
 }
 
 // WhoAmI figures out who exactly is using the current

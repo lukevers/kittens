@@ -77,6 +77,7 @@ var js_files = [
 	'livestamp.min.js',
 	'channel.js',
 	'server.js',
+	'settings.js',
 	'main.js',
 
 	// -- End JS files from assets -- //

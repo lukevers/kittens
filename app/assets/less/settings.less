@@ -1,0 +1,26 @@
+/*
+|--------------------------------------------------------------------------
+| 2FA Settings 
+|--------------------------------------------------------------------------
+*/
+
+button {
+	&.twofa_disable,
+	&.twofa_enable {
+		border: none;
+		padding: 10px;
+		color: @white;
+	}
+
+	&.twofa_enable {
+		background-color: @green;
+	}
+
+	&.twofa_disable {
+		background-color: @red;
+	}
+}
+
+#qr {
+	display: none;
+}

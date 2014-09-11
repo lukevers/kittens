@@ -44,6 +44,14 @@ func main() {
 	// logging in with correct details or not.
 	r.HandleFunc("/login", HandleLoginForm).Methods("POST")
 
+	// Handles GET requests to "/login/2fa" which displays a form that a
+	// user can use to try their 2fa token on.
+	r.HandleFunc("/login/2fa", HandleLogin2FA).Methods("GET")
+
+	// Handles POST requests to "/login/2fa" which tests if a users 2fa
+	// token is correct or not.
+	r.HandleFunc("/login/2fa", HandleLoginForm2FA).Methods("POST")
+
 	// Handle logout requests which removes the session and logs the user out
 	r.HandleFunc("/logout", HandleLogout)
 
@@ -54,6 +62,10 @@ func main() {
 	// Handles POST requests for "/settings" which is a page where users
 	// can update their settings. POSTing here will update settings.
 	r.HandleFunc("/settings", HandleUpdateSettings).Methods("POST")
+
+	// Handles GET requests for "/settings/2fa/generate" which is a page
+	// that generates a QR code for Two Factor Auth.
+	r.HandleFunc("/settings/2fa/generate", HandleGenerate2FA).Methods("GET")
 
 	// Handles GET requests for "/server/new" which is a page where a
 	// user can add a new server.

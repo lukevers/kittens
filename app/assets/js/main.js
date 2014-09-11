@@ -17,6 +17,9 @@ $(function() {
 					break;
 			}
 			break;
+		case 'settings':
+			EnableTwoFa();
+			break;
 		default:
 			break;
 	}

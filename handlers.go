@@ -1,6 +1,11 @@
 package main
 
 import (
+	"crypto/rand"
+	"code.google.com/p/rsc/qr"
+	"encoding/base32"
+	"encoding/base64"
+	"github.com/dgryski/dgoogauth"
 	"net/http"
 	"strconv"
 	"time"
@@ -42,9 +47,82 @@ func HandleLogin(w http.ResponseWriter, req *http.Request) {
 	if IsLoggedIn(req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	} else {
-		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "login", nil)
+		// Check if we have been partly authenticated yet
+		session, _ := store.Get(req, "user")
+		if session.IsNew {
+			templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "login", nil)
+		} else {
+			http.Redirect(w, req, "/login/2fa", http.StatusSeeOther)
+		}
 	}
 }
+
+// Handle "/login/2fa" web
+func HandleLogin2FA(w http.ResponseWriter, req *http.Request) {
+	if *debugFlag {
+		templates = RefreshTemplates(req)
+	}
+
+	if IsLoggedIn(req) {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	} else {
+		session, _ := store.Get(req, "user")
+		if session.Values["temp"] == "true" {
+			templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "login_2fa", nil)
+		} else {
+			http.Redirect(w, req, "/login", http.StatusSeeOther)
+		}
+	}
+}
+
+// Handle POSTS to "/login/2fa" web
+func HandleLoginForm2FA(w http.ResponseWriter, req *http.Request) {
+	// Check if we have been partly authenticated yet
+	session, _ := store.Get(req, "user")
+	if session.IsNew {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Parse our form so we can get values from req.Form
+		err = req.ParseForm()
+		if err != nil {
+			warnf("Error parsing form: %s", err)
+		}
+
+		// Get token from input
+		token := req.Form["token"][0]
+
+		// Get user
+		user := WhoAmI(req)
+
+		// Configure token
+		otpc := &dgoogauth.OTPConfig{
+			Secret: user.TwofaSecret,
+			WindowSize: 3,
+			HotpCounter: 0,
+		}
+
+		// Validate token
+		val, err := otpc.Authenticate(token)
+		if err != nil {
+			warnf("Error authenticating token: %s", err)
+		}
+
+		if val {
+			// Validated
+			session, _ := store.Get(req, "user")
+			session.Values["temp"] = "false"
+			session.Save(req, w)
+
+			// Redirect
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+		} else {
+			// Not validated
+			http.Redirect(w, req, "/login/2fa", http.StatusSeeOther)
+		}
+	}
+}
+
+
 
 // Handle POSTS to "/login" web.
 func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
@@ -70,9 +148,20 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 			session, _ := store.New(req, "user")
 			session.Values["username"] = username
 
-			// Save session and redirect
+			// Save session
 			session.Save(req, w)
-			http.Redirect(w, req, "/", http.StatusSeeOther)
+
+			// Check if 2fa is enabled
+			if user.Twofa {
+				session.Values["temp"] = "true"
+				session.Save(req, w)
+
+				// Redirect, check 2fa
+				http.Redirect(w, req, "/login/2fa", http.StatusSeeOther)
+			} else {
+				// Redirect, logged in ok
+				http.Redirect(w, req, "/", http.StatusSeeOther)
+			}
 		}
 	}
 
@@ -579,5 +668,55 @@ func HandleUpdateSettings(w http.ResponseWriter, req *http.Request) {
 
 		// Redirect back to "/settings" when we're done here.
 		http.Redirect(w, req, "/settings", http.StatusSeeOther)
+	}
+}
+
+// Handles GET AJAX requests to "/settings/2fa/generate" which
+// generates a QR code for Two Factor Auth.
+func HandleGenerate2FA(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		if req.Header.Get("X-Requested-With") != "XMLHttpRequest" {
+			http.Redirect(w, req, "/settings", http.StatusSeeOther)
+		} else {
+			// Get random secret
+			sec := make([]byte, 6)
+			_, err = rand.Read(sec)
+			if err != nil {
+				warnf("Error creating random secret key: %s", err)
+			}
+
+			// Encode secret to base32 string
+			secret := base32.StdEncoding.EncodeToString(sec)
+
+			// Create auth string to be encoded as a QR image
+			// 
+			// https://code.google.com/p/google-authenticator/wiki/KeyUriFormat
+			// otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
+			//
+			auth_string := "otpauth://totp/KittensIRC?secret="+secret+"&issuer=KittensIRC"
+
+			// Encode the QR image
+			code, err := qr.Encode(auth_string, qr.L)
+			if err != nil {
+				warnf("Error encoding qr code: %s", err)
+			}
+
+			// Update user
+			u := WhoAmI(req)
+			u.Twofa = true
+			u.TwofaSecret = secret
+
+			// Update user in database
+			var user User
+			db.Table("users").Where("id = ?", u.Id).Find(&user)
+			user.Twofa = true
+			user.TwofaSecret = secret
+			db.Save(&user)
+
+			// Write base64 encoded QR image
+			w.Write([]byte(base64.StdEncoding.EncodeToString(code.PNG())))
+		}
 	}
 }

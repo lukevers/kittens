@@ -1,0 +1,17 @@
+{{ define "login_2fa" }}
+	{{ template "header" }}
+
+	<div class="login-container">
+		<div class="login-holder">
+			<div class="login">
+				<form action="/login/2fa" method="POST">
+					<label for="token">Token</label>
+					<input type="text" name="token" id="token" placeholder="Token"/>
+					<input type="submit" value="Login"/>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	{{ template "footer" }}
+{{ end }}

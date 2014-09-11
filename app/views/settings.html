@@ -12,7 +12,15 @@
 				</div>
 			</div>
 
+			<hr>
+
 			<!-- Form -->
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h2>Settings</h2>
+				</div>
+			</div>
 
 			<form name="update" method="POST" action="/settings">
 				<div class="row">
@@ -39,6 +47,62 @@
 					</div>
 				</div>
 			</form>
+
+			<br/><hr>
+
+			<!-- Two Factor Auth -->
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h2>Two Factor Auth</h2>
+				</div>
+			</div>
+
+			{{ if .Twofa }}
+
+				<div id="tfa">
+					<div class="row">
+						<div class="col-xs-12">
+							You currently have 2FA set up on this account.
+						</div>
+					</div>
+
+					<br/>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<button id="twofa_disable" class="twofa_disable">Disable 2FA</a>
+						</div>
+					</div>
+				</div>
+
+			{{ else }}
+
+				<div id="tfa">
+					<div class="row" id="message">
+						<div class="col-xs-12">
+							You do not currently have 2FA set up on this account.
+						</div>
+					</div>
+
+					<br/>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<button id="twofa_enable" class="twofa_enable">Enable 2FA</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<div id="qr">
+								<img src="" id="qrcode">
+							</div>
+						</div>
+					</div>
+				</div>
+
+			{{ end }}
 
 		</div>
 	</div>

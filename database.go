@@ -108,5 +108,6 @@ func InitDatabase() {
 		Username:  "admin",
 		Password:  HashPassword("admin"),
 		Admin:     true,
+		Twofa:     false,
 	}, &User{})
 }
