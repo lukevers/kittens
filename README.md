@@ -22,6 +22,7 @@ Start by cloning the repository and getting all the dependencies.
 
 ```bash
 git clone https://github.com/lukevers/kittens
+cd kittens
 go get
 ```
 
@@ -48,38 +49,99 @@ If you'd rather use your own way of compiling LESS to CSS and concating all the 
 go build
 ```
 
-# Configuring
-
-An example configuration file is included in the repo ([example.config.json](example.config.json)) Reading the source is also a really good way to find out what's going on.
-
 # Flags
 
 ### Debug
 
 ```bash
-./kittens --debug
+--debug
 ```
+By including the debug flag, Kittens will do the following:
 
-### Configuration File Path
+* Recompile webserver templates on each page load
+* Provide verbose stdout output
 
-```bash
-./kittens --config /etc/kittens.json
-```
+By default, Kittens sets debug to `false`. This is a good option when developing Kittens.
+
 
 ### Webserver Port
 
 ```bash
-./kittens --port 3000
+--port [port]
 ```
+
+By including the webserver port flag you can change the port that Kittens webserver listens on by default. By default Kittens webserver listens on port `3000`.
 
 ### Webserver Interface
 
 ```bash
-./kittens --interface 0.0.0.0
+--interface [interface]
 ```
+
+By including the webserver interface flag you can change the interface that Kittens webserver binds to by default. By default the Kittens webserver binds to the interface `0.0.0.0`.
+
+### Database Driver
+
+```bash
+--driver [driver]
+```
+
+By including the database driver flag you can change the type of database that we are connecting to. By default Kittens uses `sqlite3` as the default driver because Kittens uses a SQLite3 database as default. If you change the database driver, you need to change the database connection details or it will not work.
+
+Kittens supports SQLite, MySQL, and PostgreSQL. To see how to use the database driver flag with the database flag, read the information on the database flag.
+
+### Database
+
+```bash
+--database [connection]
+```
+
+By including the database flag you can change the connection details that we use. By default Kittens uses `kittens.db` as the database to connect to. If you change the database, you need to change the database driver or it will not work. 
+
+Kittens supports SQLite, MySQL, and PostgreSQL. The full list of options for database connection details can be found on each's website respectively. Here is an example for each:
+
+##### SQLite
+
+```bash
+--driver sqlite3 --database /etc/kittens.db
+```
+
+##### PostgreSQL
+
+```bash
+--driver postgres --database "user=username dbname=kittens sslmode=disable"
+```
+
+##### MySQL
+
+```bash
+--driver mysql --database "username:password@tcp(host:port)/database"
+```
+
+If `?parseTime=true` is not included in the database string when connecting to a MySQL database, Kittens will automatically add it before trying to connect. It is needed in order for Kittens to work properly.
 
 # Screenshots
 
-![Dashboard](http://i.imgur.com/1vRVYLH.png)
+### Login
 
-![Update Server](http://i.imgur.com/LOyuwyT.png)
+![Login](http://blog.lukevers.com/content/images/2014/Sep/login.png)
+
+### Settings
+
+![Settings](http://blog.lukevers.com/content/images/2014/Sep/settings.png)
+
+### New Bot/Server
+
+![New Bot/Server](http://blog.lukevers.com/content/images/2014/Sep/newserver.png)
+
+### Server Connecting
+
+![Server Connecting](http://blog.lukevers.com/content/images/2014/Sep/server-connecting.png)
+
+### Server Connected
+
+![Server Connected](http://blog.lukevers.com/content/images/2014/Sep/server-connected.png)
+
+### Home
+
+![Home](http://blog.lukevers.com/content/images/2014/Sep/home.png)
