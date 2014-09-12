@@ -3,6 +3,7 @@ package main
 import (
 	irc "github.com/fluffle/goirc/client"
 	"github.com/fluffle/goirc/state"
+	"strconv"
 	"time"
 )
 
@@ -139,7 +140,7 @@ func (s *Server) Connect() {
 
 	// Now we connect
 	if s.Enabled {
-		if err := s.Conn.Connect(); err != nil {
+		if err := s.Conn.ConnectTo(s.Network+":"+strconv.Itoa(s.Port)); err != nil {
 			warnf("Error connecting: %s", err)
 			info("Retrying in 30 seconds")
 			time.Sleep(30 * time.Second)
