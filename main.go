@@ -27,7 +27,6 @@ func main() {
 	// Initialize database
 	InitDatabase()
 
-	verb("Loaded configuration file")
 	info("Starting webserver")
 
 	// Web server
