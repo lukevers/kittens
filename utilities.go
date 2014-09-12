@@ -6,6 +6,8 @@ import (
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -114,4 +116,24 @@ func PasswordMatchesHash(password string, hash string) bool {
 // so it's better to have it in once place than in 20 places.
 func RefreshTemplates(req *http.Request) *template.Template {
 	return template.Must(template.New("").Funcs(AddTemplateFunctions(req)).ParseGlob("app/views/*"))
+}
+
+// Clean Sessions is a func that is ran when Kittens is started
+// and removes all the old session data from "app/sessions" because
+// the old sessions are useless since a secret key is randomly
+// generated on start.
+func CleanSessions() {
+	// Find all sessions
+	sessions, err := filepath.Glob("app/sessions/session_*")
+	if err != nil {
+		warnf("Error finding sessions: %s", err)
+	}
+
+	// Loop through sessions and delete
+	for _, s := range sessions {
+		err = os.Remove(s)
+		if err != nil {
+			warnf("Error deleting session: %s", err)
+		}
+	}
 }

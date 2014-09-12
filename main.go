@@ -27,6 +27,9 @@ func main() {
 	// Initialize database
 	InitDatabase()
 
+	// Remove old sessions
+	CleanSessions()
+
 	info("Starting webserver")
 
 	// Web server
