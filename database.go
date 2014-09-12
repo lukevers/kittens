@@ -105,9 +105,9 @@ func InitDatabase() {
 	// need to make a default user.
 	verb("Checking if any users exist")
 	db.FirstOrCreate(&User{
-		Username:  "admin",
-		Password:  HashPassword("admin"),
-		Admin:     true,
-		Twofa:     false,
+		Username: "admin",
+		Password: HashPassword("admin"),
+		Admin:    true,
+		Twofa:    false,
 	}, &User{})
 }

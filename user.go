@@ -33,7 +33,7 @@ type User struct {
 	// user is an administrator or not.
 	Admin bool
 
-	// Twofa (2fa) is a bool that specifies if the 
+	// Twofa (2fa) is a bool that specifies if the
 	// current user is using 2fa or not.
 	Twofa bool
 

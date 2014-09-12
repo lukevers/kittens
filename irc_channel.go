@@ -11,7 +11,7 @@ type IrcUserChannel struct {
 	// Channel
 	Channel string
 
-	// Modes 
+	// Modes
 	Modes string
 
 	// IrcUserId is a foreign key that references the irc user
@@ -27,10 +27,10 @@ type IrcUserChannel struct {
 	LastPartedAt time.Time
 
 	// CreatedAt is a timestamp of when the specific user's channel
-	// was created at. 
+	// was created at.
 	CreatedAt time.Time
 
-	// UpdatedAt is a timestamp of when a specific user's channel 
+	// UpdatedAt is a timestamp of when a specific user's channel
 	// was last updated at.
 	UpdatedAt time.Time
 }

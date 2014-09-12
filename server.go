@@ -85,20 +85,20 @@ func (s *Server) Create() {
 	// Create connection
 	s.Conn = irc.Client(&irc.Config{
 		Me: &state.Nick{
-			Nick: s.Nick,
+			Nick:  s.Nick,
 			Ident: s.Host,
-			Host: s.Host,
-			Name: s.RealName,
+			Host:  s.Host,
+			Name:  s.RealName,
 		},
-		Server: s.Network,
-		Pass: s.Password,
-		SSL: s.Ssl,
-		PingFreq: 30 * time.Second,
-		NewNick: func(s string) string { return s + "_" },
-		Version: "Kittens IRC",
+		Server:      s.Network,
+		Pass:        s.Password,
+		SSL:         s.Ssl,
+		PingFreq:    30 * time.Second,
+		NewNick:     func(s string) string { return s + "_" },
+		Version:     "Kittens IRC",
 		QuitMessage: "bye!",
-		SplitLen: 450,
-		Recover: (*irc.Conn).LogPanic,
+		SplitLen:    450,
+		Recover:     (*irc.Conn).LogPanic,
 	})
 
 	// Add connect handler
@@ -140,7 +140,7 @@ func (s *Server) Connect() {
 
 	// Now we connect
 	if s.Enabled {
-		if err := s.Conn.ConnectTo(s.Network+":"+strconv.Itoa(s.Port)); err != nil {
+		if err := s.Conn.ConnectTo(s.Network + ":" + strconv.Itoa(s.Port)); err != nil {
 			warnf("Error connecting: %s", err)
 			info("Retrying in 30 seconds")
 			time.Sleep(30 * time.Second)

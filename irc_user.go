@@ -22,5 +22,4 @@ type IrcUser struct {
 	// UpdatedAt is a timestamp of when the specific channel was
 	// last updated at.
 	UpdatedAt time.Time
-
 }

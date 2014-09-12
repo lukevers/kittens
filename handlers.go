@@ -1,8 +1,8 @@
 package main
 
 import (
-	"crypto/rand"
 	"code.google.com/p/rsc/qr"
+	"crypto/rand"
 	"encoding/base32"
 	"encoding/base64"
 	"github.com/dgryski/dgoogauth"
@@ -96,8 +96,8 @@ func HandleLoginForm2FA(w http.ResponseWriter, req *http.Request) {
 
 		// Configure token
 		otpc := &dgoogauth.OTPConfig{
-			Secret: user.TwofaSecret,
-			WindowSize: 3,
+			Secret:      user.TwofaSecret,
+			WindowSize:  3,
 			HotpCounter: 0,
 		}
 
@@ -121,8 +121,6 @@ func HandleLoginForm2FA(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 }
-
-
 
 // Handle POSTS to "/login" web.
 func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
@@ -691,11 +689,11 @@ func HandleGenerate2FA(w http.ResponseWriter, req *http.Request) {
 			secret := base32.StdEncoding.EncodeToString(sec)
 
 			// Create auth string to be encoded as a QR image
-			// 
+			//
 			// https://code.google.com/p/google-authenticator/wiki/KeyUriFormat
 			// otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
 			//
-			auth_string := "otpauth://totp/KittensIRC?secret="+secret+"&issuer=KittensIRC"
+			auth_string := "otpauth://totp/KittensIRC?secret=" + secret + "&issuer=KittensIRC"
 
 			// Encode the QR image
 			code, err := qr.Encode(auth_string, qr.L)
@@ -741,8 +739,8 @@ func HandleVerify2FA(w http.ResponseWriter, req *http.Request) {
 
 			// Configure token
 			otpc := &dgoogauth.OTPConfig{
-				Secret: secret.(string),
-				WindowSize: 3,
+				Secret:      secret.(string),
+				WindowSize:  3,
 				HotpCounter: 0,
 			}
 
