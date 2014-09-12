@@ -93,10 +93,27 @@
 						</div>
 					</div>
 
-					<div class="row">
-						<div class="col-xs-12">
+					<div class="lightbox">
+						<div class="inner">
 							<div id="qr">
+								<h2>Two Factor Auth via Google Authenticator</h2>
 								<img src="" id="qrcode">
+								<br/><br/>
+
+								You must use Google Authenticator, Authy, or any other
+								app that supports Google Authenticator. After using the QR code
+								you must enter a token to verify that you wish to enable 2FA on
+								your account.
+
+								<form name="update" method="POST" action="/settings/2fa/verify">
+									<div class="server-info form">
+										<label for="token">Token</label>
+										<input name="token" id="token" type="text"/>
+									</div>
+									<button class="twofa_enable pull-left" id="twofa_verify">Verify</button>
+									<button class="twofa_disable pull-right" id="twofa_cancel">Cancel</button>
+								</form>
+								<br/><br/>
 							</div>
 						</div>
 					</div>

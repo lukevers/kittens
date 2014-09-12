@@ -703,20 +703,106 @@ func HandleGenerate2FA(w http.ResponseWriter, req *http.Request) {
 				warnf("Error encoding qr code: %s", err)
 			}
 
-			// Update user
+			// Set temporary session values until we verify 2fa is set
+			session, _ := store.Get(req, "user")
+			session.Values["secret"] = secret
+			session.Save(req, w)
+
+			// Write base64 encoded QR image
+			w.Write([]byte(base64.StdEncoding.EncodeToString(code.PNG())))
+		}
+	}
+}
+
+// Handles POST AJAX requests to "/settings/2fa/verify" which
+// verifies the first 2FA token.
+func HandleVerify2FA(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		if req.Header.Get("X-Requested-With") != "XMLHttpRequest" {
+			http.Redirect(w, req, "/settings", http.StatusSeeOther)
+		} else {
+			// Get our session
+			session, _ := store.Get(req, "user")
+			secret := session.Values["secret"]
+
+			// Parse our form so we can get values from req.Form
+			err = req.ParseForm()
+			if err != nil {
+				warnf("Error parsing form: %s", err)
+			}
+
+			// Get token from input
+			token := req.Form["token"][0]
+
+			// Get user
 			u := WhoAmI(req)
-			u.Twofa = true
-			u.TwofaSecret = secret
+
+			// Configure token
+			otpc := &dgoogauth.OTPConfig{
+				Secret: secret.(string),
+				WindowSize: 3,
+				HotpCounter: 0,
+			}
+
+			// Validate token
+			val, err := otpc.Authenticate(token)
+			if err != nil {
+				warnf("Error authenticating token: %s", err)
+			}
+
+			if val {
+				// Update user
+				u.Twofa = true
+				u.TwofaSecret = secret.(string)
+
+				// Update user in database
+				var user User
+				db.Table("users").Where("id = ?", u.Id).Find(&user)
+				user.Twofa = true
+				user.TwofaSecret = secret.(string)
+				db.Save(&user)
+
+				// Remove secret from session
+				session.Values["secret"] = ""
+				session.Save(req, w)
+
+				// Return success
+				http.Redirect(w, req, "/settings", http.StatusSeeOther)
+			} else {
+				// Return error
+				http.Error(w, "Wrong token", http.StatusExpectationFailed)
+			}
+		}
+	}
+}
+
+// Handles POST AJAX requests to "/settings/2fa/disable" which
+// disables 2fa for a users account.
+func HandleDisable2FA(w http.ResponseWriter, req *http.Request) {
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		if req.Header.Get("X-Requested-With") != "XMLHttpRequest" {
+			http.Redirect(w, req, "/settings", http.StatusSeeOther)
+		} else {
+			// Get user
+			u := WhoAmI(req)
+
+			// Update user
+			u.Twofa = false
+			u.TwofaSecret = ""
 
 			// Update user in database
 			var user User
 			db.Table("users").Where("id = ?", u.Id).Find(&user)
-			user.Twofa = true
-			user.TwofaSecret = secret
+			user.Twofa = false
+			user.TwofaSecret = ""
 			db.Save(&user)
 
-			// Write base64 encoded QR image
-			w.Write([]byte(base64.StdEncoding.EncodeToString(code.PNG())))
+			// Return success
+			http.Redirect(w, req, "/settings", http.StatusSeeOther)
 		}
 	}
 }

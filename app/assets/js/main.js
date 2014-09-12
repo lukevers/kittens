@@ -19,6 +19,9 @@ $(function() {
 			break;
 		case 'settings':
 			EnableTwoFa();
+			DisableTwoFa();
+			VerifyTwoFa();
+			CancelTwoFa();
 			break;
 		default:
 			break;

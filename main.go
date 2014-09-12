@@ -67,6 +67,15 @@ func main() {
 	// that generates a QR code for Two Factor Auth.
 	r.HandleFunc("/settings/2fa/generate", HandleGenerate2FA).Methods("GET")
 
+	// Handles POST requests for "/settings/2fa/verify" which checks to
+	// see if a 2FA token is correct. If it is, then we remove the temp
+	// secret key from the session and add it to the database.
+	r.HandleFunc("/settings/2fa/verify", HandleVerify2FA).Methods("POST")
+
+	// Handles POST requests for "/settings/2fa/disable" which disables
+	// 2FA for the users account.
+	r.HandleFunc("/settings/2fa/disable", HandleDisable2FA).Methods("POST")
+
 	// Handles GET requests for "/server/new" which is a page where a
 	// user can add a new server.
 	r.HandleFunc("/server/new", HandleNew).Methods("GET")
