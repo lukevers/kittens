@@ -507,8 +507,6 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 				warnf("Error parsing enabled from string to bool: %s", err)
 			}
 
-			info(server.Id)
-
 			// Get server from database to prepare to update enabled
 			var s Server
 			db.Table("servers").Where("id = ?", server.Id).Find(&s)
