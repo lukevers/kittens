@@ -71,6 +71,11 @@ func TotalServers(req *http.Request) string {
 	}
 }
 
+// Template func that checks if the current user is an admin
+func IsAdmin(req *http.Request) bool {
+	return WhoAmI(req).Admin
+}
+
 // Add func to templates
 func AddTemplateFunctions(req *http.Request) template.FuncMap {
 	return template.FuncMap{
@@ -78,5 +83,6 @@ func AddTemplateFunctions(req *http.Request) template.FuncMap {
 		"TotalServers":     func() string { return TotalServers(req) },
 		"ConnectedServers": func() string { return ConnectedServers(req) },
 		"DisabledServers":  func() string { return DisabledServers(req) },
+		"IsAdmin":          func() bool { return IsAdmin(req) },
 	}
 }
