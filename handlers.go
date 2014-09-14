@@ -828,7 +828,7 @@ func HandleUsers(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Handle "/users/new" web
+// Handle "/users/new" web POSTs
 func HandleNewUser(w http.ResponseWriter, req *http.Request) {
 	if *debugFlag {
 		templates = RefreshTemplates(req)
