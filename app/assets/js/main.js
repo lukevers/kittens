@@ -25,6 +25,7 @@ $(function() {
 			break;
 		case 'users':
 			ChangeUserAdminSetting();
+			FakeCheckboxs();
 			break;
 		default:
 			break;

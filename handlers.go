@@ -8,6 +8,7 @@ import (
 	"github.com/dgryski/dgoogauth"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -820,9 +821,77 @@ func HandleUsers(w http.ResponseWriter, req *http.Request) {
 
 		// Check if user is admin
 		if !user.Admin {
-			http.Redirect(w, req, "/login", http.StatusSeeOther)
+			http.Redirect(w, req, "/", http.StatusSeeOther)
 		} else {
 			templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "users", &users)
 		}
 	}
 }
+
+// Handle "/users/new" web
+func HandleNewUser(w http.ResponseWriter, req *http.Request) {
+	if *debugFlag {
+		templates = RefreshTemplates(req)
+	}
+
+	// Check if logged in
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Get the user
+		user := WhoAmI(req)
+
+		// Check if user is admin
+		if !user.Admin {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+		} else {
+			// Parse our form so we can get values from req.Form
+			err = req.ParseForm()
+			if err != nil {
+				warnf("Error parsing form: %s", err)
+			}
+
+			// Parse admin from string to bool
+			admin, err := strconv.ParseBool(req.Form["admin"][0])
+			if err != nil {
+				warnf("Error parsing admin from string to bool: %s", err)
+			}
+
+			// Check if username is set
+			username := strings.Trim(req.Form["username"][0], " ")
+			password := strings.Trim(req.Form["password"][0], " ")
+			if username == "" {
+				// Redirect back to "/users"
+				http.Redirect(w, req, "/users", http.StatusSeeOther)
+			} else {
+				// Check if password is set
+				if password == "" {
+					// Redirect back to "/users"
+					http.Redirect(w, req, "/users", http.StatusSeeOther)
+				} else {
+					// Create user
+					newuser := User{
+						Username:    username,
+						Password:    HashPassword(password),
+						Admin:       admin,
+						Twofa:       false,
+						TwofaSecret: "",
+					}
+
+					// Insert new user into database
+					db.Create(&newuser)
+
+					// Save new user
+					db.Save(&newuser)
+
+					// Update the users array
+					users = append(users, &newuser)
+
+					// Redirect back to "/users" when we're done here
+					http.Redirect(w, req, "/users", http.StatusSeeOther)
+				}
+			}
+		}
+	}
+}
+
