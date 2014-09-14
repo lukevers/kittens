@@ -63,6 +63,26 @@ h6 {
 	.lato()
 }
 
+table {
+	&.table {
+		tr {
+			th {
+				font-weight: normal;
+				.lato();
+				background-color: lighten(@white, 100%);
+			}
+
+			&:nth-child(odd) {
+				background-color: @white;
+			}
+
+			&:nth-child(even) {
+				background-color: lighten(@white, 2%);
+			}
+		}
+	}
+}
+
 /*
 |--------------------------------------------------------------------------
 | Content

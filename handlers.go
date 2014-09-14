@@ -804,3 +804,25 @@ func HandleDisable2FA(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 }
+
+// Handle "/users" web
+func HandleUsers(w http.ResponseWriter, req *http.Request) {
+	if *debugFlag {
+		templates = RefreshTemplates(req)
+	}
+
+	// Check if logged in
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Get the user
+		user := WhoAmI(req)
+
+		// Check if user is admin
+		if !user.Admin {
+			http.Redirect(w, req, "/login", http.StatusSeeOther)
+		} else {
+			templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "users", &users)
+		}
+	}
+}

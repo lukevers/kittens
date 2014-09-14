@@ -1,0 +1,78 @@
+{{ define "users" }}
+	{{ template "header" }}
+
+	{{ template "navigation" }}
+
+	<div class="content">
+		<div class="container-fluid max">
+
+			<!-- List Users -->
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Users</h1>
+				</div>
+			</div>
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<tr>
+						<th>Id</th>
+						<th>Username</th>
+						<th><span class="hidden-xs">Administrator</span><span class="visible-xs">Admin</span></th>
+						<th><span class="hidden-xs">Two Factor Auth</span><span class="visible-xs">2FA</span></th>
+					</tr>
+					{{ range . }}
+						<tr>
+							<td>{{ .Id }}</td>
+							<td>{{ .Username }}</td>
+							<td class="switch_admin">{{ .Admin }}</td>
+							<td>{{ .Twofa }}</td>
+						</tr>
+					{{ end }}
+				</table>
+			</div>
+
+			<!-- Create User -->
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Create User</h1>
+				</div>
+			</div>
+
+			<form name="update" method="POST" action="/users/new">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="username">Username</label>
+							<input name="username" id="username" type="text"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="password">Password</label>
+							<input name="password" id="password" type="password"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<input type="submit" id="submit" value="Create User"/>
+					</div>
+				</div>
+
+
+			</form>
+
+		</div>
+	</div>
+
+	{{ template "footer" }}
+{{ end }}
+
