@@ -23,6 +23,9 @@ $(function() {
 			VerifyTwoFa();
 			CancelTwoFa();
 			break;
+		case 'users':
+			ChangeUserAdminSetting();
+			break;
 		default:
 			break;
 	}

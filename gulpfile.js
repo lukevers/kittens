@@ -78,6 +78,7 @@ var js_files = [
 	'channel.js',
 	'server.js',
 	'settings.js',
+	'users.js',
 	'main.js',
 
 	// -- End JS files from assets -- //
