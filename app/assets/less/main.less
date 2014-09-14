@@ -63,21 +63,34 @@ h6 {
 	.lato()
 }
 
-table {
-	&.table {
-		tr {
-			th {
-				font-weight: normal;
-				.lato();
-				background-color: lighten(@white, 100%);
+/*
+|--------------------------------------------------------------------------
+| Tables
+|--------------------------------------------------------------------------
+*/
+
+.table-responsive {
+	table {
+		&.table.table-bordered {
+
+			@media(max-width: 767px) {
+				border-top: hidden;
 			}
 
-			&:nth-child(odd) {
-				background-color: @white;
-			}
+			tr {
+				th {
+					font-weight: normal;
+					.lato();
+					background-color: lighten(@white, 100%);
+				}
 
-			&:nth-child(even) {
-				background-color: lighten(@white, 2%);
+				&:nth-child(odd) {
+					background-color: @white;
+				}
+
+				&:nth-child(even) {
+					background-color: lighten(@white, 2%);
+				}
 			}
 		}
 	}
