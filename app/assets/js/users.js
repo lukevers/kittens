@@ -11,6 +11,33 @@ function ChangeUserAdminSetting()
 			$(this).children().eq(0).stop(true, true).fadeOut(200);
 		}
 	});
+
+	// Switch administrative settings via click
+	$('.switch_admin').bind('click', function() {
+		// POST
+		$.ajax({
+			'url':  '/users/admin',
+			'type': 'POST',
+			data: {id: $(this).data('id')}
+		});
+
+		// Update enable/disable
+		var el = $(this).children().eq(0);
+		if (el.hasClass('disable')) {
+			$(el).removeClass('disable').addClass('enable').text('Enable');
+		} else {
+			$(el).removeClass('enable').addClass('disable').text('Disable');
+		}
+
+		// Update check/times
+		el = $(this).children().eq(1);
+		if (el.hasClass('fa-check')) {
+			$(el).removeClass('fa-check').addClass('fa-times');
+		} else {
+			$(el).removeClass('fa-times').addClass('fa-check');
+		}
+
+	});
 }
 
 // Fake Checkboxes is a function that's used instead of

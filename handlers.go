@@ -894,3 +894,49 @@ func HandleNewUser(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 }
+
+// Handle POSTs to "/user/admin" which switches a users administrative
+// settings.
+func HandleUserAdminSwitch(w http.ResponseWriter, req *http.Request) {
+	if *debugFlag {
+		templates = RefreshTemplates(req)
+	}
+
+	// Check if logged in
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Check if user is admin
+		if !WhoAmI(req).Admin {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+		} else {
+			// Parse our form so we can get values from req.Form
+			err = req.ParseForm()
+			if err != nil {
+				warnf("Error parsing form: %s", err)
+			}
+
+			// Get the user we're switching admin values for
+			id, err := strconv.ParseUint(req.Form["id"][0], 10, 16)
+			if err != nil {
+				warnf("Error converting id: %s", err)
+			}
+
+			// Update in database
+			var user User
+			db.Table("users").Where("id = ?", id).First(&user)
+			user.Admin = !user.Admin
+			db.Save(&user)
+
+			// Update in memory
+			for _, v := range users {
+				if id == v.Id {
+					v.Admin = !v.Admin
+				}
+			}
+
+			// Return success
+			http.Redirect(w, req, "/users", http.StatusSeeOther)
+		}
+	}
+}
