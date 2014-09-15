@@ -30,12 +30,19 @@
 							<td class="switch_admin" data-id="{{ .Id }}">
 								{{ if .Admin }}
 									<div class="disable">Disable</div>
+									<i class="fa fa-check"></i>
 								{{ else }}
 									<div class="enable">Enable</div>
+									<i class="fa fa-times"></i>
 								{{ end }}
-								{{ .Admin }}
 							</td>
-							<td>{{ .Twofa }}</td>
+							<td>
+								{{ if .Twofa }}
+									<i class="fa fa-check"></i>
+								{{ else }}
+									<i class="fa fa-times"></i>
+								{{ end }}
+							</td>
 							<td><span data-livestamp="{{ UnixTime .CreatedAt }}"></span> ago</td>
 						</tr>
 					{{ end }}
