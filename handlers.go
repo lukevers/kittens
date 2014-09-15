@@ -894,4 +894,3 @@ func HandleNewUser(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 }
-

@@ -21,6 +21,7 @@
 						<th>Username</th>
 						<th><span class="hidden-xs">Administrator</span><span class="visible-xs">Admin</span></th>
 						<th><span class="hidden-xs">Two Factor Auth</span><span class="visible-xs">2FA</span></th>
+						<th>Created</th>
 					</tr>
 					{{ range . }}
 						<tr>
@@ -35,6 +36,7 @@
 								{{ .Admin }}
 							</td>
 							<td>{{ .Twofa }}</td>
+							<td><span data-livestamp="{{ UnixTime .CreatedAt }}"></span> ago</td>
 						</tr>
 					{{ end }}
 				</table>
