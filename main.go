@@ -85,6 +85,10 @@ func main() {
 	// new users can be added.
 	r.HandleFunc("/users/new", HandleNewUser).Methods("POST")
 
+	// Handles POST requests for "/users/delete" which is how users
+	// can be deleted.
+	r.HandleFunc("/users/delete", HandleUserDelete).Methods("POST")
+
 	// Handles POST requests for "/users/admin" which is a form where
 	// administrators can promote/demote users.
 	r.HandleFunc("/users/admin", HandleUserAdminSwitch).Methods("POST")

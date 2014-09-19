@@ -940,3 +940,44 @@ func HandleUserAdminSwitch(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 }
+
+// Handle POSTs to "/user/delete" which deletes a user completely
+func HandleUserDelete(w http.ResponseWriter, req *http.Request) {
+	if *debugFlag {
+		templates = RefreshTemplates(req)
+	}
+
+	// Check if logged in
+	if !IsLoggedIn(req) {
+		http.Redirect(w, req, "/login", http.StatusSeeOther)
+	} else {
+		// Check if user is admin
+		if !WhoAmI(req).Admin {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+		} else {
+			// Parse our form so we can get values from req.Form
+			err = req.ParseForm()
+			if err != nil {
+				warnf("Error parsing form: %s", err)
+			}
+
+			// Get the user we're switching admin values for
+			id, err := strconv.ParseUint(req.Form["id"][0], 10, 16)
+			if err != nil {
+				warnf("Error converting id: %s", err)
+			}
+
+			// Delete 
+
+			// Delete user from database
+			db.Unscoped().Table("users").Where("id = ?", id).Delete(&User{})
+
+			// Delete from memory
+			for i, v := range users {
+				if id == v.Id {
+					users = append(users[:i], users[i+1:]...)
+				}
+			}
+		}
+	}
+}

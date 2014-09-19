@@ -51,13 +51,15 @@
 
 			<!-- Create User -->
 
+			<br/><hr>
+
 			<div class="row">
 				<div class="col-xs-12">
 					<h1>Create User</h1>
 				</div>
 			</div>
 
-			<form name="update" method="POST" action="/users/new">
+			<form name="create" method="POST" action="/users/new">
 
 				<div class="row">
 					<div class="col-xs-12">
@@ -93,6 +95,44 @@
 					</div>
 				</div>
 
+			</form>
+
+			<!-- Delete User -->
+
+			<br/><hr>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>Delete User</h1>
+				</div>
+			</div>
+
+			<form name="delete" method="POST" action="/users/delete">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="username">Username</label>
+							<input name="username" id="username" type="text"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="server-info form">
+							<label for="admin">Are&nbsp;You&nbsp;Sure?</label>
+							<i class="fa fa-times checkbox" data-for="admin"></i>
+							<input name="admin" class="hidden" id="admin" type="text" value="false">
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<input type="submit" id="submit" value="Delete User"/>
+					</div>
+				</div>
 
 			</form>
 
