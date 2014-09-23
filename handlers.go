@@ -18,7 +18,7 @@ func HandleRoot(w http.ResponseWriter, req *http.Request) {
 		templates = RefreshTemplates(req)
 	}
 
-	if IsLoggedIn(req) {
+	if IsLoggedIn(w, req) {
 		templates.Funcs(AddTemplateFunctions(req)).ExecuteTemplate(w, "index", WhoAmI(req))
 	} else {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
@@ -45,7 +45,7 @@ func HandleLogin(w http.ResponseWriter, req *http.Request) {
 		templates = RefreshTemplates(req)
 	}
 
-	if IsLoggedIn(req) {
+	if IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	} else {
 		// Check if we have been partly authenticated yet
@@ -64,7 +64,7 @@ func HandleLogin2FA(w http.ResponseWriter, req *http.Request) {
 		templates = RefreshTemplates(req)
 	}
 
-	if IsLoggedIn(req) {
+	if IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	} else {
 		session, _ := store.Get(req, "user")
@@ -172,7 +172,7 @@ func HandleLoginForm(w http.ResponseWriter, req *http.Request) {
 // Handle "/server/{id}" web
 func HandleServer(w http.ResponseWriter, req *http.Request) {
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -199,7 +199,7 @@ func HandleServer(w http.ResponseWriter, req *http.Request) {
 // Handle "/server/{id}/channel/{channel}" web
 func HandleChannel(w http.ResponseWriter, req *http.Request) {
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -244,7 +244,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 // Handle "/server/{id}/channel/" web
 func HandleChannelRedirect(w http.ResponseWriter, req *http.Request) {
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -273,7 +273,7 @@ func HandleChannelRedirect(w http.ResponseWriter, req *http.Request) {
 // the live bot.
 func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -322,7 +322,7 @@ func HandleJoinChannel(w http.ResponseWriter, req *http.Request) {
 // the live bot.
 func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -368,7 +368,7 @@ func HandlePartChannel(w http.ResponseWriter, req *http.Request) {
 // Handle POST requests to "/server/{id}" which are server update
 // requests. From here we also want to update the live bot.
 func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -481,7 +481,7 @@ func HandleUpdateServer(w http.ResponseWriter, req *http.Request) {
 // or disabled, and if the bool we are given is true or false.
 func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get server from request
@@ -533,7 +533,7 @@ func HandleEnableServer(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/server/new" web
 func HandleNew(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Refresh the templates
@@ -549,7 +549,7 @@ func HandleNew(w http.ResponseWriter, req *http.Request) {
 // Handle POSTs to "/server/new" which occurs when a user adds
 // a new server.
 func HandleAddNew(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Parse our form so we can get values from req.Form
@@ -615,7 +615,7 @@ func HandleAddNew(w http.ResponseWriter, req *http.Request) {
 
 // Handle "/settings" web
 func HandleSettings(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Refresh the templates
@@ -631,7 +631,7 @@ func HandleSettings(w http.ResponseWriter, req *http.Request) {
 // Handles POST requests to "/settings" which is a page that
 // users update their settings at.
 func HandleUpdateSettings(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Parse our form so we can get values from req.Form
@@ -673,7 +673,7 @@ func HandleUpdateSettings(w http.ResponseWriter, req *http.Request) {
 // Handles GET AJAX requests to "/settings/2fa/generate" which
 // generates a QR code for Two Factor Auth.
 func HandleGenerate2FA(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		if req.Header.Get("X-Requested-With") != "XMLHttpRequest" {
@@ -716,7 +716,7 @@ func HandleGenerate2FA(w http.ResponseWriter, req *http.Request) {
 // Handles POST AJAX requests to "/settings/2fa/verify" which
 // verifies the first 2FA token.
 func HandleVerify2FA(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		if req.Header.Get("X-Requested-With") != "XMLHttpRequest" {
@@ -780,7 +780,7 @@ func HandleVerify2FA(w http.ResponseWriter, req *http.Request) {
 // Handles POST AJAX requests to "/settings/2fa/disable" which
 // disables 2fa for a users account.
 func HandleDisable2FA(w http.ResponseWriter, req *http.Request) {
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		if req.Header.Get("X-Requested-With") != "XMLHttpRequest" {
@@ -813,7 +813,7 @@ func HandleUsers(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get the user
@@ -835,7 +835,7 @@ func HandleNewUser(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Get the user
@@ -903,7 +903,7 @@ func HandleUserAdminSwitch(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Check if user is admin
@@ -948,7 +948,7 @@ func HandleUserDelete(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Check if logged in
-	if !IsLoggedIn(req) {
+	if !IsLoggedIn(w, req) {
 		http.Redirect(w, req, "/login", http.StatusSeeOther)
 	} else {
 		// Check if user is admin
