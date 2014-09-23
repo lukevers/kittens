@@ -10,14 +10,11 @@ import (
 )
 
 var (
-	err     error
-	wg      sync.WaitGroup
-	users   []*User
-	servers []*Server
-)
-
-var (
-	templates = template.Must(template.New("").Funcs(AddTemplateFunctions(nil)).ParseGlob("app/views/*"))
+	err       error
+	wg        sync.WaitGroup
+	users     []*User
+	servers   []*Server
+	templates *template.Template
 )
 
 func main() {
@@ -35,6 +32,9 @@ func main() {
 	// Web server routes
 	route = mux.NewRouter()
 	AddRoutes()
+
+	// Initialize templates
+	templates = RefreshTemplates(nil)
 
 	// Get all users
 	db.Find(&users, &User{})
