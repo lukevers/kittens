@@ -961,22 +961,45 @@ func HandleUserDelete(w http.ResponseWriter, req *http.Request) {
 				warnf("Error parsing form: %s", err)
 			}
 
-			// Get the user we're switching admin values for
-			id, err := strconv.ParseUint(req.Form["id"][0], 10, 16)
+			// Parse accept from string to bool
+			accept, err := strconv.ParseBool(req.Form["accept"][0])
 			if err != nil {
-				warnf("Error converting id: %s", err)
+				warnf("Error parsing accept from string to bool: %s", err)
 			}
 
-			// Delete 
-
-			// Delete user from database
-			db.Unscoped().Table("users").Where("id = ?", id).Delete(&User{})
-
-			// Delete from memory
-			for i, v := range users {
-				if id == v.Id {
-					users = append(users[:i], users[i+1:]...)
+			if !accept {
+				http.Redirect(w, req, "/users", http.StatusSeeOther)
+			} else {
+				// Get the user we're switching admin values for
+				username := req.Form["username"][0]
+				var id uint64 = 0
+				for _, u := range users {
+					if u.Username == username {
+						id = u.Id
+					}
 				}
+
+				// Loop through users to find user in memory
+				for i, v := range users {
+					if id == v.Id {
+						// Loop through the servers
+						for _, s := range v.Servers {
+							// Delete channels related to server
+							db.Unscoped().Table("channels").Where("server_id = ?", s.Id).Delete(&Channel{})
+						}
+
+						// Delete servers related to user
+						db.Unscoped().Table("servers").Where("user_id = ?", v.Id).Delete(&Server{})
+
+						// Delete user from memory
+						users = append(users[:i], users[i+1:]...)
+						// Delete user from database
+						db.Unscoped().Table("users").Where("id = ?", id).Delete(&User{})
+					}
+				}
+
+				// Redirect when we're done here
+				http.Redirect(w, req, "/users", http.StatusSeeOther)
 			}
 		}
 	}
