@@ -126,6 +126,31 @@ func (s *Server) Create() {
 			s.Logging(line)
 		})
 
+	// Listen for JOIN 
+	s.Conn.HandleFunc("JOIN",
+		func(conn *irc.Conn, line *irc.Line) {
+			// Create new irc user if it doesn't exist
+			db.FirstOrCreate(&IrcUser{
+				Nickname: line.Nick,
+				Host:     line.Host,
+				ServerId: s.Id,
+			}, )
+
+			// Get irc user
+			var ircuser IrcUser
+			db.Table("irc_users").Where("nickname = ? and host = ?", line.Nick, line.Host).First(&ircuser)
+
+			/*
+			// Create new channel related to irc user if it doesn't exist
+			db.FirstOrCreate(&IrcUserChannel{
+				Channel: nil,
+				Modes: "",
+				IrcUserId: ircuser.Id,
+				LastJoinedAt: time.Now(),
+				LastPartedAt: nil,
+			}, &IrcUserChannel{})*/
+		})
+
 	verbf("Finished creating bot for server %s", s.ServerName)
 
 	// Connect server if enabled
