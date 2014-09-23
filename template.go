@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // Template func that counts connected servers
@@ -71,6 +72,17 @@ func TotalServers(req *http.Request) string {
 	}
 }
 
+// Template func that checks if the current user is an admin
+func IsAdmin(req *http.Request) bool {
+	return WhoAmI(req).Admin
+}
+
+// UnixTime is a func that takes a timestamp and converts it
+// to a unix timestamp
+func UnixTime(time *time.Time) int64 {
+	return time.Unix()
+}
+
 // Add func to templates
 func AddTemplateFunctions(req *http.Request) template.FuncMap {
 	return template.FuncMap{
@@ -78,5 +90,7 @@ func AddTemplateFunctions(req *http.Request) template.FuncMap {
 		"TotalServers":     func() string { return TotalServers(req) },
 		"ConnectedServers": func() string { return ConnectedServers(req) },
 		"DisabledServers":  func() string { return DisabledServers(req) },
+		"IsAdmin":          func() bool { return IsAdmin(req) },
+		"UnixTime":         func(time *time.Time) int64 { return UnixTime(time) },
 	}
 }

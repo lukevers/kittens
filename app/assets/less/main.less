@@ -18,6 +18,7 @@
 @import "login.less";
 @import "servers.less";
 @import "settings.less";
+@import "users.less";
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,46 @@ h5,
 h6 {
 	font-weight: normal;
 	.lato()
+}
+
+/*
+|--------------------------------------------------------------------------
+| Tables
+|--------------------------------------------------------------------------
+*/
+
+.table-responsive {
+	table {
+		margin-bottom: 0;
+
+		&.table.table-bordered {
+
+			@media(max-width: @mobile) {
+				border-top: hidden;
+			}
+
+			tr {
+				th {
+					font-weight: normal;
+					.lato();
+					background-color: lighten(@white, 100%);
+				}
+
+				td {
+					position: relative;
+					text-align: center;
+				}
+
+				&:nth-child(odd) {
+					background-color: @white;
+				}
+
+				&:nth-child(even) {
+					background-color: lighten(@white, 2%);
+				}
+			}
+		}
+	}
 }
 
 /*

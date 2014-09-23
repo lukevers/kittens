@@ -53,7 +53,7 @@ func GetChannelFromRequest(s *Server, req *http.Request) (*Channel, error) {
 // Is Logged In checks if the user has a session or not.
 // If the user does not have a session that matches with
 // what we have, then the user is not logged in.
-func IsLoggedIn(req *http.Request) bool {
+func IsLoggedIn(w http.ResponseWriter, req *http.Request) bool {
 	// Check for session
 	session, _ := store.Get(req, "user")
 	if session.IsNew {
@@ -62,15 +62,27 @@ func IsLoggedIn(req *http.Request) bool {
 
 	// Check if user has Twofa
 	user := WhoAmI(req)
-	if user.Twofa {
-		// Check if temporary session
-		if session.Values["temp"] == "true" {
-			return false
+	if user == nil {
+		// If user is nil then the user probably deleted their own user.
+		// If we get here, we should remove the session immediately
+		http.SetCookie(w, &http.Cookie{
+			Name:   "user",
+			Value:  "",
+			Path:   "/",
+			MaxAge: -1,
+		})
+		return false
+	} else {
+		if user.Twofa {
+			// Check if temporary session
+			if session.Values["temp"] == "true" {
+				return false
+			} else {
+				return true
+			}
 		} else {
 			return true
 		}
-	} else {
-		return true
 	}
 }
 

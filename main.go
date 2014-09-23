@@ -78,6 +78,21 @@ func main() {
 	// 2FA for the users account.
 	r.HandleFunc("/settings/2fa/disable", HandleDisable2FA).Methods("POST")
 
+	// Handles GET requests for "/users" which is an admin-only page
+	r.HandleFunc("/users", HandleUsers).Methods("GET")
+
+	// Handles POST requests for "/users/new" which is a form where
+	// new users can be added.
+	r.HandleFunc("/users/new", HandleNewUser).Methods("POST")
+
+	// Handles POST requests for "/users/delete" which is how users
+	// can be deleted.
+	r.HandleFunc("/users/delete", HandleUserDelete).Methods("POST")
+
+	// Handles POST requests for "/users/admin" which is a form where
+	// administrators can promote/demote users.
+	r.HandleFunc("/users/admin", HandleUserAdminSwitch).Methods("POST")
+
 	// Handles GET requests for "/server/new" which is a page where a
 	// user can add a new server.
 	r.HandleFunc("/server/new", HandleNew).Methods("GET")
