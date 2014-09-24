@@ -988,6 +988,9 @@ func HandleUserDelete(w http.ResponseWriter, req *http.Request) {
 							db.Unscoped().Table("channels").Where("server_id = ?", s.Id).Delete(&Channel{})
 						}
 
+						// TODO delete IrcUser related
+						// TODO delete IrcUserChannel related
+
 						// Delete servers related to user
 						db.Unscoped().Table("servers").Where("user_id = ?", v.Id).Delete(&Server{})
 

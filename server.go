@@ -130,25 +130,24 @@ func (s *Server) Create() {
 	s.Conn.HandleFunc("JOIN",
 		func(conn *irc.Conn, line *irc.Line) {
 			// Create new irc user if it doesn't exist
-			db.FirstOrCreate(&IrcUser{
+			db.Table("irc_users").Where("nickname = ? and host = ?", line.Nick, line.Host).Attrs(IrcUser{
 				Nickname: line.Nick,
 				Host:     line.Host,
 				ServerId: s.Id,
-			}, )
+			}).FirstOrCreate(&IrcUser{})
 
 			// Get irc user
 			var ircuser IrcUser
 			db.Table("irc_users").Where("nickname = ? and host = ?", line.Nick, line.Host).First(&ircuser)
 
-			/*
 			// Create new channel related to irc user if it doesn't exist
-			db.FirstOrCreate(&IrcUserChannel{
-				Channel: nil,
-				Modes: "",
+			db.Table("irc_user_channels").Where("channel = ? and irc_user_id = ?", line.Args[0], ircuser.Id).Attrs(IrcUserChannel{
+				Channel: line.Args[0],
 				IrcUserId: ircuser.Id,
+				Modes: "",
 				LastJoinedAt: time.Now(),
-				LastPartedAt: nil,
-			}, &IrcUserChannel{})*/
+				LastPartedAt: time.Now(),
+			}).FirstOrCreate(&IrcUserChannel{})
 		})
 
 	verbf("Finished creating bot for server %s", s.ServerName)
