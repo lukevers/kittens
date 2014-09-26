@@ -122,24 +122,40 @@ If `?parseTime=true` is not included in the database string when connecting to a
 
 ### Login
 
-![Login](http://blog.lukevers.com/content/images/2014/Sep/login.png)
+![Login](http://blog.lukevers.com/content/images/2014/Sep/login-2.png)
 
-### Settings
+### Login 2FA
 
-![Settings](http://blog.lukevers.com/content/images/2014/Sep/settings.png)
-
-### New Bot/Server
-
-![New Bot/Server](http://blog.lukevers.com/content/images/2014/Sep/newserver.png)
-
-### Server Connecting
-
-![Server Connecting](http://blog.lukevers.com/content/images/2014/Sep/server-connecting.png)
-
-### Server Connected
-
-![Server Connected](http://blog.lukevers.com/content/images/2014/Sep/server-connected.png)
+![Login 2FA](http://blog.lukevers.com/content/images/2014/Sep/2fa-1.png)
 
 ### Home
 
-![Home](http://blog.lukevers.com/content/images/2014/Sep/home.png)
+![Home](http://blog.lukevers.com/content/images/2014/Sep/home-1.png)
+
+### New Bot/Server
+
+![New Bot/Server](http://blog.lukevers.com/content/images/2014/Sep/newserver-1.png)
+
+### Server Disabled
+
+![Server Disabled](http://blog.lukevers.com/content/images/2014/Sep/serverdisabled.png)
+
+### Server Connecting
+
+![Server Connecting](http://blog.lukevers.com/content/images/2014/Sep/serverconnecting.png)
+
+### Server Connected
+
+![Server Connected](http://blog.lukevers.com/content/images/2014/Sep/serverconnected.png)
+
+### Settings
+
+![Settings](http://blog.lukevers.com/content/images/2014/Sep/settings-1.png)
+
+### Settings 2FA
+
+![Settings 2FA](http://blog.lukevers.com/content/images/2014/Sep/settings2fa.png)
+
+### Users
+
+![Users](http://blog.lukevers.com/content/images/2014/Sep/users.png)
