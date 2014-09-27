@@ -120,14 +120,14 @@ func (s *Server) Create() {
 		})
 
 	// Listen for messages
-	s.Conn.HandleFunc("PRIVMSG",
+	s.Conn.HandleFunc(irc.PRIVMSG,
 		func(conn *irc.Conn, line *irc.Line) {
 			// Show output of line currently
 			s.Logging(line)
 		})
 
 	// Listen for JOIN 
-	s.Conn.HandleFunc("JOIN",
+	s.Conn.HandleFunc(irc.JOIN,
 		func(conn *irc.Conn, line *irc.Line) {
 			// Create new irc user if it doesn't exist
 			db.Table("irc_users").Where("nickname = ? and host = ?", line.Nick, line.Host).Attrs(IrcUser{
@@ -148,6 +148,14 @@ func (s *Server) Create() {
 				LastJoinedAt: time.Now(),
 				LastPartedAt: time.Now(),
 			}).FirstOrCreate(&IrcUserChannel{})
+
+			// Get the irc user channel
+			var iuc IrcUserChannel
+			db.Table("irc_user_channels").Where("channel = ? and irc_user_id = ?", line.Args[0], ircuser.Id).First(&iuc)
+
+			// Set the LastJoinedAt time
+			iuc.LastJoinedAt = time.Now()
+			db.Save(&iuc)
 		})
 
 	verbf("Finished creating bot for server %s", s.ServerName)
