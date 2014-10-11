@@ -101,6 +101,9 @@ func (s *Server) Create() {
 		Recover:     (*irc.Conn).LogPanic,
 	})
 
+	// Enable state tracking
+	s.Conn.EnableStateTracking()
+
 	// Add connect handler
 	s.Conn.HandleFunc(irc.CONNECTED,
 		func(conn *irc.Conn, line *irc.Line) {
