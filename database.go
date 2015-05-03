@@ -98,7 +98,7 @@ func InitDatabase() {
 	//              └─── IrcUserChannel (#channel) 1:1
 	//
 
-	db.AutoMigrate(User{}, Server{}, Channel{}, IrcUser{}, IrcUserChannel{})
+	db.AutoMigrate(&User{}, &Server{}, &Channel{}, &IrcUser{}, &IrcUserChannel{})
 
 	// Check to see if we have any users created.
 	// If we don't have any users at all then we
