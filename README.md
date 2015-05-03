@@ -6,10 +6,11 @@ Kittens is an IRC bot written in Go. I just recently started rewritting kittens 
 
 #### 0. Before You Build
 
-Make sure you have [Go](http://golang.org/) installed. In order to compile the LESS/JS the preferred way is to use [Gulp](http://gulpjs.com/). To install Gulp you need to have [NPM](https://www.npmjs.org/) installed. Once you have NPM installed you can install Gulp via NPM:
+Make sure you have [Go](http://golang.org/) installed. In order to compile the LESS/JS the preferred way is to use [Bower](http://bower.io/), and [Gulp](http://gulpjs.com/). To install Gulp you need to have [NPM](https://www.npmjs.org/) installed. Once you have NPM installed you can install Gulp via NPM:
 
 ```bash
 npm install -g gulp
+npm install -g bower
 ```
 
 Once everything is installed make sure you have set your [$GOPATH](http://golang.org/doc/code.html#GOPATH) properly, or it will prove difficult to build.
@@ -26,9 +27,11 @@ go get
 
 #### 2. Build LESS/JS
 
-Before we can run Gulp we need to make sure we install all of the necessary modules:
+Before we can run Gulp we need to make sure we install all of the necessary modules and assets:
+
 ```bash
-npm update
+npm install
+bower install
 ```
 
 Building our webserver CSS/JS files is easy with Gulp.
@@ -54,6 +57,7 @@ go build
 ```bash
 --debug
 ```
+
 By including the debug flag, Kittens will do the following:
 
 * Recompile webserver templates on each page load
