@@ -218,6 +218,16 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 				warnf("Error parsing channel request: %s", err)
 			}
 
+			// Get list of IrcUsers related to this server
+			//var ircusers *IrcUser
+			//db.Table("irc_users").Where("server_id = ?", server.Id).Find(&ircusers)
+			//verb(ircusers)
+
+			//verb(server.Id)
+			//var ircusers interface{}
+			//v := db.Table("irc_users").Where("server_id = ?", server.Id).Find(&ircusers)
+			//verb(&v)
+
 			// Refresh the templates
 			if *debugFlag {
 				templates = RefreshTemplates(req)
@@ -230,6 +240,7 @@ func HandleChannel(w http.ResponseWriter, req *http.Request) {
 			data := struct {
 				Server  *Server
 				Channel *Channel
+				//IrcUser *IrcUser
 			}{
 				server,
 				channel,
@@ -987,6 +998,9 @@ func HandleUserDelete(w http.ResponseWriter, req *http.Request) {
 							// Delete channels related to server
 							db.Unscoped().Table("channels").Where("server_id = ?", s.Id).Delete(&Channel{})
 						}
+
+						// TODO delete IrcUser related
+						// TODO delete IrcUserChannel related
 
 						// Delete servers related to user
 						db.Unscoped().Table("servers").Where("user_id = ?", v.Id).Delete(&Server{})

@@ -16,8 +16,17 @@ kittens
 \#*
 .\#*
 
+# Folders
+bower_components
 node_modules
 logs
 
+# Fonts
+FontAwesome.*
+fontawesome-webfont.*
+
 # Sessions
 app/sessions/session_*
+
+# Bootstrap css
+app/assets/css/bootstrap.css

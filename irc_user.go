@@ -11,6 +11,10 @@ type IrcUser struct {
 	// Nickname is the name that the irc user goes by.
 	Nickname string
 
+	// Hostm is the host which the irc user identifies with.
+	// The host is used with the nickname to 
+	Host string
+
 	// ServerId is a foreign key that references the server that
 	// this user is on.
 	ServerId uint64
