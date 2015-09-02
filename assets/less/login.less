@@ -1,0 +1,24 @@
+body.login {
+    background-color: @brand-dark;
+    .placeholder(@brand-light);
+
+    input {
+        background: lighten(@brand-dark, 5%);
+        border: 0;
+        padding: 10px;
+        margin: 10px auto;
+        width: 100%;
+        max-width: 300px;
+        display: block;
+        color: @brand-light;
+    }
+
+    button.submit {
+        .buttonify(@brand);
+        border: 0;
+        padding: 10px;
+        color: @brand-light;
+        width: 100%;
+        max-width: 300px;
+    }
+}

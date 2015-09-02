@@ -1,0 +1,16 @@
+{{ define "login" }}
+{{ template "header" }}
+<body class="login">
+    <div class="center-wrap">
+        <div class="center">
+            <form id="login-form">
+                <input type="text" placeholder="Username" v-model="username" v-on="keyup: login | key 'enter'">
+                <input type="password" placeholder="Password" v-model="password" v-on="keyup: login | key 'enter'">
+                <button class="submit" v-on="click: login">Login</button>
+            </form>
+        </div>
+    </div>
+    {{ template "scripts" }}
+</body>
+{{ template "footer" }}
+{{ end }}

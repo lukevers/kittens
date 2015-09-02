@@ -3,7 +3,7 @@
 .DS_Store
 
 # Configuration files
-config.json
+.env
 
 # Binaries
 kittens
@@ -17,16 +17,11 @@ kittens
 .\#*
 
 # Folders
-bower_components
-node_modules
-logs
+/bower_components
+/node_modules
+/public/assets/css
+/public/assets/js
 
 # Fonts
 FontAwesome.*
 fontawesome-webfont.*
-
-# Sessions
-app/sessions/session_*
-
-# Bootstrap css
-app/assets/css/bootstrap.css

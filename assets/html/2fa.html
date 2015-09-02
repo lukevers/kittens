@@ -1,0 +1,16 @@
+{{ define "2fa" }}
+{{ template "header" }}
+<body class="login">
+    <div class="center-wrap">
+        <div class="center">
+            <form id="login-form">
+                <input type="text" placeholder="2FA Token" v-model="token" v-on="keyup: login2fa | key 'enter'">
+                <button class="submit" v-on="click: login2fa">Login</button>
+            </form>
+        </div>
+    </div>
+    {{ template "scripts" }}
+</body>
+{{ template "footer" }}
+{{ end }}
+

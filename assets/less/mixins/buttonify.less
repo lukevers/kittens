@@ -1,0 +1,12 @@
+.buttonify(@color) {
+    background-color: @color;
+
+    &:hover {
+        background-color: darken(@color, 3%);
+    }
+
+    &:focus,
+    &:active {
+        background-color: darken(@color, 8%);
+    }
+}

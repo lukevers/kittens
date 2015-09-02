@@ -1,75 +1,38 @@
 package main
 
 import (
-	"github.com/gorilla/securecookie"
-	"github.com/gorilla/sessions"
+	"fmt"
+	"golang.org/x/crypto/bcrypt"
+	"log"
 	"time"
 )
 
-// Session store for users
-var store = sessions.NewFilesystemStore(
-	// Path
-	"app/sessions",
-	// Secret key with strength set to 64
-	[]byte(securecookie.GenerateRandomKey(64)),
-)
-
 type User struct {
-	// ID is an int64 that is a users identification
-	// number.
-	Id uint64
-
-	// Username is a string with max-size set to 255
-	// and is the username that a user will use when
-	// logging in to the web interface.
-	Username string `sql:"size:255;unique"`
-
-	// Password is a string with max-size set to 255
-	// and is the password that a user will use when
-	// logging in to the web interface.
-	Password string `sql:"size:255"`
-
-	// Admin is a bool that specifies if the current
-	// user is an administrator or not.
-	Admin bool
-
-	// Twofa (2fa) is a bool that specifies if the
-	// current user is using 2fa or not.
-	Twofa bool
-
-	// TwofaSecret is a base32 encoded string of the
-	// 2fa secret.
+	Id          uint
+	Username    string `sql:"unique"`
+	Password    string
+	Twofa       bool
 	TwofaSecret string
-
-	// CreatedAt is a timestamp of when the specific
-	// user was created at.
-	CreatedAt time.Time
-
-	// UpdatedAt is a timestamp of when the specific
-	// user was last updated at.
-	UpdatedAt time.Time
-
-	// Servers is a slice of Server structs that define
-	// what servers the user owns
-	Servers []*Server `sql:"-"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
-// Owns Server checks if the given *Server is owned by
-// the current user given.
-func (user *User) OwnsServer(server *Server) bool {
-	// If we go to a server that doesn't exist, we
-	// automatically know we don't own that server
-	if server == nil || user == nil {
-		return false
+func GetUser(by, value interface{}) *User {
+	var user User
+	db.Where(fmt.Sprintf("%s = ?", by), value).First(&user)
+	return &user
+}
+
+func (u User) SetPassword(password string) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Fatal("Could not generate hash from password: ", err)
 	}
 
-	// Check
-	for _, s := range user.Servers {
-		if s.Id == server.Id {
-			return true
-		}
-	}
+	u.Password = string(hash)
+	db.Save(&u)
+}
 
-	// Return false if we never found it
-	return false
+func (u User) AttemptPassword(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) == nil
 }

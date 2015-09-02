@@ -3,20 +3,14 @@
   "version": "0.1.0",
   "homepage": "https://github.com/lukevers/kittens",
   "authors": [
-    "Luke Evers <luke@lukevers.com>"
+    "Luke Evers <kittens@lukevers.com> (https://lukevers.com/)"
   ],
-  "description": "An IRC bot written in Go",
-  "license": "GPLv3",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components"
-  ],
+  "description": "An IRC bot hub",
+  "license": "GPL-3.0",
   "dependencies": {
-    "jquery": "^2.1.1",
-    "bootstrap": "^3.2.0",
-    "livestampjs": "^1.1.2",
-    "moment": "^2.8.3",
-    "font-awesome": "^4.2.0"
+    "font-awesome": "fontawesome#~4.4.0",
+    "jquery": "~2.1.4",
+    "normalize-css": "normalize.css#~3.0.3",
+    "vue": "~0.12.12"
   }
 }
