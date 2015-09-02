@@ -61,6 +61,7 @@ func AddRoutes() {
 	private.Use(Authorized(), Expecting2Fa())
 	{
 		private.GET("/", handleRoot)
+		private.GET("/settings", handleSettings)
 	}
 }
 

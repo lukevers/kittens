@@ -76,3 +76,7 @@ func handleLogout(c *gin.Context) {
 func handleRoot(c *gin.Context) {
 	c.HTML(http.StatusOK, "index", nil)
 }
+
+func handleSettings(c *gin.Context) {
+	c.HTML(http.StatusOK, "settings", nil)
+}
