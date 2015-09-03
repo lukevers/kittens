@@ -57,6 +57,11 @@ func AddRoutes() {
 	router.POST("/login/2fa", Authorized(), handle2faLoginPost)
 	router.GET("/logout", Authorized(), handleLogout)
 
+	if os.Getenv("USERS_CAN_REGISTER") == "true" {
+		router.GET("/register", Guest(), handleRegister)
+		router.POST("/register", Guest(), handleRegisterPost)
+	}
+
 	private := router.Group("/")
 	private.Use(Authorized(), Expecting2Fa())
 	{

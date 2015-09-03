@@ -1,0 +1,20 @@
+{{ define "register" }}
+{{ template "header" }}
+<body class="login">
+    <div class="center-wrap">
+        <div class="center">
+            <form id="login-form">
+                <input type="text" placeholder="Username" v-model="username" v-on="keyup: register | key 'enter'">
+                <input type="password" placeholder="Password" v-model="password" v-on="keyup: register | key 'enter'">
+                <input type="email" placeholder="Email" v-model="email" v-on="keyup: register | key 'enter'">
+                <button class="submit" v-on="click: register">Register</button>
+            </form>
+            <ul class="links">
+                <li><a href="/login">Already have an account?</a></li>
+            </ul>
+        </div>
+    </div>
+    {{ template "scripts" }}
+</body>
+{{ template "footer" }}
+{{ end }}

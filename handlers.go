@@ -5,10 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tommy351/gin-sessions"
 	"net/http"
+	"os"
 )
 
 func handleLogin(c *gin.Context) {
-	c.HTML(http.StatusOK, "login", nil)
+	c.HTML(http.StatusOK, "login", gin.H{
+		"CAN_REGISTER": os.Getenv("USERS_CAN_REGISTER") == "true",
+	})
 }
 
 func handleLoginPost(c *gin.Context) {
@@ -71,6 +74,23 @@ func handleLogout(c *gin.Context) {
 	session.Save()
 
 	c.Redirect(http.StatusFound, "/login")
+}
+
+func handleRegister(c *gin.Context) {
+	c.HTML(http.StatusOK, "register", nil)
+}
+
+func handleRegisterPost(c *gin.Context) {
+	username := c.PostForm("username")
+	//password := c.PostForm("password")
+
+	// We need to make sure this username is not already taken
+	user := GetUser("username", username)
+	if user.Id != 0 {
+		c.AbortWithStatus(http.StatusBadRequest)
+	} else {
+		// TODO
+	}
 }
 
 func handleRoot(c *gin.Context) {

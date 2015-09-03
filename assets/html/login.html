@@ -8,6 +8,11 @@
                 <input type="password" placeholder="Password" v-model="password" v-on="keyup: login | key 'enter'">
                 <button class="submit" v-on="click: login">Login</button>
             </form>
+            <ul class="links">
+                {{ if .CAN_REGISTER }}
+                <li><a href="/register">Need an account?</a></li>
+                {{ end }}
+            </ul>
         </div>
     </div>
     {{ template "scripts" }}

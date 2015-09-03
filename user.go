@@ -11,6 +11,7 @@ type User struct {
 	Id          uint
 	Username    string `sql:"unique"`
 	Password    string
+	Email       string `sql:"unique"`
 	Twofa       bool
 	TwofaSecret string
 	CreatedAt   time.Time
