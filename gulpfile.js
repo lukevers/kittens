@@ -30,6 +30,7 @@ gulp.task('js', function() {
 gulp.task('jslibs', function() {
     return gulp.src([
             'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/vue/dist/vue.min.js',
         ])
         .pipe(concat('libs.js'))

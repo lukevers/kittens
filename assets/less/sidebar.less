@@ -6,10 +6,12 @@
     height: 100%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    z-index: 2;
 
     ul {
         margin: 0;
         padding: 0;
+        font-size: 0;
 
         li {
             list-style: none;
@@ -31,6 +33,30 @@
                     line-height: 20px;
                     .buttonify(@brand);
                 }
+            }
+        }
+    }
+
+    @media(max-width: @screen-xs) {
+        height: auto;
+        width: 100%;
+
+        ul li {
+            display: inline-block;
+
+            &:first-child {
+                a {
+                    font-size: 15px;
+                    line-height: 15px;
+                }
+            }
+
+            a {
+                border-bottom: none;
+                border-right: 1px solid darken(@brand-dark, 3%);
+                padding: 10px;
+                font-size: 15px;
+                line-height: 15px;
             }
         }
     }

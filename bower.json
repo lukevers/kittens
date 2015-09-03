@@ -8,8 +8,8 @@
   "description": "An IRC bot hub",
   "license": "GPL-3.0",
   "dependencies": {
+    "bootstrap": "~3.3.5",
     "font-awesome": "fontawesome#~4.4.0",
-    "jquery": "~2.1.4",
     "normalize-css": "normalize.css#~3.0.3",
     "vue": "~0.12.12"
   }
