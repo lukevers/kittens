@@ -7,7 +7,7 @@
     "url": "git+https://github.com/lukevers/kittens.git"
   },
   "author": "Luke Evers <kittens@lukevers.com> (https://lukevers.com/)",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lukevers/kittens/issues"
   },

@@ -6,7 +6,7 @@
     "Luke Evers <kittens@lukevers.com> (https://lukevers.com/)"
   ],
   "description": "An IRC bot hub",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "dependencies": {
     "bootstrap": "~3.3.5",
     "font-awesome": "fontawesome#~4.4.0",
