@@ -28,6 +28,19 @@ func Authorized() gin.HandlerFunc {
 			c.Abort()
 		}
 
+		// We need to make sure this user is actually logged in.
+		id := session.Get("user_id")
+		user := GetUser("id", id)
+		// If the user id does not match, then we could not find the correct
+		// user that they are claiming to be. A common example of when this
+		// could happen is if someone manually updates the database.
+		if user.Id != id {
+			session.Clear()
+			session.Save()
+			c.Redirect(http.StatusFound, "/login")
+			c.Abort()
+		}
+
 		c.Next()
 	}
 }
