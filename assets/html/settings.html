@@ -17,15 +17,15 @@
 
                     <div class="form-row">
                         <label for="username">Username</label>
-                        <input type="text" name="username" v-model="username" placeholder="Username" value="[[ .user.Username ]]">
+                        <input type="text" v-model="username" placeholder="Username" value="[[ .user.Username ]]">
                     </div>
                     <div class="form-row">
                         <label for="email">Email</label>
-                        <input type="email" name="email" v-model="email" placeholder="Email" value="[[ .user.Email ]]">
+                        <input type="email" v-model="email" placeholder="Email" value="[[ .user.Email ]]">
                     </div>
                     <div class="form-row">
                         <label for="password">New&nbsp;Password</label>
-                        <input type="password" name="password" v-model="password" placeholder="Password">
+                        <input type="password" v-model="password" placeholder="Password">
                     </div>
 
                     <button class="submit" v-on="click: update">Update Info</button>
