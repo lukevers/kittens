@@ -3,8 +3,9 @@ var login = new Vue({
     data: {
         username: '',
         password: '',
-        token: '',
-        lock: false,
+        token:    '',
+        lock:     false,
+        errors:   [],
     },
     methods: {
         login: function(e) {
@@ -27,6 +28,21 @@ var login = new Vue({
                 }
 
                 login.lock = false;
+                login.$set('errors', []);
+                if (res.status !== 200) {
+                    var error = res.responseJSON;
+                    if (!ansuz.isArray(error)) {
+                        // We probably are only ever going to recieve one error here,
+                        // but just in case we change this in the future, let's take
+                        // an extra step now and convert this into an array if it's
+                        // not already.
+                        error = [error];
+                    }
+
+                    error.map(function(err) {
+                        login.errors.push(err);
+                    });
+                }
             });
         },
 

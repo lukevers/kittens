@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/lukevers/kittens#readme",
   "dependencies": {
+    "ansuz": "0.0.8",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-less": "^3.0.3",

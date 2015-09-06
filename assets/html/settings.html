@@ -1,15 +1,51 @@
-{{ define "settings" }}
-{{ template "header" }}
-<body class="index">
-    {{ template "sidebar" }}
+[[ define "settings" ]]
+[[ template "header" ]]
+<body class="settings" id="settings-page">
+    [[ template "sidebar" ]]
     <div id="main-content" class="container-fluid">
         <div class="row">
             <div class="col-xs-12">
-                hey
+                <h1>Hey, {{username}}!</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <form class="form">
+                    <ul class="errors">
+                        <li v-repeat="errors">{{error}}</li>
+                    </ul>
+
+                    <div class="form-row">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" v-model="username" placeholder="Username" value="[[ .user.Username ]]">
+                    </div>
+                    <div class="form-row">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" v-model="email" placeholder="Email" value="[[ .user.Email ]]">
+                    </div>
+                    <div class="form-row">
+                        <label for="password">New&nbsp;Password</label>
+                        <input type="password" name="password" v-model="password" placeholder="Password">
+                    </div>
+
+                    <button class="submit" v-on="click: update">Update Info</button>
+                </form>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Two Factor Authentication</h2>
+                [[ if .user.Twofa ]]
+                    
+                [[ else ]]
+                    <p>You do not currently have 2FA set up on this account.</p>
+                    <button class="enable" v-on="click: modal2fa">Enable 2FA</button>
+                [[ end ]]
             </div>
         </div>
     </div>
-    {{ template "scripts" }}
+    [[ template "scripts" ]]
 </body>
-{{ template "footer" }}
-{{ end }}
+[[ template "footer" ]]
+[[ end ]]

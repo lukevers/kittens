@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tommy351/gin-csrf"
 	"github.com/tommy351/gin-sessions"
+	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -29,6 +31,14 @@ func InitRouter() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	// Set custom HTML renderer so we can change the delimeters
+	html, err := template.New("").Delims("[[", "]]").ParseGlob("assets/html/*.html")
+	if err != nil {
+		log.Fatal("Could not parse html files: ", err)
+	}
+
+	router.SetHTMLTemplate(html)
+
 	addr := fmt.Sprintf("%s:%s",
 		os.Getenv("WEB_INTERFACE"),
 		os.Getenv("WEB_PORT"))
@@ -41,7 +51,6 @@ func InitRouter() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	router.LoadHTMLGlob("assets/html/*.html")
 	router.Static("/assets", "./public/assets")
 	router.StaticFile("/robots.txt", "./public/robots.txt")
 	router.StaticFile("/favicon.ico", "./public/favicon.ico")
@@ -67,6 +76,7 @@ func AddRoutes() {
 	{
 		private.GET("/", handleRoot)
 		private.GET("/settings", handleSettings)
+		private.POST("/settings", handleSettingsUpdatePost)
 	}
 }
 

@@ -2,6 +2,17 @@ body.login {
     background-color: @brand-dark;
     .placeholder(@brand-light);
 
+    ul.errors {
+        width: 100%;
+        max-width: 300px;
+        margin: auto;
+    }
+
+    .center {
+        background-color: @brand-dark;
+        padding: 10px 0;
+    }
+
     input {
         background: lighten(@brand-dark, 5%);
         border: 0;
@@ -14,10 +25,6 @@ body.login {
     }
 
     button.submit {
-        .buttonify(@brand);
-        border: 0;
-        padding: 10px;
-        color: @brand-light;
         width: 100%;
         max-width: 300px;
     }

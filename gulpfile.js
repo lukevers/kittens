@@ -19,8 +19,9 @@ gulp.task('less', function() {
 
 gulp.task('js', function() {
     return gulp.src([
-            'assets/js/main.js',
             'assets/js/login.js',
+            'assets/js/register.js',
+            'assets/js/settings.js',
         ])
         .pipe(concat('scripts.js'))
         .pipe(uglify())
@@ -32,6 +33,7 @@ gulp.task('jslibs', function() {
             'bower_components/jquery/dist/jquery.min.js',
             'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/vue/dist/vue.min.js',
+            'node_modules/ansuz/ansuz.js',
         ])
         .pipe(concat('libs.js'))
         .pipe(uglify())

@@ -45,6 +45,11 @@ func InitDatabase() {
 		log.Fatal("Error connecting to database: ", err)
 	}
 
+	// If we're in debug mode, debug database.
+	if os.Getenv("APP_DEBUG") == "true" {
+		db.LogMode(true)
+	}
+
 	// Test connection
 	err = db.DB().Ping()
 	if err != nil {
@@ -55,15 +60,19 @@ func InitDatabase() {
 	log.Println("Running database migrations (if any)")
 	db.AutoMigrate(&User{})
 
-	// Create default user if no users exist
-	var user User
-	db.FirstOrCreate(&user, &User{
-		Username: "default",
-		Twofa:    false,
-	})
+	/*
+			// Create default user if no users exist
+			var user User
+			db.FirstOrCreate(&user, &User{
+				Username: "default",
+				Twofa:    false,
+			})
 
-	if user.Password == "" {
-		log.Println("Setting password for default user as secret")
-		user.SetPassword("secret")
-	}
+		    db.First(&User{})
+
+			if user.Password == "" {
+				log.Println("Setting password for default user as secret")
+				user.SetPassword("secret")
+			}
+	*/
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"github.com/dgryski/dgoogauth"
 	"github.com/gin-gonic/gin"
 	"github.com/tommy351/gin-sessions"
@@ -20,10 +21,18 @@ func handleLoginPost(c *gin.Context) {
 	user := GetUser("username", username)
 
 	if user.Id == 0 {
-		c.AbortWithStatus(http.StatusBadRequest)
+		// We don't want to give away too much information about what exactly
+		// the error is here. If we say the username does not exist, then if
+		// someone eventually hits a real username with a wrong password we
+		// don't want to let them know they just need to figure out that
+		// user's password. It's safer to respond with the same message
+		// for both username and password errors.
+		c.Error(errors.New("Could not authenticate"))
+		c.JSON(http.StatusBadRequest, c.Errors)
 	} else {
 		if !user.AttemptPassword(password) {
-			c.AbortWithStatus(http.StatusBadRequest)
+			c.Error(errors.New("Could not authenticate"))
+			c.JSON(http.StatusBadRequest, c.Errors)
 		} else {
 			session := sessions.Get(c)
 			session.Set("logged_in", "true")
@@ -35,7 +44,11 @@ func handleLoginPost(c *gin.Context) {
 
 			session.Save()
 
-			c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "twofa": user.Twofa})
+			c.JSON(http.StatusOK, gin.H{
+				"status": http.StatusOK,
+				"twofa":  user.Twofa,
+				"errors": c.Errors,
+			})
 		}
 	}
 }
@@ -82,14 +95,53 @@ func handleRegister(c *gin.Context) {
 
 func handleRegisterPost(c *gin.Context) {
 	username := c.PostForm("username")
-	//password := c.PostForm("password")
+	password := c.PostForm("password")
+	email := c.PostForm("email")
 
-	// We need to make sure this username is not already taken
-	user := GetUser("username", username)
-	if user.Id != 0 {
-		c.AbortWithStatus(http.StatusBadRequest)
+	if username == "" {
+		c.Error(errors.New("Username cannot be blank"))
+	}
+
+	if password == "" {
+		c.Error(errors.New("Password cannot be blank"))
+	}
+
+	if email == "" {
+		c.Error(errors.New("Email cannot be blank"))
+	}
+
+	if len(c.Errors) > 0 {
+		// If we have any errors, let's send them to the user now before
+		// we do anything else. If we're missing any information, we
+		// can't register properly anyways.
+		c.JSON(http.StatusBadRequest, c.Errors)
 	} else {
-		// TODO
+		// We need to make sure this username is not already taken
+		user := GetUser("username", username)
+		if user.Id != 0 {
+			c.Error(errors.New("Username is already taken"))
+			c.JSON(http.StatusBadRequest, c.Errors)
+		} else {
+			user = GetUser("email", email)
+			if user.Id != 0 {
+				c.Error(errors.New("Email is already taken"))
+				c.JSON(http.StatusBadRequest, c.Errors)
+			} else {
+				// Now we can register!
+				user = &User{
+					Username: username,
+					Email:    email,
+				}
+
+				// This function runs db.Save(&user), so we do not want to run
+				// it again or we'll get a 1062 (duplicate entry) error.
+				user.SetPassword(password)
+				c.JSON(http.StatusOK, gin.H{
+					"status": http.StatusOK,
+					"errors": c.Errors,
+				})
+			}
+		}
 	}
 }
 
@@ -98,5 +150,56 @@ func handleRoot(c *gin.Context) {
 }
 
 func handleSettings(c *gin.Context) {
-	c.HTML(http.StatusOK, "settings", nil)
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id"))
+	c.HTML(http.StatusOK, "settings", gin.H{
+		"user": user,
+	})
+}
+
+func handleSettingsUpdatePost(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	email := c.PostForm("email")
+
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id"))
+
+	// If they entered a password, let's update it.
+	if password != "" {
+		user.SetPassword(password)
+	}
+
+	if username == "" {
+		// If the username is blank, they should get an error.
+		c.Error(errors.New("Username can not be blank"))
+	} else if user.Username != username {
+		// If the username is not their current username, let's try
+		// to update it.
+		err := user.SetUsername(username)
+		if err != nil {
+			c.Error(err)
+		}
+	}
+
+	if email == "" {
+		// If the email is blank, they should get an error.
+		c.Error(errors.New("Email can not be blank"))
+	} else if user.Email != email {
+		// If the email is not their current email, let's try to
+		// update it.
+		err := user.SetEmail(email)
+		if err != nil {
+			c.Error(err)
+		}
+	}
+
+	if len(c.Errors) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"status": http.StatusOK,
+			"errors": c.Errors,
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, c.Errors)
+	}
 }

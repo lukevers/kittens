@@ -11,3 +11,68 @@
         text-align: center;
     }
 }
+
+form.form {
+    margin-bottom: 15px;
+
+    .form-row {
+        width: 100%;
+        display: table;
+        background-color: lighten(@brand-light, 100%);
+        padding: 10px;
+        margin: 10px 0;
+
+        label,
+        input {
+            display: table-cell;
+        }
+
+        label {
+            width: 0;
+            padding-right: 5px;
+            font-weight: normal;
+            .lato_bold;
+        }
+
+        input {
+            width: 100%;
+            border: 0;
+        }
+    }
+}
+
+button {
+    border: 0;
+    padding: 10px;
+    color: @brand-light;
+
+    @media(max-width: @screen-xs) {
+        width: 100%;
+    }
+
+    &.submit {
+        .buttonify(@brand);
+    }
+
+    &.enable {
+        .buttonify(@brand-success);
+    }
+
+    &.disable {
+        .buttonify(@brand-error);
+    }
+}
+
+ul.errors {
+    margin: 0;
+    padding: 0;
+
+    li {
+        list-style: none;
+        width: 100%;
+        background-color: @brand-error;
+        padding: 10px;
+        color: @brand-light;
+        margin-bottom: 10px;
+    }
+}

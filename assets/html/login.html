@@ -1,21 +1,25 @@
-{{ define "login" }}
-{{ template "header" }}
+[[ define "login" ]]
+[[ template "header" ]]
 <body class="login">
     <div class="center-wrap">
         <div class="center">
             <form id="login-form">
-                <input type="text" placeholder="Username" v-model="username" v-on="keyup: login | key 'enter'">
-                <input type="password" placeholder="Password" v-model="password" v-on="keyup: login | key 'enter'">
+                <ul class="errors">
+                    <li v-repeat="errors">{{error}}</li>
+                </ul>
+
+                <input type="text" placeholder="Username" v-model="username">
+                <input type="password" placeholder="Password" v-model="password">
                 <button class="submit" v-on="click: login">Login</button>
             </form>
             <ul class="links">
-                {{ if .CAN_REGISTER }}
+                [[ if .CAN_REGISTER ]]
                 <li><a href="/register">Need an account?</a></li>
-                {{ end }}
+                [[ end ]]
             </ul>
         </div>
     </div>
-    {{ template "scripts" }}
+    [[ template "scripts" ]]
 </body>
-{{ template "footer" }}
-{{ end }}
+[[ template "footer" ]]
+[[ end ]]

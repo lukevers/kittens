@@ -25,10 +25,23 @@ body {
     .lato;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    margin-bottom: 15px;
+    font-weight: normal;
+    .lato_bold;
+}
+
 #main-content {
     width: calc(~"100% - 60px");
     margin-left: 60px;
-    padding: 10px 15px;
+    padding: 15px;
+    max-width: @screen-sm;
 
     @media(max-width: @screen-xs) {
         width: 100%;
