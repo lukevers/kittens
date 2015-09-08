@@ -31,7 +31,7 @@ var register = new Vue({
                 register.lock = false;
                 register.$set('errors', []);
                 if (res.status !== 200) {
-                    var error = res.responseJSON;
+                    var error = res.responseJSON.errors;
                     if (!ansuz.isArray(error)) {
                         error = [error];
                     }

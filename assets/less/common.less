@@ -76,3 +76,41 @@ ul.errors {
         margin-bottom: 10px;
     }
 }
+
+.modal {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: fade(@brand-dark, 60%);
+    z-index: 100;
+    display: block;
+    padding: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .25s ease;
+
+    &.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .content {
+        width: 100%;
+        max-width: @screen-xs;
+        margin: auto;
+        background-color: @brand-light;
+        padding: 15px;
+    }
+
+    img.qr {
+        width: 100%;
+    }
+
+    p {
+        margin-top: 10px;
+    }
+
+    form.form {
+        margin-bottom: 0;
+    }
+}

@@ -30,7 +30,7 @@ var login = new Vue({
                 login.lock = false;
                 login.$set('errors', []);
                 if (res.status !== 200) {
-                    var error = res.responseJSON;
+                    var error = res.responseJSON.errors;
                     if (!ansuz.isArray(error)) {
                         // We probably are only ever going to recieve one error here,
                         // but just in case we change this in the future, let's take
@@ -65,6 +65,19 @@ var login = new Vue({
                 }
 
                 login.lock = false;
+                login.$set('errors', []);
+                if (res.status !== 200) {
+                    var error = res.responseJSON.errors;
+                    if (!ansuz.isArray(error)) {
+                        error = [error];
+                    }
+
+                    console.log(error);
+
+                    error.map(function(err) {
+                        login.errors.push(err);
+                    });
+                }
             });
         },
     }

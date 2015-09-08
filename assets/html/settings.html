@@ -16,15 +16,15 @@
                     </ul>
 
                     <div class="form-row">
-                        <label for="username">Username</label>
+                        <label>Username</label>
                         <input type="text" v-model="username" placeholder="Username" value="[[ .user.Username ]]">
                     </div>
                     <div class="form-row">
-                        <label for="email">Email</label>
+                        <label>Email</label>
                         <input type="email" v-model="email" placeholder="Email" value="[[ .user.Email ]]">
                     </div>
                     <div class="form-row">
-                        <label for="password">New&nbsp;Password</label>
+                        <label>New&nbsp;Password</label>
                         <input type="password" v-model="password" placeholder="Password">
                     </div>
 
@@ -37,12 +37,32 @@
             <div class="col-xs-12">
                 <h2>Two Factor Authentication</h2>
                 [[ if .user.Twofa ]]
-                    
+                    <p>You currently have 2FA setup on this account. Good job!</p>
+                    <button class="disable" v-on="click: disable2fa">{{disabletext}}</button>
                 [[ else ]]
-                    <p>You do not currently have 2FA set up on this account.</p>
+                    <p>You currently do not have 2FA set up on this account.</p>
                     <button class="enable" v-on="click: modal2fa">Enable 2FA</button>
                 [[ end ]]
             </div>
+        </div>
+    </div>
+    <div class="modal">
+        <div class="content">
+            <img class="qr" src="{{qr}}">
+            <p>
+                Neque dolor at sapien. Aenean viverra justo ac sem. Pellentesque at dolor non lectus sagittis semper. Donec quis mi. Duis eget.
+            </p>
+            <ul class="errors">
+                <li v-repeat="modalErrors">{{error}}</li>
+            </ul>
+            <form class="form">
+                <div class="form-row">
+                    <label>Token</label>
+                    <input type="text" v-model="token">
+                </div>
+                <button class="disable" v-on="click: closeModal">Cancel</button>
+                <button class="enable" v-on="click: enable2fa">Enable 2FA</button>
+            </form>
         </div>
     </div>
     [[ template "scripts" ]]

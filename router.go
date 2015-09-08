@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/tommy351/gin-csrf"
+	//"github.com/tommy351/gin-csrf"
 	"github.com/tommy351/gin-sessions"
 	"html/template"
 	"log"
@@ -22,10 +22,10 @@ func InitRouter() {
 	store = sessions.NewCookieStore([]byte(os.Getenv("USERS_COOKIE_STORE_SECRET")))
 	router.Use(gin.Logger())
 	router.Use(sessions.Middleware("session", store))
-	router.Use(csrf.Middleware(csrf.Options{
-		Secret:    os.Getenv("USERS_CSRF_TOKEN_SECRET"),
-		ErrorFunc: CsrfMismatch,
-	}))
+	//router.Use(csrf.Middleware(csrf.Options{
+	//	Secret:    os.Getenv("USERS_CSRF_TOKEN_SECRET"),
+	//	ErrorFunc: CsrfMismatch,
+	//}))
 
 	if os.Getenv("APP_DEBUG") != "true" {
 		gin.SetMode(gin.ReleaseMode)
@@ -77,6 +77,9 @@ func AddRoutes() {
 		private.GET("/", handleRoot)
 		private.GET("/settings", handleSettings)
 		private.POST("/settings", handleSettingsUpdatePost)
+		private.GET("/settings/generate2fa", handleSettingsGenerate2fa)
+		private.POST("/settings/verify2fa", handleSettingsVerify2fa)
+		private.POST("/settings/disable2fa", handleSettingsDisable2fa)
 	}
 }
 

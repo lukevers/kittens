@@ -1,10 +1,18 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
+	"crypto/rand"
+	"encoding/base32"
+	"encoding/base64"
 	"errors"
+	"github.com/boombuler/barcode"
+	"github.com/boombuler/barcode/qr"
 	"github.com/dgryski/dgoogauth"
 	"github.com/gin-gonic/gin"
 	"github.com/tommy351/gin-sessions"
+	"image/png"
 	"net/http"
 	"os"
 )
@@ -28,11 +36,17 @@ func handleLoginPost(c *gin.Context) {
 		// user's password. It's safer to respond with the same message
 		// for both username and password errors.
 		c.Error(errors.New("Could not authenticate"))
-		c.JSON(http.StatusBadRequest, c.Errors)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"errors": c.Errors,
+		})
 	} else {
 		if !user.AttemptPassword(password) {
 			c.Error(errors.New("Could not authenticate"))
-			c.JSON(http.StatusBadRequest, c.Errors)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": http.StatusBadRequest,
+				"errors": c.Errors,
+			})
 		} else {
 			session := sessions.Get(c)
 			session.Set("logged_in", "true")
@@ -68,16 +82,19 @@ func handle2faLoginPost(c *gin.Context) {
 		HotpCounter: 0,
 	}
 
-	// TODO
-	// - this should work, but I need to test it later
-
 	val, err := otpc.Authenticate(token)
-	if err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-	} else if val {
+	if err != nil || !val {
+		c.Error(errors.New("Could not authenticate"))
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"errors": c.Errors,
+		})
+	} else {
 		session.Set("needs_tfa", "false")
 		session.Save()
-		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK})
+		c.JSON(http.StatusOK, gin.H{
+			"status": http.StatusOK,
+		})
 	}
 }
 
@@ -114,18 +131,27 @@ func handleRegisterPost(c *gin.Context) {
 		// If we have any errors, let's send them to the user now before
 		// we do anything else. If we're missing any information, we
 		// can't register properly anyways.
-		c.JSON(http.StatusBadRequest, c.Errors)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"errors": c.Errors,
+		})
 	} else {
 		// We need to make sure this username is not already taken
 		user := GetUser("username", username)
 		if user.Id != 0 {
 			c.Error(errors.New("Username is already taken"))
-			c.JSON(http.StatusBadRequest, c.Errors)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": http.StatusBadRequest,
+				"errors": c.Errors,
+			})
 		} else {
 			user = GetUser("email", email)
 			if user.Id != 0 {
 				c.Error(errors.New("Email is already taken"))
-				c.JSON(http.StatusBadRequest, c.Errors)
+				c.JSON(http.StatusBadRequest, gin.H{
+					"status": http.StatusBadRequest,
+					"errors": c.Errors,
+				})
 			} else {
 				// Now we can register!
 				user = &User{
@@ -200,6 +226,99 @@ func handleSettingsUpdatePost(c *gin.Context) {
 			"errors": c.Errors,
 		})
 	} else {
-		c.JSON(http.StatusBadRequest, c.Errors)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"errors": c.Errors,
+		})
 	}
+}
+
+func handleSettingsGenerate2fa(c *gin.Context) {
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id"))
+
+	// Get random secret
+	s := make([]byte, 6)
+	_, err := rand.Read(s)
+	if err != nil {
+		c.Error(errors.New("Could not generate random secret"))
+	}
+
+	secret := base32.StdEncoding.EncodeToString(s)
+	session.Set("twofa_secret", secret)
+	session.Save()
+	// Create auth string to be encoded as a QR image
+	//
+	// https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+	// otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
+	//
+	authstr := "otpauth://totp/Kittens:" + user.Email + "?secret=" + secret + "&issuer=Kittens"
+
+	// Encode the QR image
+	qrcode, err := qr.Encode(authstr, qr.L, qr.Auto)
+	if err != nil {
+		c.Error(errors.New("Could not encode qr image"))
+	}
+
+	qrcode, err = barcode.Scale(qrcode, 512, 512)
+	if err != nil {
+		c.Error(errors.New("Could not scale qr image"))
+	}
+
+	var b bytes.Buffer
+	buffer := bufio.NewWriter(&b)
+	png.Encode(buffer, qrcode)
+	buffer.Flush()
+
+	data := base64.StdEncoding.EncodeToString(b.Bytes())
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"errors": c.Errors,
+		"data":   data,
+	})
+}
+
+func handleSettingsVerify2fa(c *gin.Context) {
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id"))
+	secret := session.Get("twofa_secret")
+
+	token := c.PostForm("token")
+	otpc := &dgoogauth.OTPConfig{
+		Secret:      secret.(string),
+		WindowSize:  3,
+		HotpCounter: 0,
+	}
+
+	val, err := otpc.Authenticate(token)
+	if err != nil {
+		c.Error(errors.New("Could not authenticate token"))
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"errors": c.Errors,
+		})
+	} else if val {
+		user.Twofa = true
+		user.TwofaSecret = secret.(string)
+		db.Save(&user)
+		session.Delete("twofa_secret")
+		session.Save()
+		c.JSON(http.StatusOK, gin.H{
+			"status": http.StatusOK,
+			"errors": c.Errors,
+		})
+	}
+}
+
+func handleSettingsDisable2fa(c *gin.Context) {
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id"))
+	user.TwofaSecret = ""
+	user.Twofa = false
+	db.Save(&user)
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"errors": c.Errors,
+	})
 }
