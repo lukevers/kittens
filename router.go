@@ -74,12 +74,20 @@ func AddRoutes() {
 	private := router.Group("/")
 	private.Use(Authorized(), Expecting2Fa())
 	{
+		// Home
 		private.GET("/", handleRoot)
+
+		// Settings
 		private.GET("/settings", handleSettings)
 		private.POST("/settings", handleSettingsUpdatePost)
 		private.GET("/settings/generate2fa", handleSettingsGenerate2fa)
 		private.POST("/settings/verify2fa", handleSettingsVerify2fa)
 		private.POST("/settings/disable2fa", handleSettingsDisable2fa)
+
+		// Bots
+		private.GET("/bots", handleBots)
+		private.GET("/bots/:id", handleBot)
+		private.POST("/bots/:id", handleBotPost)
 	}
 }
 

@@ -17,12 +17,14 @@ import (
 	"os"
 )
 
+// GET "/login"
 func handleLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "login", gin.H{
 		"CAN_REGISTER": os.Getenv("USERS_CAN_REGISTER") == "true",
 	})
 }
 
+// POST "/login"
 func handleLoginPost(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -67,10 +69,12 @@ func handleLoginPost(c *gin.Context) {
 	}
 }
 
+// GET "/login/2fa"
 func handle2faLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "2fa", nil)
 }
 
+// POST "/login/2fa"
 func handle2faLoginPost(c *gin.Context) {
 	token := c.PostForm("token")
 	session := sessions.Get(c)
@@ -98,6 +102,7 @@ func handle2faLoginPost(c *gin.Context) {
 	}
 }
 
+// GET "/logout"
 func handleLogout(c *gin.Context) {
 	session := sessions.Get(c)
 	session.Clear()
@@ -106,10 +111,12 @@ func handleLogout(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/login")
 }
 
+// GET "/register"
 func handleRegister(c *gin.Context) {
 	c.HTML(http.StatusOK, "register", nil)
 }
 
+// POST "/register"
 func handleRegisterPost(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -171,10 +178,12 @@ func handleRegisterPost(c *gin.Context) {
 	}
 }
 
+// GET "/"
 func handleRoot(c *gin.Context) {
 	c.HTML(http.StatusOK, "index", nil)
 }
 
+// GET "/settings"
 func handleSettings(c *gin.Context) {
 	session := sessions.Get(c)
 	user := GetUser("id", session.Get("user_id"))
@@ -183,6 +192,7 @@ func handleSettings(c *gin.Context) {
 	})
 }
 
+// POST "/settings"
 func handleSettingsUpdatePost(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -233,6 +243,7 @@ func handleSettingsUpdatePost(c *gin.Context) {
 	}
 }
 
+// GET "/settings/generate2fa"
 func handleSettingsGenerate2fa(c *gin.Context) {
 	session := sessions.Get(c)
 	user := GetUser("id", session.Get("user_id"))
@@ -279,6 +290,7 @@ func handleSettingsGenerate2fa(c *gin.Context) {
 	})
 }
 
+// POST "/settings/verify2fa"
 func handleSettingsVerify2fa(c *gin.Context) {
 	session := sessions.Get(c)
 	user := GetUser("id", session.Get("user_id"))
@@ -311,6 +323,7 @@ func handleSettingsVerify2fa(c *gin.Context) {
 	}
 }
 
+// POST "/settings/disable2fa"
 func handleSettingsDisable2fa(c *gin.Context) {
 	session := sessions.Get(c)
 	user := GetUser("id", session.Get("user_id"))
@@ -321,4 +334,31 @@ func handleSettingsDisable2fa(c *gin.Context) {
 		"status": http.StatusOK,
 		"errors": c.Errors,
 	})
+}
+
+// GET "/bots"
+func handleBots(c *gin.Context) {
+	c.HTML(http.StatusOK, "bots", gin.H{
+		"todo": "todo",
+	})
+}
+
+// GET "/bots/:bot"
+func handleBot(c *gin.Context) {
+	// bot := c.Param("bot")
+
+	c.HTML(http.StatusOK, "bot", gin.H{
+		"todo": "todo",
+	})
+}
+
+// POST "/bots/:bot"
+func handleBotPost(c *gin.Context) {
+	// TODO
+
+	/*
+		session := sessions.Get(c)
+		user := GetUser("id", session.Get("user_id"))
+		bot := c.Param("bot")
+	*/
 }
