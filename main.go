@@ -6,6 +6,6 @@ import (
 
 func main() {
 	InitDatabase()
-	InitKittens()
+	InitPluginAPI()
 	InitRouter()
 }
