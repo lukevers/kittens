@@ -1,3 +1,4 @@
+/* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
 import (
@@ -34,7 +35,7 @@ func Authorized() gin.HandlerFunc {
 		// If the user id does not match, then we could not find the correct
 		// user that they are claiming to be. A common example of when this
 		// could happen is if someone manually updates the database.
-		if user.Id != id {
+		if user.ID != id {
 			session.Clear()
 			session.Save()
 			c.Redirect(http.StatusFound, "/login")

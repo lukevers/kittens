@@ -1,3 +1,4 @@
+/* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
 import (
@@ -86,8 +87,12 @@ func AddRoutes() {
 
 		// Bots
 		private.GET("/bots", handleBots)
-		private.GET("/bots/:id", handleBot)
-		private.POST("/bots/:id", handleBotPost)
+		private.GET("/bots/:bot", handleBot)
+		private.POST("/bots/:bot", handleBotPost)
+
+		// Channels
+		private.GET("/bots/:bot/channel/:channel", handleBotChannel)
+		private.POST("/bots/:bot/channel/:channel", handleBotChannelPost)
 	}
 }
 

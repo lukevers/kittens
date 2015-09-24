@@ -1,3 +1,4 @@
+/* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
 import (
@@ -15,6 +16,7 @@ import (
 	"image/png"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 // GET "/login"
@@ -30,7 +32,7 @@ func handleLoginPost(c *gin.Context) {
 	password := c.PostForm("password")
 	user := GetUser("username", username)
 
-	if user.Id == 0 {
+	if user.ID == 0 {
 		// We don't want to give away too much information about what exactly
 		// the error is here. If we say the username does not exist, then if
 		// someone eventually hits a real username with a wrong password we
@@ -52,7 +54,7 @@ func handleLoginPost(c *gin.Context) {
 		} else {
 			session := sessions.Get(c)
 			session.Set("logged_in", "true")
-			session.Set("user_id", user.Id)
+			session.Set("user_id", user.ID)
 
 			if user.Twofa {
 				session.Set("needs_tfa", "true")
@@ -145,7 +147,7 @@ func handleRegisterPost(c *gin.Context) {
 	} else {
 		// We need to make sure this username is not already taken
 		user := GetUser("username", username)
-		if user.Id != 0 {
+		if user.ID != 0 {
 			c.Error(errors.New("Username is already taken"))
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": http.StatusBadRequest,
@@ -153,7 +155,7 @@ func handleRegisterPost(c *gin.Context) {
 			})
 		} else {
 			user = GetUser("email", email)
-			if user.Id != 0 {
+			if user.ID != 0 {
 				c.Error(errors.New("Email is already taken"))
 				c.JSON(http.StatusBadRequest, gin.H{
 					"status": http.StatusBadRequest,
@@ -338,27 +340,80 @@ func handleSettingsDisable2fa(c *gin.Context) {
 
 // GET "/bots"
 func handleBots(c *gin.Context) {
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id")).Related()
+
 	c.HTML(http.StatusOK, "bots", gin.H{
-		"todo": "todo",
+		"user": user,
 	})
 }
 
 // GET "/bots/:bot"
 func handleBot(c *gin.Context) {
-	// bot := c.Param("bot")
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id")).Related()
+	bot, _ := strconv.Atoi(c.Param("bot"))
 
-	c.HTML(http.StatusOK, "bot", gin.H{
-		"todo": "todo",
-	})
+	for _, b := range user.Bots {
+		if b.ID == bot {
+			c.HTML(http.StatusOK, "bot", gin.H{
+				"bot": b,
+			})
+		}
+	}
 }
 
 // POST "/bots/:bot"
 func handleBotPost(c *gin.Context) {
-	// TODO
-
 	/*
 		session := sessions.Get(c)
 		user := GetUser("id", session.Get("user_id"))
-		bot := c.Param("bot")
-	*/
+
+		b := Bot{
+			Nickname: "bot",
+			Username: "username",
+			Host:     "localhost",
+			Port:     6667,
+			UserID:   user.ID,
+			Channels: []Channel{
+				Channel{
+					Name: "#test",
+					Plugins: []Plugin{
+						Plugin{
+							Name: "echo",
+							Path: "plugins/echo.lua",
+						},
+					},
+				},
+			},
+		}
+
+		db.Save(&b)*/
+}
+
+// GET "/bots/:bot/channel/:channel"
+func handleBotChannel(c *gin.Context) {
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id")).Related()
+	bot, _ := strconv.Atoi(c.Param("bot"))
+	channel, _ := strconv.Atoi(c.Param("channel"))
+
+	for _, b := range user.Bots {
+		if b.ID == bot {
+			for _, ch := range b.Channels {
+				if ch.ID == channel {
+					c.HTML(http.StatusOK, "channel", gin.H{
+						"bot":     b,
+						"channel": ch,
+					})
+				}
+			}
+		}
+	}
+
+}
+
+// POST "/bots/:bot/channel/:channel"
+func handleBotChannelPost(c *gin.Context) {
+	// TODO
 }

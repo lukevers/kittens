@@ -1,7 +1,7 @@
+/* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
 import (
-	"fmt"
 	"github.com/thoj/go-ircevent"
 	"github.com/yuin/gopher-lua"
 )
@@ -37,13 +37,16 @@ func InitPluginAPI() {
 
 func On(L *lua.LState) int {
 	event := L.ToString(1)
-	cback := L.ToString(2)
+	//	cback := L.ToString(2)
 
 	bot.AddCallback(event, func(event *irc.Event) {
-        L.DoString(fmt.Sprintf(`%s("%s", "%s")`,
-			cback,
-			event.Arguments[0],
-			event.Message()))
+		dump(event)
+
+		/*
+			        L.DoString(fmt.Sprintf(`%s("%s", "%s")`,
+						cback,
+						event.Arguments[0],
+						event.Message()))*/
 	})
 
 	return 1

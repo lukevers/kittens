@@ -3,7 +3,20 @@
 <body class="index">
     [[ template "sidebar" ]]
     <div id="main-content">
-        Bots
+        <ul class="stats">
+            [[ range .user.Bots ]]
+                <a href="/bots/[[ .ID ]]">
+                    <li>
+                        <div class="icon">
+                            <i class="fa fa-unlink"></i>
+                        </div>
+                        <div class="description">
+                            [[ .DisplayName ]]
+                        </div>
+                    </li>
+                </a>
+            [[ end ]]
+        </ul>
     </div>
     [[ template "scripts" ]]
 </body>

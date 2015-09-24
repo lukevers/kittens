@@ -2,10 +2,124 @@
 [[ template "header" ]]
 <body class="index">
     [[ template "sidebar" ]]
-    <div id="main-content">
-        Bot
+    <div id="main-content" class="container-fluid">
+        <div id="bot-form">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>{{displayname}}</h1>
+                    <div class="pull-right">
+                        <button class="enable [[ if .bot.Enabled ]] hidden [[ end ]]" v-on="click: enable">Enable {{displayname}}</button>
+                        <button class="disable [[ if not .bot.Enabled ]] hidden [[ end ]]" v-on="click: disable">Disable {{displayname}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <form class="form">
+                        <ul class="errors">
+                            <li v-repeat="errors">{{error}}</li>
+                        </ul>
+
+                        <div class="form-row">
+                            <label>Display&nbsp;Name</label>
+                            <input type="text" v-model="displayname" placeholder="Display Name">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Nickname</label>
+                            <input type="text" v-model="nickname" placeholder="Nickname">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Username</label>
+                            <input type="text" v-model="username" placeholder="Nickname">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Host</label>
+                            <input type="text" v-model="host" placeholder="Nickname">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Port</label>
+                            <input type="number" v-model="port" placeholder="6667" min="0">
+                        </div>
+
+                        <button class="submit" v-on="click: update">Update {{displayname}}</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>Channels</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 channels">
+                    [[ range .bot.Channels ]]
+                        <a href="/bots/[[ .BotID ]]/channel/[[ .ID ]]"><button class="submit">[[ .Name ]]</button></a>
+                    [[ end ]]
+                    <button class="enable" v-on="click: addchan">+ Add Channel</button>
+                </div>
+            </div>
+        </div>
     </div>
     [[ template "scripts" ]]
+    <script type="text/javascript">
+        var bot = new Vue({
+            el: '#bot-form',
+            data: {
+                displayname: [[ .bot.DisplayName ]],
+                nickname:    [[ .bot.Nickname ]],
+                username:    [[ .bot.Username ]],
+                host:        [[ .bot.Host ]],
+                port:        [[ .bot.Port ]],
+                enabled:     [[ .bot.Enabled ]],
+                lock:        false,
+                errors:      [],
+            },
+            methods: {
+                update: function(e) {
+                    e.preventDefault();
+
+                    // Lock so we don't send too many requests
+                    if (this.lock) return;
+                    this.lock = true;
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/bots/' + window.location.pathname,
+                        data: {
+                            displayname: this.displayname,
+                            username:    this.username,
+                            password:    this.password,
+                            host:        this.host,
+                            port:        this.port,
+                            enabled:     this.enabled,
+                        },
+                    }).always(function(res) {
+                        if (res.status === 200) {
+                            // 
+                        }
+
+                        bot.lock = false;
+                        bot.$set('errors', []);
+                        if (res.status !== 200) {
+                            var error = res.responseJSON.errors;
+                            if (!ansuz.isArray(error)) {
+                                error = [error];
+                            }
+
+                            error.map(function(err) {
+                                bot.errors.push(err);
+                            });
+                        }
+                    });
+                },
+            }
+        });
+    </script>
 </body>
 [[ template "footer" ]]
 [[ end ]]

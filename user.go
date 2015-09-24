@@ -1,3 +1,4 @@
+/* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
 import (
@@ -9,12 +10,13 @@ import (
 )
 
 type User struct {
-	Id          uint
+	ID          int
 	Username    string `sql:"unique"`
 	Password    string
 	Email       string `sql:"unique"`
 	Twofa       bool
 	TwofaSecret string
+	Bots        []Bot
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
@@ -23,6 +25,18 @@ func GetUser(by, value interface{}) *User {
 	var user User
 	db.Where(fmt.Sprintf("%s = ?", by), value).First(&user)
 	return &user
+}
+
+func (u User) Related() *User {
+	db.Model(&u).Related(&u.Bots)
+	for b := range u.Bots {
+		db.Model(&u.Bots[b]).Related(&u.Bots[b].Channels)
+		for c := range u.Bots[b].Channels {
+			db.Model(&u.Bots[b].Channels[c]).Related(&u.Bots[b].Channels[c].Plugins)
+		}
+	}
+
+	return &u
 }
 
 func (u User) AttemptPassword(password string) bool {
@@ -47,7 +61,7 @@ func (u User) SetUsername(username string) error {
 
 	// Check to see if another user already has this username.
 	user := GetUser("username", username)
-	if user.Id != 0 {
+	if user.ID != 0 {
 		return errors.New("Username already exists")
 	}
 
@@ -66,7 +80,7 @@ func (u User) SetEmail(email string) error {
 
 	// Check to see if another user already has this email.
 	user := GetUser("email", email)
-	if user.Id != 0 {
+	if user.ID != 0 {
 		return errors.New("Email already exists")
 	}
 

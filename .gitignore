@@ -21,6 +21,7 @@ kittens
 /node_modules
 /public/assets/css
 /public/assets/js
+/tmp
 
 # Fonts
 FontAwesome.*

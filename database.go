@@ -1,3 +1,4 @@
+/* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
 import (
@@ -58,7 +59,12 @@ func InitDatabase() {
 
 	// Run database migrations
 	log.Println("Running database migrations (if any)")
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(
+		&Plugin{},
+		&Channel{},
+		&Bot{},
+		&User{},
+	)
 
 	/*
 			// Create default user if no users exist
