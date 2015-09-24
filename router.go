@@ -89,6 +89,7 @@ func AddRoutes() {
 		private.GET("/bots", handleBots)
 		private.GET("/bots/:bot", handleBot)
 		private.POST("/bots/:bot", handleBotPost)
+		private.PATCH("/bots/:bot", handleBotPatch)
 
 		// Channels
 		private.GET("/bots/:bot/channel/:channel", handleBotChannel)

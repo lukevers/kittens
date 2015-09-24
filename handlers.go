@@ -391,6 +391,11 @@ func handleBotPost(c *gin.Context) {
 		db.Save(&b)*/
 }
 
+// PATCH "/bots/:bot"
+func handleBotPatch(c *gin.Context) {
+	
+}
+
 // GET "/bots/:bot/channel/:channel"
 func handleBotChannel(c *gin.Context) {
 	session := sessions.Get(c)

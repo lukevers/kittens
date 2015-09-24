@@ -8,8 +8,8 @@
                 <div class="col-xs-12">
                     <h1>{{displayname}}</h1>
                     <div class="pull-right">
-                        <button class="enable [[ if .bot.Enabled ]] hidden [[ end ]]" v-on="click: enable">Enable {{displayname}}</button>
-                        <button class="disable [[ if not .bot.Enabled ]] hidden [[ end ]]" v-on="click: disable">Disable {{displayname}}</button>
+                        <button class="enable [[ if .bot.Enabled ]] hidden [[ end ]]" v-on="click: toggle(true, $event)">Enable {{displayname}}</button>
+                        <button class="disable [[ if not .bot.Enabled ]] hidden [[ end ]]" v-on="click: toggle(false, $event)">Disable {{displayname}}</button>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                     [[ range .bot.Channels ]]
                         <a href="/bots/[[ .BotID ]]/channel/[[ .ID ]]"><button class="submit">[[ .Name ]]</button></a>
                     [[ end ]]
-                    <button class="enable" v-on="click: addchan">+ Add Channel</button>
+                    <button class="enable" v-on="click: join">+ Join Channel</button>
                 </div>
             </div>
         </div>
@@ -77,9 +77,31 @@
                 port:        [[ .bot.Port ]],
                 enabled:     [[ .bot.Enabled ]],
                 lock:        false,
+                toggleLock:  false,
                 errors:      [],
             },
             methods: {
+                toggle: function(enabled, e) {
+                    e.preventDefault();
+
+                    // Lock so we don't send too many requests
+                    if (this.toggleLock) return;
+                    this.toggleLock = true;
+
+                    $.ajax({
+                        type: 'PATCH',
+                        url: window.location.pathname,
+                        data: {
+                            enabled: enabled,
+                        },
+                    }).always(function(res) {
+                        if (res.status === 200) {
+
+                        }
+
+                        bot.toggleLock = false;
+                    });
+                },
                 update: function(e) {
                     e.preventDefault();
 
@@ -89,7 +111,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '/bots/' + window.location.pathname,
+                        url: window.location.pathname,
                         data: {
                             displayname: this.displayname,
                             username:    this.username,
