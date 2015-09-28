@@ -393,7 +393,22 @@ func handleBotPost(c *gin.Context) {
 
 // PATCH "/bots/:bot"
 func handleBotPatch(c *gin.Context) {
-	
+	session := sessions.Get(c)
+	user := GetUser("id", session.Get("user_id")).Related()
+	bot, _ := strconv.Atoi(c.Param("bot"))
+
+	for _, b := range user.Bots {
+		if b.ID == bot {
+			b.Enabled = !b.Enabled
+			db.Save(&b)
+
+			c.JSON(http.StatusOK, gin.H{
+				"status":  http.StatusOK,
+				"errors":  c.Errors,
+				"enabled": b.Enabled,
+			})
+		}
+	}
 }
 
 // GET "/bots/:bot/channel/:channel"
