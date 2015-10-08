@@ -399,8 +399,17 @@ func handleBotPatch(c *gin.Context) {
 
 	for _, b := range user.Bots {
 		if b.ID == bot {
-			b.Enabled = !b.Enabled
-			db.Save(&b)
+
+			if _, ok := bots[b.ID]; ok {
+				go func(b Bot) {
+					go bots[b.ID].Disconnect()
+				}(b)
+			} else {
+				go func(b Bot) {
+					bots[b.ID] = &b
+					bots[b.ID].Connect()
+				}(b)
+			}
 
 			c.JSON(http.StatusOK, gin.H{
 				"status":  http.StatusOK,
