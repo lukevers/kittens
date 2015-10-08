@@ -26,15 +26,6 @@ type Bot struct {
 	bot         *irc.Connection
 }
 
-type Channel struct {
-	ID        int
-	Name      string
-	BotID     int `sql:"index"`
-	Plugins   []Plugin
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
 func GetBot(by, value interface{}) *Bot {
 	var bot Bot
 	db.Where(fmt.Sprintf("%s = ?", by), value).First(&bot)
