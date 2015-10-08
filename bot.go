@@ -4,7 +4,6 @@ package main
 import (
 	"fmt"
 	"github.com/thoj/go-ircevent"
-	"github.com/yuin/gopher-lua"
 	"time"
 )
 
@@ -22,8 +21,7 @@ type Bot struct {
 	DisplayName string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	lua         *lua.LState
-	bot         *irc.Connection
+	irc         *irc.Connection
 }
 
 func GetBot(by, value interface{}) *Bot {
@@ -37,19 +35,19 @@ func (b *Bot) Connect() {
 	db.Save(&b)
 
 	// Create the IRC connection
-	b.bot = irc.IRC(b.Nickname, b.Username)
-	b.bot.Connect(fmt.Sprintf("%s:%d", b.Host, b.Port))
+	b.irc = irc.IRC(b.Nickname, b.Username)
+	b.irc.Connect(fmt.Sprintf("%s:%d", b.Host, b.Port))
 
 	// Join all channels
 	for _, channel := range b.Channels {
-		b.bot.Join(channel.Name)
+		b.irc.Join(channel.Name)
 
 		// TODO: Add plugins for each channel
 	}
 }
 
 func (b *Bot) Disconnect() {
-	b.bot.Quit()
+	b.irc.Quit()
 	delete(bots, b.ID)
 
 	b.Enabled = false

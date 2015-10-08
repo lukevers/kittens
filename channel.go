@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/yuin/gopher-lua"
 	"time"
 )
 
@@ -12,4 +13,5 @@ type Channel struct {
 	Plugins   []Plugin
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	lua       *lua.LState
 }
