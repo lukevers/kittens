@@ -8,7 +8,7 @@ import (
 
 func main() {
 	InitDatabase()
-	//InitPluginAPI()
+	InitEnabledBots()
 	InitRouter()
 }
 

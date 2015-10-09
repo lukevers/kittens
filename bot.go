@@ -24,10 +24,30 @@ type Bot struct {
 	irc         *irc.Connection
 }
 
+func InitEnabledBots() {
+	var enabledBots []*Bot
+	db.Where(&Bot{Enabled: true}).Find(&enabledBots)
+	for _, bot := range enabledBots {
+		bot = bot.Related()
+
+		bots[bot.ID] = bot
+		bots[bot.ID].Connect()
+	}
+}
+
 func GetBot(by, value interface{}) *Bot {
 	var bot Bot
 	db.Where(fmt.Sprintf("%s = ?", by), value).First(&bot)
 	return &bot
+}
+
+func (b Bot) Related() *Bot {
+	db.Model(&b).Related(&b.Channels)
+	for c := range b.Channels {
+		db.Model(&b.Channels[c]).Related(&b.Channels[c].Plugins)
+	}
+
+	return &b
 }
 
 func (b *Bot) Connect() {
