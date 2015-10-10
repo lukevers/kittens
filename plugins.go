@@ -1,6 +1,8 @@
 /* vim: set autoindent noexpandtab tabstop=4 shiftwidth=4: */
 package main
 
+/*
+
 import (
 	"github.com/thoj/go-ircevent"
 	"github.com/yuin/gopher-lua"
@@ -46,7 +48,7 @@ func On(L *lua.LState) int {
 			        L.DoString(fmt.Sprintf(`%s("%s", "%s")`,
 						cback,
 						event.Arguments[0],
-						event.Message()))*/
+						event.Message()))*
 	})
 
 	return 1
@@ -59,4 +61,4 @@ func Say(L *lua.LState) int {
 	bot.Privmsg(channel, message)
 
 	return 1
-}
+}*/

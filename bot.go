@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"github.com/thoj/go-ircevent"
+	"github.com/yuin/gopher-lua"
 	"time"
 )
 
@@ -60,9 +61,41 @@ func (b *Bot) Connect() {
 
 	// Join all channels
 	for _, channel := range b.Channels {
-		b.irc.Join(channel.Name)
+		// Setup Lua state for each channel
+		channel.lua = lua.NewState()
+		defer channel.lua.Close()
 
-		// TODO: Add plugins for each channel
+		go func(b *Bot, channel Channel) {
+			channel.lua.SetGlobal("say", channel.lua.NewFunction(func(L *lua.LState) int {
+				ch := L.ToString(1)
+				msg := L.ToString(2)
+
+				b.irc.Privmsg(ch, msg)
+
+				return 1
+			}))
+
+			channel.lua.SetGlobal("on", channel.lua.NewFunction(func(L *lua.LState) int {
+				event := L.ToString(1)
+				cback := L.ToString(2)
+
+				b.irc.AddCallback(event, func(event *irc.Event) {
+					L.DoString(fmt.Sprintf(`%s("%s", "%s")`,
+						cback,
+						event.Arguments[0],
+						event.Message()))
+				})
+
+				return 1
+			}))
+		}(b, channel)
+
+		if err := channel.lua.DoFile("plugins/echo.lua"); err != nil {
+			panic(err)
+		}
+
+		// Join all channels
+		b.irc.Join(channel.Name)
 	}
 }
 
