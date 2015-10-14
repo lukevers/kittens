@@ -19,7 +19,7 @@ func (c *Channel) LoadPlugins(b *Bot) {
 	c.lua = NewLuaState(b)
 
 	for _, plugin := range c.Plugins {
-		if err := c.lua.L.DoFile(plugin.Path); err != nil {
+		if err := c.lua.Lua.DoFile(plugin.Path); err != nil {
 			panic(err)
 		}
 	}

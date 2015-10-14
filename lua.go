@@ -2,46 +2,46 @@
 package main
 
 import (
-	LUA "github.com/yuin/gopher-lua"
+	"github.com/yuin/gopher-lua"
 	"github.com/thoj/go-ircevent"
 	"fmt"
 )
 
 type Lua struct {
-	L *LUA.LState
-	B *Bot
+	Lua *lua.LState
+	Bot *Bot
 }
 
 func NewLuaState(bot *Bot) *Lua {
-	lua := &Lua{
-		L: LUA.NewState(),
-		B: bot,
+	L := &Lua{
+		Lua: lua.NewState(),
+		Bot: bot,
 	}
 
-	defer lua.L.Close()
-	return lua.SetPluginAPI()
+	defer L.Lua.Close()
+	return L.SetPluginAPI()
 }
 
-func (lua *Lua) SetPluginAPI() *Lua {
-	lua.L.SetGlobal("say", lua.L.NewFunction(lua.say))
-	lua.L.SetGlobal("on", lua.L.NewFunction(lua.on))
-	return lua
+func (L *Lua) SetPluginAPI() *Lua {
+	L.Lua.SetGlobal("say", L.Lua.NewFunction(L.say))
+	L.Lua.SetGlobal("on", L.Lua.NewFunction(L.on))
+	return L
 }
 
-func (lua *Lua) say(L *LUA.LState) int {
-	channel := L.ToString(1)
-	message := L.ToString(2)
-	lua.B.irc.Privmsg(channel, message)
+func (L *Lua) say(state *lua.LState) int {
+	channel := state.ToString(1)
+	message := state.ToString(2)
+	L.Bot.irc.Privmsg(channel, message)
 
 	return 1
 }
 
-func (lua *Lua) on(L *LUA.LState) int {
-	event := L.ToString(1)
-	cback := L.ToString(2)
+func (L *Lua) on(state *lua.LState) int {
+	event := state.ToString(1)
+	cback := state.ToString(2)
 
-	lua.B.irc.AddCallback(event, func(event *irc.Event) {
-		L.DoString(fmt.Sprintf(`%s("%s", "%s")`,
+	L.Bot.irc.AddCallback(event, func(event *irc.Event) {
+		state.DoString(fmt.Sprintf(`%s("%s", "%s")`,
 			cback,
 			event.Arguments[0],
 			event.Message()))
