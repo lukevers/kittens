@@ -12,17 +12,14 @@ type Channel struct {
 	Plugins   []*Plugin
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	lua       *Lua
+	Lua       *Lua
 }
 
-func (c *Channel) InitPlugins(b *Bot) {
-	c.lua = NewLuaState(b)
-	c.LoadPlugins()
-}
+func (c *Channel) LoadPlugins(b *Bot) {
+	c.Lua = NewLuaState(b, c)
 
-func (c *Channel) LoadPlugins() {
 	for _, plugin := range c.Plugins {
-		if err := c.lua.Lua.DoFile(plugin.Path); err != nil {
+		if err := c.Lua.Lua.DoFile(plugin.Path); err != nil {
 			panic(err)
 		}
 	}

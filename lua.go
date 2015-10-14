@@ -2,20 +2,24 @@
 package main
 
 import (
-	"github.com/yuin/gopher-lua"
-	"github.com/thoj/go-ircevent"
 	"fmt"
+	"github.com/thoj/go-ircevent"
+	"github.com/yuin/gopher-lua"
 )
 
 type Lua struct {
-	Lua *lua.LState
-	Bot *Bot
+	Lua     *lua.LState
+	Bot     *Bot
+	Channel *Channel
+	events  map[string][]string
 }
 
-func NewLuaState(bot *Bot) *Lua {
+func NewLuaState(bot *Bot, channel *Channel) *Lua {
 	L := &Lua{
-		Lua: lua.NewState(),
-		Bot: bot,
+		Lua:     lua.NewState(),
+		Bot:     bot,
+		Channel: channel,
+		events:  make(map[string][]string),
 	}
 
 	defer L.Lua.Close()
@@ -25,6 +29,7 @@ func NewLuaState(bot *Bot) *Lua {
 func (L *Lua) SetPluginAPI() *Lua {
 	L.Lua.SetGlobal("say", L.Lua.NewFunction(L.say))
 	L.Lua.SetGlobal("on", L.Lua.NewFunction(L.on))
+	L.Lua.SetGlobal("reload", L.Lua.NewFunction(L.reload))
 	return L
 }
 
@@ -40,12 +45,24 @@ func (L *Lua) on(state *lua.LState) int {
 	event := state.ToString(1)
 	cback := state.ToString(2)
 
-	L.Bot.irc.AddCallback(event, func(event *irc.Event) {
+	id := L.Bot.irc.AddCallback(event, func(event *irc.Event) {
 		state.DoString(fmt.Sprintf(`%s("%s", "%s")`,
 			cback,
 			event.Arguments[0],
 			event.Message()))
 	})
 
+	L.events[event] = append(L.events[event], id)
+	return 1
+}
+
+func (L *Lua) reload(state *lua.LState) int {
+	for event, ids := range L.events {
+		for _, id := range ids {
+			L.Bot.irc.RemoveCallback(event, id)
+		}
+	}
+
+	L.Channel.LoadPlugins(L.Bot)
 	return 1
 }
