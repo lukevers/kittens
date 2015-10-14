@@ -15,9 +15,12 @@ type Channel struct {
 	lua       *Lua
 }
 
-func (c *Channel) LoadPlugins(b *Bot) {
+func (c *Channel) InitPlugins(b *Bot) {
 	c.lua = NewLuaState(b)
+	c.LoadPlugins()
+}
 
+func (c *Channel) LoadPlugins() {
 	for _, plugin := range c.Plugins {
 		if err := c.lua.Lua.DoFile(plugin.Path); err != nil {
 			panic(err)
