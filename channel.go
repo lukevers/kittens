@@ -9,7 +9,7 @@ type Channel struct {
 	ID        int
 	Name      string
 	BotID     int `sql:"index"`
-	Plugins   []Plugin
+	Plugins   []*Plugin
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	lua       *Lua
@@ -18,8 +18,9 @@ type Channel struct {
 func (c *Channel) LoadPlugins(b *Bot) {
 	c.lua = NewLuaState(b)
 
-	// Add sample
-	if err := c.lua.L.DoFile("plugins/echo.lua"); err != nil {
-		panic(err)
+	for _, plugin := range c.Plugins {
+		if err := c.lua.L.DoFile(plugin.Path); err != nil {
+			panic(err)
+		}
 	}
 }
