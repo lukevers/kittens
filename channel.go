@@ -2,7 +2,6 @@
 package main
 
 import (
-	"github.com/yuin/gopher-lua"
 	"time"
 )
 
@@ -13,5 +12,14 @@ type Channel struct {
 	Plugins   []Plugin
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	lua       *lua.LState
+	lua       *Lua
+}
+
+func (c *Channel) LoadPlugins(b *Bot) {
+	c.lua = NewLuaState(b)
+
+	// Add sample
+	if err := c.lua.L.DoFile("plugins/echo.lua"); err != nil {
+		panic(err)
+	}
 }
