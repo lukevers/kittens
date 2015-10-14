@@ -1,4 +1,4 @@
-Hi! If you're reading this then you're currently looking at the refactor branch. A lot of shit is going to change--and hopefully soon! Feel free to help out if you want. Old code is currently in the `.old` directory.
+Hi! If you're reading this then you're currently looking at the refactor branch. A lot is changing from the old branch. Feel free to help out if you want. Checkout the master branch (or in the git history) if you want to see the old code.
 
 ---
 
@@ -32,4 +32,8 @@ TODO LATER WHEN THE REFACTOR IS DONE.
 
 ## Plugins
 
-TODO LATER WHEN THE REFACTOR IS DONE AND PLUGINS ARE A THING. (I PROMISE THEY WILL, JUST NOT YET!)
+Plugins are written in [GopherLua](https://github.com/yuin/gopher-lua) which is almost identical to [Lua](http://www.lua.org/), but with slight differences. Take a look at the [differences between Lua and GopherLua](https://github.com/yuin/gopher-lua#differences-between-lua-and-gopherlua) to get started.
+
+---
+
+This guide is still being written as the codebase has been changing drastically. Feel free to open any issue you want.
