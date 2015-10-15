@@ -401,12 +401,12 @@ func handleBotPatch(c *gin.Context) {
 		if b.ID == bot {
 
 			if _, ok := bots[b.ID]; ok {
-				go func(b Bot) {
+				go func(b *Bot) {
 					go bots[b.ID].Disconnect()
 				}(b)
 			} else {
-				go func(b Bot) {
-					bots[b.ID] = &b
+				go func(b *Bot) {
+					bots[b.ID] = b
 					bots[b.ID].Connect()
 				}(b)
 			}

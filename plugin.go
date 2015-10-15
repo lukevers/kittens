@@ -12,4 +12,5 @@ type Plugin struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	ChannelID int `sql:"index"`
+	Lua       *Lua
 }

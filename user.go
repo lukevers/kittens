@@ -16,7 +16,7 @@ type User struct {
 	Email       string `sql:"unique"`
 	Twofa       bool
 	TwofaSecret string
-	Bots        []Bot
+	Bots        []*Bot
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
@@ -28,11 +28,11 @@ func GetUser(by, value interface{}) *User {
 }
 
 func (u User) Related() *User {
-	db.Model(&u).Related(&u.Bots)
+	db.Model(&u).Association("Bots").Find(&u.Bots)
 	for b := range u.Bots {
-		db.Model(&u.Bots[b]).Related(&u.Bots[b].Channels)
+		db.Model(&u.Bots[b]).Association("Channels").Find(&u.Bots[b].Channels)
 		for c := range u.Bots[b].Channels {
-			db.Model(&u.Bots[b].Channels[c]).Related(&u.Bots[b].Channels[c].Plugins)
+			db.Model(&u.Bots[b].Channels[c]).Association("Plugins").Find(&u.Bots[b].Channels[c].Plugins)
 		}
 	}
 

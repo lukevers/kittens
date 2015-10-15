@@ -11,18 +11,23 @@ type Lua struct {
 	Lua     *lua.LState
 	Bot     *Bot
 	Channel *Channel
-	events  map[string][]string
+	Plugin  *Plugin
+	eventId string
+	eventType string
 }
 
-func NewLuaState(bot *Bot, channel *Channel) *Lua {
+func NewLuaState(bot *Bot, channel *Channel, plugin *Plugin) *Lua {
 	L := &Lua{
-		Lua:     lua.NewState(),
 		Bot:     bot,
 		Channel: channel,
-		events:  make(map[string][]string),
+		Plugin:  plugin,
+		eventId:   "",
+		eventType: "",
+		Lua:     lua.NewState(lua.Options{
+			IncludeGoStackTrace: true,
+		}),
 	}
 
-	defer L.Lua.Close()
 	return L.SetPluginAPI()
 }
 
@@ -45,22 +50,28 @@ func (L *Lua) on(state *lua.LState) int {
 	event := state.ToString(1)
 	cback := state.ToString(2)
 
-	id := L.Bot.irc.AddCallback(event, func(event *irc.Event) {
-		state.DoString(fmt.Sprintf(`%s("%s", "%s")`,
-			cback,
-			event.Arguments[0],
-			event.Message()))
+	L.eventType = event
+	L.eventId = L.Bot.irc.AddCallback(event, func(event *irc.Event) {
+		if L.Channel.Name == event.Arguments[0] {
+
+			state.DoString(fmt.Sprintf(`%s("%s", "%s")`,
+				cback,
+				event.Arguments[0],
+				event.Message()))
+		}
 	})
 
-	L.events[event] = append(L.events[event], id)
 	return 1
 }
 
 func (L *Lua) reload(state *lua.LState) int {
-	for event, ids := range L.events {
-		for _, id := range ids {
-			L.Bot.irc.RemoveCallback(event, id)
-		}
+	for _, plugin := range L.Channel.Plugins {
+		// Remove callback events
+		L.Bot.irc.RemoveCallback(plugin.Lua.eventType, plugin.Lua.eventId)
+
+		// Destroy lua
+		defer plugin.Lua.Lua.Close()
+		plugin.Lua = nil
 	}
 
 	L.Channel.LoadPlugins(L.Bot)

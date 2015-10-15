@@ -16,7 +16,7 @@ type Bot struct {
 	Host        string
 	Port        int
 	UserID      int `sql:"index"`
-	Channels    []Channel
+	Channels    []*Channel
 	Enabled     bool `sql:"default:'0'"`
 	DisplayName string
 	CreatedAt   time.Time
@@ -42,9 +42,9 @@ func GetBot(by, value interface{}) *Bot {
 }
 
 func (b Bot) Related() *Bot {
-	db.Model(&b).Related(&b.Channels)
+	db.Model(&b).Association("Channels").Find(&b.Channels)
 	for c := range b.Channels {
-		db.Model(&b.Channels[c]).Related(&b.Channels[c].Plugins)
+		db.Model(&b.Channels[c]).Association("Plugins").Find(&b.Channels[c].Plugins)
 	}
 
 	return &b
