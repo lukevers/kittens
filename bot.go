@@ -56,6 +56,9 @@ func (b *Bot) Connect() {
 
 	// Create the IRC connection
 	b.irc = irc.IRC(b.Nickname, b.Username)
+	b.irc.PingFreq = 1 * time.Minute
+
+	// Connect to the IRC server
 	b.irc.Connect(fmt.Sprintf("%s:%d", b.Host, b.Port))
 
 	// Join all channels and add plugins for each
