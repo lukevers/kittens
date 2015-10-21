@@ -3,6 +3,7 @@ on("PRIVMSG", "alot")
 function alot(channel, message)
 
     math.randomseed(os.time())
+
     local alots = { 
         "http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TRIo4br3I/AAAAAAAACv4/Zh7_GcMlRKo/s400/ALOT.png",
         "http://1.bp.blogspot.com/_D_Z-D2tzi14/S8TflwXvTgI/AAAAAAAACxI/qgd1wYcTWV8/s320/ALOT12.png",
