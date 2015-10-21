@@ -8,22 +8,22 @@ import (
 )
 
 type Lua struct {
-	Lua     *lua.LState
-	Bot     *Bot
-	Channel *Channel
-	Plugin  *Plugin
-	eventId string
+	Lua       *lua.LState
+	Bot       *Bot
+	Channel   *Channel
+	Plugin    *Plugin
+	eventId   string
 	eventType string
 }
 
 func NewLuaState(bot *Bot, channel *Channel, plugin *Plugin) *Lua {
 	L := &Lua{
-		Bot:     bot,
-		Channel: channel,
-		Plugin:  plugin,
+		Bot:       bot,
+		Channel:   channel,
+		Plugin:    plugin,
 		eventId:   "",
 		eventType: "",
-		Lua:     lua.NewState(lua.Options{
+		Lua: lua.NewState(lua.Options{
 			IncludeGoStackTrace: true,
 		}),
 	}
