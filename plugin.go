@@ -8,6 +8,8 @@ import (
 type Plugin struct {
 	ID        int
 	Name      string
+	Text      string `sql:"type:text"`
+	File      bool   `sql:"default:true"`
 	Path      string
 	CreatedAt time.Time
 	UpdatedAt time.Time

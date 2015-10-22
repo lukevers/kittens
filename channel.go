@@ -20,8 +20,14 @@ func (c *Channel) LoadPlugins(b *Bot) {
 	for _, plugin := range c.Plugins {
 		plugin.Lua = NewLuaState(b, c, plugin)
 
-		if err := plugin.Lua.Lua.DoFile(plugin.Path); err != nil {
-			log.Println("Erorr running plugin: ", err)
+		if plugin.File {
+			if err := plugin.Lua.Lua.DoFile(plugin.Path); err != nil {
+				log.Println("Erorr running plugin from file: ", err)
+			}
+		} else {
+			if err := plugin.Lua.Lua.DoString(plugin.Text); err != nil {
+				log.Println("Error running plugin from string: ", err)
+			}
 		}
 	}
 }
