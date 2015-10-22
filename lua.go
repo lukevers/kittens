@@ -36,6 +36,7 @@ func (L *Lua) SetPluginAPI() *Lua {
 	L.Lua.SetGlobal("reload", L.Lua.NewFunction(L.reload))
 	L.Lua.SetGlobal("say", L.Lua.NewFunction(L.say))
 	L.Lua.SetGlobal("join", L.Lua.NewFunction(L.join))
+	L.Lua.SetGlobal("part", L.Lua.NewFunction(L.part))
 	return L
 }
 
@@ -102,6 +103,21 @@ func (L *Lua) join(state *lua.LState) int {
 	}
 
 	L.Bot.irc.Join(channel)
+
+	return 1
+}
+
+func (L *Lua) part(state *lua.LState) int {
+	channel := state.ToString(1)
+	hard := state.ToBool(2)
+
+	// TODO - leave channel / set channel to disabled (or just destroy it, depending)
+
+	if hard {
+		// Completely remove from database
+	}
+
+	L.Bot.irc.Part(channel)
 
 	return 1
 }

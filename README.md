@@ -94,8 +94,19 @@ Join a new IRC channel. With this function you can have the IRC bot join new cha
 ```lua
 -- Join a new IRC channel
 -- @param channel The channel to join
--- @param fresh Boolean to not copy the existing plugin structure
+-- @param fresh Boolean to not copy the existing plugin structure - optional: default false
 function join(channel, fresh)
+```
+
+### part
+
+Part an IRC channel. With this function you can have the IRC bot leave an IRC channel.
+
+```lua
+--- Part an IRC channel
+-- @param channel The channel to part
+-- @param hard - Boolean to completely remove channel and all related data from database - optional: default false
+function part(channel, hard)
 ```
 
 ---
