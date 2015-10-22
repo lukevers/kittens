@@ -91,6 +91,8 @@ function say(channel, message)
 
 Join a new IRC channel. With this function you can have the IRC bot join new channels with the default behavior being to copy the existing plugin structure. The first parameter is the channel to be joined, and the second parameter is a boolean value that determines if the bot should start fresh with no included plugins. If the second parameter is omitted, it will act as if the value given is `false` and the plugin structure of the current channel will be duplicated to the new channel.
 
+If the IRC bot joins a currently disabled channel, that channel will be re-enabled, and the second parameter will be discarded and the existing plugin structure for the re-enabled channel will be used.
+
 ```lua
 -- Join a new IRC channel
 -- @param channel The channel to join
@@ -100,7 +102,7 @@ function join(channel, fresh)
 
 ### part
 
-Part an IRC channel. With this function you can have the IRC bot leave an IRC channel.
+Part an IRC channel. With this function you can have the IRC bot leave an IRC channel. The first parameter is the channel to leave, and the second parameter is a boolean value that determines if the bot should be completely removed with all related data from the database or not. If the second parameter is omitted, it will act as if the value given is `false` and the channel and all related data will not be deleted, but set to disabled.
 
 ```lua
 --- Part an IRC channel

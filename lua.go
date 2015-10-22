@@ -96,6 +96,7 @@ func (L *Lua) join(state *lua.LState) int {
 	channel := state.ToString(1)
 	fresh := state.ToBool(2)
 
+	// TODO - check to see if we're joining a currently disabled channel
 	// TODO - save everything/duplicate plugins (or not, depending), etc
 
 	if fresh {
