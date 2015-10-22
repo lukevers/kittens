@@ -54,7 +54,11 @@ The function `on` is a global function that binds a function to an IRC event cod
 
 ### Global Functions
 
+These are functions that are not Lua specific, but are Kittens specific global Lua functions. Their documentation is below, and examples of each can most likely be found in the [plugins](./plugins) folder.
+
 ### on
+
+Run a callback function when an IRC event occurs. This is the main function that every plugin is going to have. The most common IRC event code to listen on is `"PRIVMSG"` which occurs on every message in a channel.
 
 ```lua
 --- Run a callback function when an IRC event occurs
@@ -65,11 +69,22 @@ function on(code, func)
 
 #### say
 
+Send a message to an IRC channel. With this function, an IRC bot can say anything to any channel or user (omit the `#` in the channel parameter to send a message to a user).
+
 ```lua
 --- Send a message to an IRC channel
 -- @param channel The channel to send a message to
 -- @param message The message to send to a channel
 function say(channel, message)
+```
+
+#### reload
+
+Reload all plugins in an IRC channel. No parameters are given in this function because the Lua state already knows what channel the plugins need to be reloaded in.
+
+```lua
+--- Reload all plugins in an IRC channel
+function reload()
 ```
 
 ---
