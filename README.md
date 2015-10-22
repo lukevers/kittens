@@ -56,7 +56,7 @@ The function `on` is a global function that binds a function to an IRC event cod
 
 These are functions that are not Lua specific, but are Kittens specific global Lua functions. Their documentation is below, and examples of each can most likely be found in the [plugins](./plugins) folder.
 
-### on
+#### on
 
 Run a callback function when an IRC event occurs. This is the main function that every plugin is going to have. The most common IRC event code to listen on is `"PRIVMSG"` which occurs on every message in a channel.
 
@@ -87,7 +87,7 @@ Send a message to an IRC channel. With this function, an IRC bot can say anythin
 function say(channel, message)
 ```
 
-### join
+#### join
 
 Join a new IRC channel. With this function you can have the IRC bot join new channels with the default behavior being to copy the existing plugin structure. The first parameter is the channel to be joined, and the second parameter is a boolean value that determines if the bot should start fresh with no included plugins. If the second parameter is omitted, it will act as if the value given is `false` and the plugin structure of the current channel will be duplicated to the new channel.
 
@@ -100,7 +100,7 @@ If the IRC bot joins a currently disabled channel, that channel will be re-enabl
 function join(channel, fresh)
 ```
 
-### part
+#### part
 
 Part an IRC channel. With this function you can have the IRC bot leave an IRC channel. The first parameter is the channel to leave, and the second parameter is a boolean value that determines if the channel should be completely removed with all related data from the database or not. If the second parameter is omitted, it will act as if the value given is `false` and the channel and all related data will not be deleted, but set to disabled.
 
