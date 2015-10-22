@@ -42,7 +42,7 @@ on("EVENTCODE", function (event)
 end)
 ```
 
-The function `on` is a global function that binds a function to an irc event code. The event code is expected to be a string. The callback function is passed one parameter which contains all of the event information in a table. The event information includes the following data:
+The function `on` is a global function that binds a function to an IRC event code. The event code is expected to be a string. The callback function is passed one parameter which contains all of the event information in a table. The event information includes the following data:
 
 1. `message` - The IRC message.
 2. `channel` - The IRC channel that this event happened at.
@@ -54,13 +54,23 @@ The function `on` is a global function that binds a function to an irc event cod
 
 ### Global Functions
 
-### On
+### on
 
-TODO
+```lua
+--- Run a callback function when an IRC event occurs
+-- @param code The IRC event code to listen for
+-- @param func The function to run
+function on(code, func)
+```
 
-#### Say
+#### say
 
-TODO
+```lua
+--- Send a message to an IRC channel
+-- @param channel The channel to send a message to
+-- @param message The message to send to a channel
+function say(channel, message)
+```
 
 ---
 
