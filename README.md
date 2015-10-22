@@ -34,6 +34,44 @@ TODO LATER WHEN THE REFACTOR IS DONE.
 
 Plugins are written in [GopherLua](https://github.com/yuin/gopher-lua) which is almost identical to [Lua](http://www.lua.org/), but with slight differences. Take a look at the [differences between Lua and GopherLua](https://github.com/yuin/gopher-lua#differences-between-lua-and-gopherlua) to get started.
 
+Let's look at the structure of a plugin:
+
+```lua
+on("EVENTCODE", function (event)
+    -- implementation here
+end)
+```
+
+The function `on` is a global function that binds a function to an IRC event code. The event code is expected to be a string. The callback function is passed one parameter which contains all of the event information in a table. The event information includes the following data:
+
+1. `message` - The IRC message.
+2. `channel` - The IRC channel that this event happened at.
+3. `nick` - The nickname of the user that is related to the event.
+4. `host` - The hostname of the user that is related to the event.
+5. `user` - The user that is related to the event.
+6. `source` - The full host (`<nick>!<usr>@<host>`) of the user that is related to the event.
+7. `raw` - The raw IRC message.
+
+### Global Functions
+
+### on
+
+```lua
+--- Run a callback function when an IRC event occurs
+-- @param code The IRC event code to listen for
+-- @param func The function to run
+function on(code, func)
+```
+
+#### say
+
+```lua
+--- Send a message to an IRC channel
+-- @param channel The channel to send a message to
+-- @param message The message to send to a channel
+function say(channel, message)
+```
+
 ---
 
 This guide is still being written as the codebase has been changing drastically. Feel free to open any issue you want.
