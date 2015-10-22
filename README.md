@@ -102,7 +102,7 @@ function join(channel, fresh)
 
 ### part
 
-Part an IRC channel. With this function you can have the IRC bot leave an IRC channel. The first parameter is the channel to leave, and the second parameter is a boolean value that determines if the bot should be completely removed with all related data from the database or not. If the second parameter is omitted, it will act as if the value given is `false` and the channel and all related data will not be deleted, but set to disabled.
+Part an IRC channel. With this function you can have the IRC bot leave an IRC channel. The first parameter is the channel to leave, and the second parameter is a boolean value that determines if the channel should be completely removed with all related data from the database or not. If the second parameter is omitted, it will act as if the value given is `false` and the channel and all related data will not be deleted, but set to disabled.
 
 ```lua
 --- Part an IRC channel
