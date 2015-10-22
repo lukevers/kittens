@@ -32,18 +32,10 @@ func NewLuaState(bot *Bot, channel *Channel, plugin *Plugin) *Lua {
 }
 
 func (L *Lua) SetPluginAPI() *Lua {
-	L.Lua.SetGlobal("say", L.Lua.NewFunction(L.say))
 	L.Lua.SetGlobal("on", L.Lua.NewFunction(L.on))
 	L.Lua.SetGlobal("reload", L.Lua.NewFunction(L.reload))
+	L.Lua.SetGlobal("say", L.Lua.NewFunction(L.say))
 	return L
-}
-
-func (L *Lua) say(state *lua.LState) int {
-	channel := state.ToString(1)
-	message := state.ToString(2)
-	L.Bot.irc.Privmsg(channel, message)
-
-	return 1
 }
 
 func (L *Lua) on(state *lua.LState) int {
@@ -86,5 +78,13 @@ func (L *Lua) reload(state *lua.LState) int {
 	}
 
 	L.Channel.LoadPlugins(L.Bot)
+	return 1
+}
+
+func (L *Lua) say(state *lua.LState) int {
+	channel := state.ToString(1)
+	message := state.ToString(2)
+	L.Bot.irc.Privmsg(channel, message)
+
 	return 1
 }

@@ -67,6 +67,15 @@ Run a callback function when an IRC event occurs. This is the main function that
 function on(code, func)
 ```
 
+#### reload
+
+Reload all plugins in an IRC channel. No parameters are given in this function because the Lua state already knows what channel the plugins need to be reloaded in.
+
+```lua
+--- Reload all plugins in an IRC channel
+function reload()
+```
+
 #### say
 
 Send a message to an IRC channel. With this function, an IRC bot can say anything to any channel or user (omit the `#` in the channel parameter to send a message to a user).
@@ -76,15 +85,6 @@ Send a message to an IRC channel. With this function, an IRC bot can say anythin
 -- @param channel The channel to send a message to
 -- @param message The message to send to a channel
 function say(channel, message)
-```
-
-#### reload
-
-Reload all plugins in an IRC channel. No parameters are given in this function because the Lua state already knows what channel the plugins need to be reloaded in.
-
-```lua
---- Reload all plugins in an IRC channel
-function reload()
 ```
 
 ---
