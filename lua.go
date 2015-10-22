@@ -4,6 +4,7 @@ package main
 import (
 	"github.com/thoj/go-ircevent"
 	"github.com/yuin/gopher-lua"
+	"log"
 )
 
 type Lua struct {
@@ -62,11 +63,11 @@ func (L *Lua) on(state *lua.LState) int {
 			table.RawSetString("raw", lua.LString(event.Raw))
 
 			if err := L.Lua.CallByParam(lua.P{
-					Fn: cback,
-					NRet: 1,
-					Protect: true,
-				}, table); err != nil {
-					panic(err)
+				Fn:      cback,
+				NRet:    1,
+				Protect: true,
+			}, table); err != nil {
+				log.Println("Error calling lua function: ", err)
 			}
 		}
 	})
