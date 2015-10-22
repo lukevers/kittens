@@ -32,9 +32,9 @@ TODO LATER WHEN THE REFACTOR IS DONE.
 
 ## Plugins
 
-Plugins are written in [GopherLua](https://github.com/yuin/gopher-lua) which is almost identical to [Lua](http://www.lua.org/), but with slight differences. Take a look at the [differences between Lua and GopherLua](https://github.com/yuin/gopher-lua#differences-between-lua-and-gopherlua) to get started.
+Plugins are written in [GopherLua](https://github.com/yuin/gopher-lua) which is almost identical to [Lua](http://www.lua.org/), but with slight differences. Take a look at the [differences between Lua and GopherLua](https://github.com/yuin/gopher-lua#differences-between-lua-and-gopherlua) to get started writing plugins.
 
-Let's look at the structure of a plugin:
+Let's look at the basic structure of a plugin:
 
 ```lua
 on("EVENTCODE", function (event)
@@ -42,15 +42,7 @@ on("EVENTCODE", function (event)
 end)
 ```
 
-The function `on` is a global function that binds a function to an IRC event code. The event code is expected to be a string. The callback function is passed one parameter which contains all of the event information in a table. The event information includes the following data:
-
-1. `message` - The IRC message.
-2. `channel` - The IRC channel that this event happened at.
-3. `nick` - The nickname of the user that is related to the event.
-4. `host` - The hostname of the user that is related to the event.
-5. `user` - The user that is related to the event.
-6. `source` - The full host (`<nick>!<user>@<host>`) of the user that is related to the event.
-7. `raw` - The raw IRC message.
+The function `on` is a global function that binds a function to an IRC event code, and is the main function in Kittens plugins.
 
 ### Global Functions
 
@@ -63,9 +55,19 @@ Run a callback function when an IRC event occurs. This is the main function that
 ```lua
 --- Run a callback function when an IRC event occurs
 -- @param code The IRC event code to listen for
--- @param func The function to run
+-- @param func The callback function to run
 function on(code, func)
 ```
+
+The callback function is passed one parameter which contains all of the event information in a table. The event information includes the following data:
+
+1. `message` - The IRC message related to this event.
+2. `channel` - The IRC channel that this event happened in.
+3. `nick` - The nickname of the user that is related to the event.
+4. `host` - The hostname of the user that is related to the event.
+5. `user` - The user that is related to the event.
+6. `source` - The full host (`<nick>!<user>@<host>`) of the user that is related to the event.
+7. `raw` - The raw IRC message.
 
 #### reload
 
