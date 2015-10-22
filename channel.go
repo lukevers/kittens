@@ -9,7 +9,8 @@ import (
 type Channel struct {
 	ID        int
 	Name      string
-	BotID     int `sql:"index"`
+	BotID     int  `sql:"index"`
+	Enabled   bool `sql:"default:true"`
 	Plugins   []*Plugin
 	CreatedAt time.Time
 	UpdatedAt time.Time

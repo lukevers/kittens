@@ -63,8 +63,10 @@ func (b *Bot) Connect() {
 
 	// Join all channels and add plugins for each
 	for _, channel := range b.Channels {
-		channel.LoadPlugins(b)
-		b.irc.Join(channel.Name)
+		if channel.Enabled {
+			channel.LoadPlugins(b)
+			b.irc.Join(channel.Name)
+		}
 	}
 }
 
