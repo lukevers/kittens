@@ -1,7 +1,4 @@
-on("PRIVMSG", "alot")
-
-function alot(channel, message)
-
+on("PRIVMSG", function (event)
     math.randomseed(os.time())
 
     local alots = { 
@@ -18,7 +15,7 @@ function alot(channel, message)
         "http://3.bp.blogspot.com/_D_Z-D2tzi14/S8TTPQCPA6I/AAAAAAAACwA/ZHZH-Bi8OmI/s400/ALOT2.png"
     }
 
-    if string.find(message, "alot") then
-        say(channel, alots[math.random(1, #alots)])
+    if string.find(event["message"], "alot") then
+        say(event["channel"], alots[math.random(1, #alots)])
     end
-end
+end)

@@ -2,7 +2,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/thoj/go-ircevent"
 	"github.com/yuin/gopher-lua"
 )
@@ -48,16 +47,27 @@ func (L *Lua) say(state *lua.LState) int {
 
 func (L *Lua) on(state *lua.LState) int {
 	event := state.ToString(1)
-	cback := state.ToString(2)
+	cback := state.ToFunction(2)
 
 	L.eventType = event
 	L.eventId = L.Bot.irc.AddCallback(event, func(event *irc.Event) {
 		if L.Channel.Name == event.Arguments[0] {
+			table := new(lua.LTable)
+			table.RawSetString("message", lua.LString(event.Message()))
+			table.RawSetString("channel", lua.LString(event.Arguments[0]))
+			table.RawSetString("nick", lua.LString(event.Nick))
+			table.RawSetString("host", lua.LString(event.Host))
+			table.RawSetString("source", lua.LString(event.Source))
+			table.RawSetString("user", lua.LString(event.User))
+			table.RawSetString("raw", lua.LString(event.Raw))
 
-			state.DoString(fmt.Sprintf(`%s("%s", "%s")`,
-				cback,
-				event.Arguments[0],
-				event.Message()))
+			if err := L.Lua.CallByParam(lua.P{
+					Fn: cback,
+					NRet: 1,
+					Protect: true,
+				}, table); err != nil {
+					panic(err)
+			}
 		}
 	})
 

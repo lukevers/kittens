@@ -1,8 +1,6 @@
-on("PRIVMSG", "parse")
-
-function parse(channel, message)
-    if string.find(message, "^@reload$") then
-        say(channel, "Reloading plugins...")
+on("PRIVMSG", function (event)
+    if string.find(event["message"], "^@reload$") then
+        say(event["channel"], "Reloading plugins...")
         reload()
     end
-end
+end)

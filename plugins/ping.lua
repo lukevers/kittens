@@ -1,7 +1,5 @@
-on("PRIVMSG", "ping")
-
-function ping(channel, message)
-    if string.find(message, "^@ping$") then
-        say(channel, "pong")
+on("PRIVMSG", function (event)
+    if string.find(event["message"], "^@ping$") then
+        say(event["channel"], "pong")
     end
-end
+end)

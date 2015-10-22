@@ -1,7 +1,5 @@
-on("PRIVMSG", "echo")
-
-function echo(channel, message)
-    if string.find(message, "^@echo%s") then
-        say(channel, string.gsub(message, "^@echo%s", ""))
+on("PRIVMSG", function (event)
+    if string.find(event["message"], "^@echo%s") then
+        say(event["channel"], string.gsub(event["message"], "^@echo%s", ""))
     end
-end
+end)
