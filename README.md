@@ -87,6 +87,17 @@ Send a message to an IRC channel. With this function, an IRC bot can say anythin
 function say(channel, message)
 ```
 
+### join
+
+Join a new IRC channel. With this function you can have the IRC bot join new channels with the default behavior being to copy the existing plugin structure. The first parameter is the channel to be joined, and the second parameter is a boolean value that determines if the bot should start fresh with no included plugins. If the second parameter is omitted, it will act as if the value given is `false` and the plugin structure of the current channel will be duplicated to the new channel.
+
+```lua
+-- Join a new IRC channel
+-- @param channel The channel to join
+-- @param fresh Boolean to not copy the existing plugin structure
+function join(channel, fresh)
+```
+
 ---
 
 This guide is still being written as the codebase has been changing drastically. Feel free to open any issue you want.

@@ -35,6 +35,7 @@ func (L *Lua) SetPluginAPI() *Lua {
 	L.Lua.SetGlobal("on", L.Lua.NewFunction(L.on))
 	L.Lua.SetGlobal("reload", L.Lua.NewFunction(L.reload))
 	L.Lua.SetGlobal("say", L.Lua.NewFunction(L.say))
+	L.Lua.SetGlobal("join", L.Lua.NewFunction(L.join))
 	return L
 }
 
@@ -78,6 +79,7 @@ func (L *Lua) reload(state *lua.LState) int {
 	}
 
 	L.Channel.LoadPlugins(L.Bot)
+
 	return 1
 }
 
@@ -85,6 +87,21 @@ func (L *Lua) say(state *lua.LState) int {
 	channel := state.ToString(1)
 	message := state.ToString(2)
 	L.Bot.irc.Privmsg(channel, message)
+
+	return 1
+}
+
+func (L *Lua) join(state *lua.LState) int {
+	channel := state.ToString(1)
+	fresh := state.ToBool(2)
+
+	// TODO - save everything/duplicate plugins (or not, depending), etc
+
+	if fresh {
+		// Do not duplicate plugin structure
+	}
+
+	L.Bot.irc.Join(channel)
 
 	return 1
 }
