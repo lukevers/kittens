@@ -49,7 +49,7 @@ The function `on` is a global function that binds a function to an IRC event cod
 3. `nick` - The nickname of the user that is related to the event.
 4. `host` - The hostname of the user that is related to the event.
 5. `user` - The user that is related to the event.
-6. `source` - The full host (`<nick>!<usr>@<host>`) of the user that is related to the event.
+6. `source` - The full host (`<nick>!<user>@<host>`) of the user that is related to the event.
 7. `raw` - The raw IRC message.
 
 ### Global Functions
