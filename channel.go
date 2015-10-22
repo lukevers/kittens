@@ -2,6 +2,7 @@
 package main
 
 import (
+	"log"
 	"time"
 )
 
@@ -19,7 +20,7 @@ func (c *Channel) LoadPlugins(b *Bot) {
 		plugin.Lua = NewLuaState(b, c, plugin)
 
 		if err := plugin.Lua.Lua.DoFile(plugin.Path); err != nil {
-			dump(err)
+			log.Println("Erorr running plugin: ", err)
 		}
 	}
 }
