@@ -31,3 +31,18 @@ func (c *Channel) LoadPlugins(b *Bot) {
 		}
 	}
 }
+
+func (c *Channel) Delete() {
+	// Delete plugins related to channel
+	for _, plugin := range c.Plugins {
+		db.Delete(plugin)
+	}
+
+	// Delete channel
+	db.Delete(c)
+}
+
+func (c *Channel) Disable() {
+	c.Enabled = false
+	db.Save(&c)
+}

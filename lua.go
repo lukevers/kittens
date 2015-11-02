@@ -112,13 +112,15 @@ func (L *Lua) part(state *lua.LState) int {
 	channel := state.ToString(1)
 	hard := state.ToBool(2)
 
-	// TODO - leave channel / set channel to disabled (or just destroy it, depending)
-
-	if hard {
-		// Completely remove from database
-	}
-
+	// Leave channel
 	L.Bot.irc.Part(channel)
+
+	// Delete or disable channel and related
+	if hard {
+		L.Channel.Delete()
+	} else {
+		L.Channel.Disable()
+	}
 
 	return 1
 }
