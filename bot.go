@@ -15,10 +15,11 @@ type Bot struct {
 	Username    string
 	Host        string
 	Port        int
-	UserID      int `sql:"index"`
-	Channels    []*Channel
-	Enabled     bool `sql:"default:'0'"`
+	UserID      int    `sql:"index"`
+	QuitMessage string `sql:"default:'bye'"`
+	Enabled     bool   `sql:"default:'0'"`
 	DisplayName string
+	Channels    []*Channel
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	irc         *irc.Connection
@@ -57,6 +58,7 @@ func (b *Bot) Connect() {
 	// Create the IRC connection
 	b.irc = irc.IRC(b.Nickname, b.Username)
 	b.irc.PingFreq = 1 * time.Minute
+	b.irc.QuitMessage = b.QuitMessage
 
 	// Connect to the IRC server
 	b.irc.Connect(fmt.Sprintf("%s:%d", b.Host, b.Port))
