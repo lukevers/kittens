@@ -32,6 +32,17 @@ func (c *Channel) LoadPlugins(b *Bot) {
 	}
 }
 
+func (c *Channel) UnloadPlugins(L *Lua) {
+	for _, plugin := range c.Plugins {
+		// Remove callback events
+		L.Bot.irc.RemoveCallback(plugin.Lua.eventType, plugin.Lua.eventId)
+
+		// Destroy Lua
+		defer plugin.Lua.Lua.Close()
+		plugin.Lua = nil
+	}
+}
+
 func (c *Channel) Delete() {
 	// Delete plugins related to channel
 	for _, plugin := range c.Plugins {
@@ -44,5 +55,10 @@ func (c *Channel) Delete() {
 
 func (c *Channel) Disable() {
 	c.Enabled = false
+	db.Save(&c)
+}
+
+func (c *Channel) Enable() {
+	c.Enabled = true
 	db.Save(&c)
 }

@@ -70,15 +70,7 @@ func (L *Lua) on(state *lua.LState) int {
 }
 
 func (L *Lua) reload(state *lua.LState) int {
-	for _, plugin := range L.Channel.Plugins {
-		// Remove callback events
-		L.Bot.irc.RemoveCallback(plugin.Lua.eventType, plugin.Lua.eventId)
-
-		// Destroy lua
-		defer plugin.Lua.Lua.Close()
-		plugin.Lua = nil
-	}
-
+	L.Channel.UnloadPlugins(L)
 	L.Channel.LoadPlugins(L.Bot)
 
 	return 1
@@ -96,14 +88,39 @@ func (L *Lua) join(state *lua.LState) int {
 	channel := state.ToString(1)
 	fresh := state.ToBool(2)
 
-	// TODO - check to see if we're joining a currently disabled channel
-	// TODO - save everything/duplicate plugins (or not, depending), etc
+	var c *Channel
+	var cc Channel
+	db.Where(&Channel{
+		Name:  channel,
+		BotID: L.Bot.ID,
+	}).Find(&cc)
+	c = &cc
 
-	if fresh {
-		// Do not duplicate plugin structure
+	if c.ID == 0 {
+		if fresh {
+			// New
+		} else {
+			// Clone
+		}
+	} else if !c.Enabled {
+		// Check to see if already in bot slice
+		exists := false
+		for _, ch := range L.Bot.Channels {
+			if ch.ID == c.ID {
+				exists = true
+				c = ch
+				break
+			}
+		}
+
+		if !exists {
+			L.Bot.Channels = append(L.Bot.Channels, c)
+		}
+
+		c.Enable()
+		L.Bot.irc.Join(channel)
+		c.LoadPlugins(L.Bot)
 	}
-
-	L.Bot.irc.Join(channel)
 
 	return 1
 }
@@ -112,14 +129,30 @@ func (L *Lua) part(state *lua.LState) int {
 	channel := state.ToString(1)
 	hard := state.ToBool(2)
 
+	var c *Channel
+	var cc Channel
+	db.Where(&Channel{
+		Name:  channel,
+		BotID: L.Bot.ID,
+	}).Find(&cc)
+	c = &cc
+
+	for _, ch := range L.Bot.Channels {
+		if ch.ID == c.ID {
+			c = ch
+			break
+		}
+	}
+
 	// Leave channel
 	L.Bot.irc.Part(channel)
+	c.UnloadPlugins(L)
 
 	// Delete or disable channel and related
 	if hard {
-		L.Channel.Delete()
+		c.Delete()
 	} else {
-		L.Channel.Disable()
+		c.Disable()
 	}
 
 	return 1
